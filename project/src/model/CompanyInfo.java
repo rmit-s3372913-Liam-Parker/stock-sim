@@ -1,5 +1,8 @@
 package model;
 
+/*
+ * Stores information related to a company that trades on the market.
+ * */
 public class CompanyInfo 
 {
 	String companyName;

@@ -14,21 +14,19 @@ public class ASXInterface
 	/*
 	 * Returns a Stock object containing all market information related to a specific stock code.
 	 * */
-	public Stock GetStockData(String code)
+	public Stock GetStockData(String stockCode)
 	{
 		Stock stock = null;
 		
 		try 
 		{
-			URL website = new URL(STOCK_URL + code);
+			URL website = new URL(STOCK_URL + stockCode);
+			//TODO: Fill out stock information
 		} 
-		catch (MalformedURLException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		catch (MalformedURLException e) { e.printStackTrace(); }
 		
-		//TODO: Fill out stock information
 		return stock;
 	}
+	
+	
 }
