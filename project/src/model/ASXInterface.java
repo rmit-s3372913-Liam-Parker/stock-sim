@@ -15,7 +15,7 @@ public class ASXInterface
 	
 	private static ASXInterface singleton = null;
 	
-	public ASXInterface Get()
+	public ASXInterface getSingleton()
 	{
 		 if(singleton == null)
 		 {
@@ -24,14 +24,12 @@ public class ASXInterface
 		 }
 		 else
 			 return singleton;
-			 
-			 
 	}
 	
 	/*
 	 * Returns a Stock object containing all market information related to a specific stock code.
 	 * */
-	public Stock GetStockData(String stockCode)
+	public Stock getStockData(String stockCode)
 	{
 		Stock stock = null;
 		
@@ -45,7 +43,10 @@ public class ASXInterface
 		return stock;
 	}
 	
-	public List<CompanyInfo> GetCurrentCompanyList()
+	/*
+	 * Returns a list of CompanyInfo objects containing data on all companies listed on the ASX
+	 * */
+	public List<CompanyInfo> getCurrentCompanyList()
 	{
 		List<CompanyInfo> companyList = new ArrayList<CompanyInfo>();
 		

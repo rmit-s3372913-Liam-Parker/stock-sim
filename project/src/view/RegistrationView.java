@@ -7,5 +7,8 @@ import javafx.scene.layout.Pane;
  * */
 public class RegistrationView extends Pane
 {
-	
+	public RegistrationView()
+	{
+		
+	}
 }
