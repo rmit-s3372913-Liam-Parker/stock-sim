@@ -8,7 +8,7 @@ import javafx.stage.Stage;
  * */
 public class StockApplication extends Application 
 {
-	private static final String PROGRAM_NAME =  "ASX Simulator";
+	private static final String PROGRAM_NAME =  "ASX Sim";
 	private static final int WINDOW_WIDTH = 1920/2;
 	private static final int WINDOW_HEIGHT = 1080/2;
 	
