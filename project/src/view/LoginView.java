@@ -19,6 +19,14 @@ import javafx.scene.text.Text;
  * */
 public class LoginView extends GridPane 
 {
+	private static final String LOGIN_TITLE = "ASX Simulator";
+	private static final String USERNAME_LABEL = "Username:";
+	private static final String PASSWORD_LABEL = "Password:";
+	private static final String REMEMBER_LABEL = "Remember:";
+	
+	private static final String LOGIN_BUTTON = "Login";
+	private static final String REGISTER_BUTTON = "Register";
+	
 	/* Constructs a LoginView object centered in the pane. */
 	public LoginView()
 	{
@@ -35,30 +43,30 @@ public class LoginView extends GridPane
 	public void populate()
 	{
 		// Setup title
-		Text loginTitle = new Text("ASX Simulator");
+		Text loginTitle = new Text(LOGIN_TITLE);
 		loginTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		add(loginTitle, 0, 0, 2, 1);
 
 		// Setup user-name field
-		Label username = new Label("User Name:");
+		Label username = new Label(USERNAME_LABEL);
 		add(username, 0, 1);
 		TextField usernameField = new TextField();
 		add(usernameField, 1, 1);
 		
 		// Setup password field and remember toggle
-		Label password = new Label("Password:");
+		Label password = new Label(PASSWORD_LABEL);
 		add(password, 0, 2);
 		PasswordField passwordField = new PasswordField();
 		add(passwordField, 1, 2);
-		Label rPassword = new Label("Remember:");
+		Label rPassword = new Label(REMEMBER_LABEL);
 		add(rPassword, 2, 2);
 		CheckBox rPasswordCheckbox = new CheckBox();
 		add(rPasswordCheckbox, 3, 2);
 		
 		// Set up buttons
-		Button loginButton = new Button("Login");
+		Button loginButton = new Button(LOGIN_BUTTON);
 		loginButton.setOnAction(new LoginController());
-		Button registerButton = new Button("Register");
+		Button registerButton = new Button(REGISTER_BUTTON);
 		add(registerButton, 1, 3);
 		HBox buttons = new HBox(2.5);
 		buttons.getChildren().addAll(loginButton, registerButton);

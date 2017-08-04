@@ -16,10 +16,10 @@ public class StockApplication extends Application
 	public void start(Stage stage) throws Exception 
 	{
 		// We begin the application on the login page.
-		LoginView login = new LoginView();
+		LoginView initialView = new LoginView();
 		
 		// Set frame data
-		Scene scene = new Scene(login, WINDOW_WIDTH, WINDOW_HEIGHT);
+		Scene scene = new Scene(initialView, WINDOW_WIDTH, WINDOW_HEIGHT);
         stage.setTitle(PROGRAM_NAME);
         stage.setScene(scene);
         stage.show();
