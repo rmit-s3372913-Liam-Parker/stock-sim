@@ -1,6 +1,7 @@
 package view;
 
 import controller.login.LoginController;
+import controller.login.RegisterController;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -65,8 +66,9 @@ public class LoginView extends GridPane
 		
 		// Set up buttons
 		Button loginButton = new Button(LOGIN_BUTTON);
-		loginButton.setOnAction(new LoginController());
+		loginButton.setOnAction(new LoginController(usernameField, passwordField));
 		Button registerButton = new Button(REGISTER_BUTTON);
+		registerButton.setOnAction(new RegisterController());
 		add(registerButton, 1, 3);
 		HBox buttons = new HBox(2.5);
 		buttons.getChildren().addAll(loginButton, registerButton);

@@ -2,17 +2,30 @@ package controller.login;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.TextField;
 
 /*
- * LoginController handles interaction with the login screen. Including input and parsing.
+ * LoginController handles login and input validation.
  * */
 public class LoginController implements EventHandler<ActionEvent>
 {
-	/* Handles interaction */
+	TextField user;
+	TextField pw;
+	
+	public LoginController(TextField user, TextField pw)
+	{
+		this.user = user;
+		this.pw = pw;
+	}
+	
 	@Override
 	public void handle(ActionEvent event) 
 	{
-		System.out.println("Login pressed!");
+		String userString = user.getText();
+		String pwString = pw.getText();
+		
+		System.out.println("TEST OUTPUT: Username: " + userString + " Password: " + pwString);
+		
 		event.consume();
 	}
 
