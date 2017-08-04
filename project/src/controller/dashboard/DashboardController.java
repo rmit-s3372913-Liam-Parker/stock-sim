@@ -1,4 +1,4 @@
-package controller;
+package controller.dashboard;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

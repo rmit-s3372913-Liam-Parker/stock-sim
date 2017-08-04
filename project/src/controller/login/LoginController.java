@@ -1,4 +1,4 @@
-package controller;
+package controller.login;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,11 +8,12 @@ import javafx.event.EventHandler;
  * */
 public class LoginController implements EventHandler<ActionEvent>
 {
-
+	/* Handles interaction */
 	@Override
-	public void handle(ActionEvent event) {
-		// TODO Auto-generated method stub
-		
+	public void handle(ActionEvent event) 
+	{
+		System.out.println("Login pressed!");
+		event.consume();
 	}
 
 }
