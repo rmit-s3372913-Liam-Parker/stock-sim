@@ -26,7 +26,7 @@ public class UserDetails
 	 */
 	public String getUsername()
 	{
-		
+		return username;
 	}
 	
 	/**
@@ -34,6 +34,6 @@ public class UserDetails
 	 */
 	public String getPassword()
 	{
-		
+		return password;
 	}
 }
