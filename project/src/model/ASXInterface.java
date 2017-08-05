@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * ASXInterface allows for queries of ASX share market data.
  * */
 public class ASXInterface 
@@ -15,6 +15,13 @@ public class ASXInterface
 	
 	private static ASXInterface singleton = null;
 	
+	// ASXInerface constructor is private because we don't want external files
+	// constructing this object when they should be using the singleton.
+	private ASXInterface() { }
+	
+	/**
+	 * @return An ASXInterface object used to obtain ASX data.
+	 */
 	public ASXInterface getSingleton()
 	{
 		 if(singleton == null)
@@ -26,9 +33,10 @@ public class ASXInterface
 			 return singleton;
 	}
 	
-	/*
-	 * Returns a Stock object containing all market information related to a specific stock code.
-	 * */
+	/**
+	 * @param stockCode The stock code to attempt to retrieve data for.
+	 * @return Stock information for given code.
+	 */
 	public Stock getStockData(String stockCode)
 	{
 		Stock stock = null;
@@ -43,9 +51,9 @@ public class ASXInterface
 		return stock;
 	}
 	
-	/*
-	 * Returns a list of CompanyInfo objects containing data on all companies listed on the ASX
-	 * */
+	/**
+	 * @return A List<> of companies trading on the ASX.
+	 */
 	public List<CompanyInfo> getCurrentCompanyList()
 	{
 		List<CompanyInfo> companyList = new ArrayList<CompanyInfo>();

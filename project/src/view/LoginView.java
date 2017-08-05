@@ -14,7 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-/*
+/**
  * LoginView contains any UI code relevant to the login screen. This class also
  * constructs and registers any relevant
  * */
@@ -28,7 +28,9 @@ public class LoginView extends GridPane
 	private static final String LOGIN_BUTTON = "Login";
 	private static final String REGISTER_BUTTON = "Register";
 	
-	/* Constructs a LoginView object centered in the pane. */
+	/**
+	 *  Constructs a LoginView object with default positioning.
+	 **/
 	public LoginView()
 	{
 		setAlignment(Pos.CENTER);
@@ -37,7 +39,8 @@ public class LoginView extends GridPane
 		populate();
 	}
 	
-	/* Builds the UI for this pane. UI elements and
+	/**
+	 * Builds the UI for this pane. UI elements and
 	 * any call-backs for functionality should be registered
 	 * here.   
 	 * */

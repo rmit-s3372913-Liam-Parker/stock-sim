@@ -13,16 +13,19 @@ public class Core implements CoreAPI
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
 	@Override
 	public boolean beginSession(UserDetails details) {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
 	@Override
 	public boolean endSession() {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
 	@Override
 	public List<PlayerStats> getPlayerList() {
 		// TODO Auto-generated method stub

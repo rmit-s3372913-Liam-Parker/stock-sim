@@ -3,8 +3,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/*
- * StockApplication serves as the main entry point to the program.
+/**
+ * StockApplication serves as the main entry point for the program.
  * */
 public class StockApplication extends Application 
 {
@@ -24,7 +24,7 @@ public class StockApplication extends Application
         stage.setScene(scene);
         stage.show();
 	}
-
+	
 	public static void main(String[] args) 
 	{
 		// Because we're using JavaFX, we must tell the application to launch.

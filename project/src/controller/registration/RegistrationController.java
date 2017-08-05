@@ -5,7 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-/*
+/**
  * RegistrationController handles input from the registration screen, including user data and parsing.
  * */
 public class RegistrationController implements EventHandler<ActionEvent>
