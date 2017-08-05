@@ -15,24 +15,6 @@ public class ASXInterface
 	
 	private static ASXInterface singleton = null;
 	
-	// ASXInerface constructor is private because we don't want external files
-	// constructing this object when they should be using the singleton.
-	private ASXInterface() { }
-	
-	/**
-	 * @return An ASXInterface object used to obtain ASX data.
-	 */
-	public ASXInterface getSingleton()
-	{
-		 if(singleton == null)
-		 {
-			 singleton = new ASXInterface();
-			 return singleton;
-		 }
-		 else
-			 return singleton;
-	}
-	
 	/**
 	 * @param stockCode The stock code to attempt to retrieve data for.
 	 * @return Stock information for given code.
