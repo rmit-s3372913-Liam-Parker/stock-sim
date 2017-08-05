@@ -4,7 +4,6 @@ import java.util.List;
 
 /**
  * Acts as the interface to all major system functionality.
- * @author Liam Parker
  */
 public interface CoreAPI 
 {

@@ -2,7 +2,6 @@ package model;
 
 /**
  * Stores login details
- * @author Liam Parker
  *
  */
 public class UserDetails 
