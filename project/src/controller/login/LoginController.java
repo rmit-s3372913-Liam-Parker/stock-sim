@@ -1,13 +1,18 @@
 package controller.login;
 
+import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import view.DashboardView;
+import view.StockApplication;
 
 /**
  * LoginController handles login and input validation.
  * */
-public class LoginController implements EventHandler<ActionEvent>
+public class LoginController extends Controller
 {
 	TextField user;
 	TextField pw;
@@ -29,8 +34,9 @@ public class LoginController implements EventHandler<ActionEvent>
 		String userString = user.getText();
 		String pwString = pw.getText();
 		
-		System.out.println("TEST OUTPUT: Username: " + userString + " Password: " + pwString);
+		//TODO: Input validation
 		
+		switchView(new DashboardView());
 		event.consume();
 	}
 
