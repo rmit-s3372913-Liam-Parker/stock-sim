@@ -1,5 +1,6 @@
 package view;
 
+<<<<<<< HEAD
 import controller.registration.RegistrationController;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -8,6 +9,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+=======
+import javafx.scene.layout.BorderPane;
+>>>>>>> 8259e98c3862cde9156eedea566937cda54dddc9
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -15,6 +19,7 @@ import javafx.scene.text.Text;
 /**
  * RegistrationView contains any UI code relevant to the registration screen.
  * */
+<<<<<<< HEAD
 public class RegistrationView extends GridPane
 {
 	private static final String REGISTRATION_TITLE = "Register";
@@ -37,6 +42,15 @@ public class RegistrationView extends GridPane
 		populate();
 	}
 	
+=======
+public class RegistrationView extends BorderPane
+{	
+	public RegistrationView()
+	{
+		populate();
+	}
+	
+>>>>>>> 8259e98c3862cde9156eedea566937cda54dddc9
 	/**
 	 * Builds the UI for this pane. UI elements and
 	 * any call-backs for functionality should be registered
@@ -45,6 +59,7 @@ public class RegistrationView extends GridPane
 	public void populate()
 	{
 		// Setup title
+<<<<<<< HEAD
 		Text loginTitle = new Text(REGISTRATION_TITLE);
 		loginTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		add(loginTitle, 0, 0, 2, 1);
@@ -81,3 +96,10 @@ public class RegistrationView extends GridPane
 		add(buttons, 1, 5);
 	}
 }
+=======
+		Text loginTitle = new Text("Registration Screen");
+		loginTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		setCenter(loginTitle);
+	}
+}
+>>>>>>> 8259e98c3862cde9156eedea566937cda54dddc9
