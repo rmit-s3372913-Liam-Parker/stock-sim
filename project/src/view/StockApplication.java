@@ -2,6 +2,8 @@ package view;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.CoreAPI;
+import model.CoreTest;
 
 /**
  * StockApplication serves as the main entry point for the program.
@@ -13,11 +15,13 @@ public class StockApplication extends Application
 	public static final int WINDOW_HEIGHT = 1080/2;
 	
 	private static Stage stage;
+	private static CoreAPI model;
 	
 	@Override
 	public void start(Stage stage) throws Exception 
 	{
 		StockApplication.stage = stage;
+		StockApplication.model = new CoreTest();
 		
 		// We begin the application on the login page.
 		LoginView initialView = new LoginView();
@@ -35,6 +39,14 @@ public class StockApplication extends Application
 	public static Stage getMainStage()
 	{
 		return stage;
+	}
+	
+	/**
+	 * @return Returns access to the model for this application.
+	 */
+	public static CoreAPI getModel()
+	{
+		return model;
 	}
 	
 	public static void main(String[] args) 
