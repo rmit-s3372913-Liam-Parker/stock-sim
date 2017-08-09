@@ -8,7 +8,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -82,10 +81,6 @@ public class RegistrationView extends BorderPane
 		// Set up buttons
 		Button registerButton = new Button(REGISTER_BUTTON);
 		registerButton.setOnAction(new RegistrationController(this, usernameField, passwordField, retypePasswordField));
-		gridPane.add(registerButton, 1, 3);
-		HBox buttons = new HBox(2.5);
-		buttons.getChildren().addAll(registerButton);
-		gridPane.add(buttons, 1, 5);
 		return gridPane;
 	}
 }
