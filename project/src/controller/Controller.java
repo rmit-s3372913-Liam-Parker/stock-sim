@@ -13,6 +13,6 @@ public abstract class Controller implements EventHandler<ActionEvent>
 	protected void switchView(Pane newView)
 	{
 		Stage stage = StockApplication.getMainStage();
-		stage.setScene(new Scene(new DashboardView(), StockApplication.WINDOW_WIDTH, StockApplication.WINDOW_HEIGHT));
+		stage.setScene(new Scene(newView, StockApplication.WINDOW_WIDTH, StockApplication.WINDOW_HEIGHT));
 	}
 }
