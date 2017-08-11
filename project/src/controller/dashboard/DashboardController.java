@@ -1,12 +1,13 @@
 package controller.dashboard;
 
+import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 /**
  * DashboardController handles interaction with the dash board.
  * */
-public class DashboardController implements EventHandler<ActionEvent>
+public class DashboardController extends Controller
 {
 
 	@Override
