@@ -49,10 +49,6 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 			lblStatus.setText("Please enter the password");
 		}
 		
-		// check both username & password
-		if(userString.isEmpty() && pwString.isEmpty()) {
-			lblStatus.setText("Please enter a username and a password");
-		}
 		
 		// connect to database and get match
 		//UserDetails user = new UserDetails(userString, pwString);
