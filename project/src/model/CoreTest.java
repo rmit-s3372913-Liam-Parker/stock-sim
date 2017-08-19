@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.CloudDatabase;
+
 /**
  * A mock core for faster testing and until we get a database running.
  */
@@ -15,6 +17,7 @@ public class CoreTest implements CoreAPI
 	@Override
 	public boolean registerNewUser(UserDetails details) 
 	{
+    	CloudDatabase cd = new CloudDatabase("register", details);
 		return true;
 	}
 	
