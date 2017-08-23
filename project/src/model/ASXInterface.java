@@ -31,7 +31,6 @@ public class ASXInterface
 	private final String COMPANY_LIST = "http://www.asx.com.au/asx/research/ASXListedCompanies.csv";
 	private final int LINE_SKIP = 3;
 	
-	private String lastUpdate = "";
 	private List<CompanyInfo> cachedCompanyInfo = null;
 	
 	/**
