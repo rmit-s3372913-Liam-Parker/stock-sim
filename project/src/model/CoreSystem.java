@@ -1,7 +1,11 @@
 package model;
 
 import java.util.List;
+import database.CloudDatabase;
 
+/**
+ * A mock core for faster testing and until we get a database running.
+ */
 public class CoreSystem implements CoreAPI 
 {
 	private UserDetails curUserSession = null;
@@ -16,7 +20,7 @@ public class CoreSystem implements CoreAPI
 	@Override
 	public boolean registerNewUser(UserDetails details) 
 	{
-		// TODO Auto-generated method stub
+    	CloudDatabase cd = new CloudDatabase("register", details);
 		return true;
 	}
 

@@ -2,23 +2,25 @@
 <html>
 <head>
 	<title>ASX Stock Simulator</title>
-	<link rel="stylesheet type="text/css" href="p1.css">
+	<link rel="stylesheet" type="text/css" href="p1.css">
 </head>
 <body>
 	<div class="form">
 		<form>
-			<label>Username:</label><input type="text" name="uname" placeholder="Username">
+			<p><font size="10">ASX Game</font></p>
+			<label>Username:</label><input type="text" name="uname" placeholder="Username" class="text">
 			<br><br>
-			<label>Password:</label> <input type="password" id="reg_password" name="reg_password" placeholder="Password" />
+			<label>Password:</label> <input type="password" id="reg_password" name="reg_password" placeholder="Password" class="text"/>
                             
              <input type="checkbox" id="showText" onclick="if(reg_password.type=='text')reg_password.type='password'; else reg_password.type='text';"/>
 			<br><br>
-			<label>Confirm Password:</label> <input type="password" id="con_password" name="con_password" placeholder="Confirm Password" />
+			<label>Confirm Password:</label> <input type="password" id="con_password" name="con_password" placeholder="Confirm Password" class="text"/>
                             
              <input type="checkbox" id="showText" onclick="if(con_password.type=='text')con_password.type='password'; else con_password.type='text';"/>
 			<br><br>
-			<input type="submit" value="submit">
-			<input type="submit" value="register">
+			<div id="button">
+			<input type="submit" value="Register" class="button">
+			</div>
 
 		</form>
 	</div>
