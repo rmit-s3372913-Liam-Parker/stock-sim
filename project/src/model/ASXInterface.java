@@ -7,11 +7,18 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import org.apache.commons.io.IOUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.opencsv.CSVReader;
 
@@ -22,6 +29,7 @@ public class ASXInterface
 {
 	private final String STOCK_URL = "http://data.asx.com.au/data/1/share/";
 	private final String COMPANY_LIST = "http://www.asx.com.au/asx/research/ASXListedCompanies.csv";
+	private final int LINE_SKIP = 3;
 	
 	private String lastUpdate = "";
 	private List<CompanyInfo> cachedCompanyInfo = null;
@@ -33,13 +41,19 @@ public class ASXInterface
 	public Stock getStockData(String stockCode)
 	{
 		Stock stock = null;
+		JSONParser parser = new JSONParser();
 		
 		try 
 		{
-			URL website = new URL(STOCK_URL + stockCode);
-			//TODO: Fill out stock information
+			InputStream stream = new URL( STOCK_URL + stockCode ).openStream();
+			Object parsedData = parser.parse(IOUtils.toString(stream, Charset.forName("UTF-8")));
+			JSONObject json = (JSONObject) parsedData;
+			stock = new Stock(json);
 		} 
 		catch (MalformedURLException e) { e.printStackTrace(); }
+	    catch (UnsupportedEncodingException e) { e.printStackTrace(); }
+		catch (IOException e) { e.printStackTrace(); } 
+		catch (ParseException e) { e.printStackTrace(); }
 		
 		return stock;
 	}
@@ -58,7 +72,16 @@ public class ASXInterface
 		try 
 		{
 			InputStream csv = new URL(COMPANY_LIST).openStream();
-			CSVReader reader = new CSVReader(new BufferedReader(new InputStreamReader(csv, "UTF-8")), ',', '"', 2);
+			CSVReader reader = new CSVReader(new BufferedReader(new InputStreamReader(csv, "UTF-8")));
+			List<String[]> lines = reader.readAll();
+			
+			for(int i = LINE_SKIP; i < lines.size(); ++i)
+			{
+				CompanyInfo info = new CompanyInfo(lines.get(i)[0], lines.get(i)[1], lines.get(i)[2]);
+				cachedCompanyInfo.add(info);
+			}
+			
+			reader.close();
 		}
 		catch (MalformedURLException e1) { e1.printStackTrace(); } 
 		catch (IOException e1)           { e1.printStackTrace(); }

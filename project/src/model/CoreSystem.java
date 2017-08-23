@@ -14,7 +14,7 @@ public class CoreSystem implements CoreAPI
 	
 	public CoreSystem()
 	{
-		marketInterface.getCurrentCompanyList();
+		
 	}
 	
 	@Override
