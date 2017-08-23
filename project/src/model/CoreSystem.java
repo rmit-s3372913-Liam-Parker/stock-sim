@@ -8,6 +8,11 @@ public class CoreSystem implements CoreAPI
 	private PlayerStats curPlayerStats = null;
 	private ASXInterface marketInterface = new ASXInterface();
 	
+	public CoreSystem()
+	{
+		marketInterface.getCurrentCompanyList();
+	}
+	
 	@Override
 	public boolean registerNewUser(UserDetails details) 
 	{

@@ -1,12 +1,19 @@
 package model;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import com.opencsv.CSVReader;
 
 /**
  * ASXInterface allows for queries of ASX share market data.
@@ -48,28 +55,13 @@ public class ASXInterface
 			cachedCompanyInfo = new ArrayList<CompanyInfo>();
 		
 		// Download and load the companies list from ASX.
-		File csv = new File(COMPANY_LIST);
-			
 		try 
 		{
-			Scanner s = new Scanner(csv);
-				
-			// Two special cases at the top of csv. Last update and blank line.
-			lastUpdate = s.nextLine();
-			s.nextLine();
-				
-			// Iterate over listed companies
-			while(s.hasNextLine())
-			{
-				String rawData = s.nextLine();
-				String[] splitData = rawData.split(",");
-				CompanyInfo info = new CompanyInfo(splitData[0], splitData[1], splitData[2]);
-				cachedCompanyInfo.add(info);
-		    }
-				
-			s.close();
-		} 
-		catch (FileNotFoundException e) { e.printStackTrace(); }
+			InputStream csv = new URL(COMPANY_LIST).openStream();
+			CSVReader reader = new CSVReader(new BufferedReader(new InputStreamReader(csv, "UTF-8")), ',', '"', 2);
+		}
+		catch (MalformedURLException e1) { e1.printStackTrace(); } 
+		catch (IOException e1)           { e1.printStackTrace(); }
 		
 		return cachedCompanyInfo;
 	}
