@@ -28,6 +28,7 @@ public class RegistrationView extends BorderPane
 	public Text userCheck = new Text();
 	public Text passCheck = new Text();
 	public Text retypePassCheck = new Text();
+	public Text internetCheck = new Text();
 	
 	public RegistrationView()
 	{
@@ -79,6 +80,9 @@ public class RegistrationView extends BorderPane
 
 		//Creating an alert Text 
 		gridPane.add(retypePassCheck, 2, 3);
+		
+		//Creating an alert Text 
+		gridPane.add(internetCheck, 1, 4);
 		
 		// Set up buttons
 		Button registerButton = new Button(REGISTER_BUTTON);

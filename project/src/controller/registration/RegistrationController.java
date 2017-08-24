@@ -91,7 +91,7 @@ public class RegistrationController  extends Controller implements EventHandler<
 			UserDetails newUser = new UserDetails(user.getText(), pw.getText());
 			
 			//send form to database
-			getModel().registerNewUser(newUser);
+			view.internetCheck.setText(getModel().registerNewUser(newUser));;
 			
 			//all text field is qualified, go back to login
 			switchView(new LoginView());

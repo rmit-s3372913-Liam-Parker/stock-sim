@@ -11,6 +11,7 @@ public class CoreSystem implements CoreAPI
 	private UserDetails curUserSession = null;
 	private PlayerStats curPlayerStats = null;
 	private ASXInterface marketInterface = new ASXInterface();
+	private CloudDatabase cloudDatabase = new CloudDatabase();
 	
 	public CoreSystem()
 	{
@@ -18,10 +19,9 @@ public class CoreSystem implements CoreAPI
 	}
 	
 	@Override
-	public boolean registerNewUser(UserDetails details) 
+	public String registerNewUser(UserDetails details) 
 	{
-    	CloudDatabase cd = new CloudDatabase("register", details);
-		return true;
+    	return cloudDatabase.register(details);
 	}
 
 	@Override

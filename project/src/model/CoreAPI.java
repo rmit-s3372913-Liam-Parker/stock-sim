@@ -12,7 +12,7 @@ public interface CoreAPI
 	 * @param details The new user to attempt to register with the system.
 	 * @return True when the details were accepted, false otherwise.
 	 */
-	public boolean registerNewUser(UserDetails details);
+	public String registerNewUser(UserDetails details);
 	
 	/**
 	 * Begins a session for the given user.

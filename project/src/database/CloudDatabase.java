@@ -14,6 +14,8 @@ import java.sql.ResultSetMetaData;
 
 public class CloudDatabase
 {
+	private static String EXISTED_NAME = "Username already existed";
+	private static String NO_INTERNET = "Internet connection unavailable";
     private static String dbURL = "jdbc:derby://52.65.208.133:1368/Database";
     private static String playerTable = "player";
     // jdbc Connection
@@ -21,22 +23,22 @@ public class CloudDatabase
     
     private Statement stmt = null;
 
-    public CloudDatabase(String function, Object info){
-    	switch (function){
-	    	case "register":{
-	    		UserDetails user = (UserDetails) info;
-	    		
-	            createConnection();
-	            insertPlayer(user.getUsername(), user.getPassword());
-	//            updatePlayer(5, "lol", "otz");
-	            select();
-	            shutdown();
-	            break;
-	    	}
-    	}
+    public CloudDatabase(){
     }
     
-    private void createConnection()
+    public String register(UserDetails user){
+        if (createConnection()){
+            if (!insertPlayer(user.getUsername(), user.getPassword()))
+            	return EXISTED_NAME;
+//            updatePlayer(5, "lol", "otz");
+            select();
+            shutdown();
+            return null;
+        }
+    	return NO_INTERNET;
+    }
+    
+    private boolean createConnection()
     {
         try
         {
@@ -47,18 +49,22 @@ public class CloudDatabase
         catch (Exception except)
         {
             except.printStackTrace();
+            return false;
         }
+        return true;
     }
     
-    private void insertPlayer(String username, String password)
+    private boolean insertPlayer(String username, String password)
     {
         try
         {
+        	int id = 1;
             stmt = conn.createStatement();
             ResultSet results = stmt.executeQuery("select * from " + playerTable + " order by id DESC");
-            results.next();
-            int id = results.getInt(1);
-            id++;
+            if (results.next()){
+	            id = results.getInt(1);
+	            id++;
+            }
             
             stmt.execute("insert into " + playerTable + " values (" +
                     id + ",'" + username + "','" + password +"')");
@@ -67,7 +73,9 @@ public class CloudDatabase
         catch (SQLException sqlExcept)
         {
             sqlExcept.printStackTrace();
+            return false;
         }
+        return true;
     }
     
     private void updatePlayer(int id, String username, String password)
