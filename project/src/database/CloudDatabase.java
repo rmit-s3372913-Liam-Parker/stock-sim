@@ -14,10 +14,12 @@ import java.sql.ResultSetMetaData;
 
 public class CloudDatabase
 {
-	private static String EXISTED_NAME = "Username already existed";
-	private static String NO_INTERNET = "Internet connection unavailable";
+	private static final String EXISTED_NAME = "Username already existed";
+	private static final String NO_INTERNET = "Internet connection unavailable";
+	
     private static String dbURL = "jdbc:derby://52.65.208.133:1368/Database";
     private static String playerTable = "player";
+    
     // jdbc Connection
     private Connection conn = null;
     
@@ -28,8 +30,11 @@ public class CloudDatabase
     
     public String register(UserDetails user){
         if (createConnection()){
-            if (!insertPlayer(user.getUsername(), user.getPassword()))
+            if (playerExist(user.getUsername())){
+            	shutdown();
             	return EXISTED_NAME;
+            }
+            insertPlayer(user.getUsername(), user.getPassword());
 //            updatePlayer(5, "lol", "otz");
             select();
             shutdown();
@@ -54,7 +59,25 @@ public class CloudDatabase
         return true;
     }
     
-    private boolean insertPlayer(String username, String password)
+    private boolean playerExist(String username){
+    	try
+        {
+            stmt = conn.createStatement();
+            ResultSet results = stmt.executeQuery("select * from " + playerTable + " where username = '" + username + "'");
+            if (results.next()){
+                stmt.close();
+            	return true;
+            }
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+    	return false;
+    }
+    
+    private void insertPlayer(String username, String password)
     {
         try
         {
@@ -73,9 +96,7 @@ public class CloudDatabase
         catch (SQLException sqlExcept)
         {
             sqlExcept.printStackTrace();
-            return false;
         }
-        return true;
     }
     
     private void updatePlayer(int id, String username, String password)

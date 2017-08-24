@@ -16,6 +16,10 @@ import view.RegistrationView;
  * */
 public class RegistrationController  extends Controller implements EventHandler<ActionEvent>
 {
+	private static final String EMPTY = "Need to be filled";
+	private static final String WRONG_SYNTAX = 
+		"Can have only maximum length of 15 of normal alphabet, number and following special character: ,.;:?_-$";
+	private static final String NOT_SAME_PASSWORD = "Not the same password";
 	RegistrationView view;
 	TextField user;
 	TextField pw;
@@ -27,7 +31,8 @@ public class RegistrationController  extends Controller implements EventHandler<
 	 * @param pw The TextField used to input password.
 	 * @param pwRe The TextField used to retype password.
 	 */
-	public RegistrationController(RegistrationView view, TextField userField, PasswordField pwField, PasswordField pwFieldRetype)
+	public RegistrationController(RegistrationView view, TextField userField,
+			PasswordField pwField, PasswordField pwFieldRetype)
 	{
 		this.view = view;
 		if (userField!=null)
@@ -52,37 +57,37 @@ public class RegistrationController  extends Controller implements EventHandler<
 
 		//check if user name is allowed
 		if (!user.getText().matches(pattern)){
-			view.userCheck.setText("Can have only maximum length of 15 of normal alphabet, number and following special character: ,.;:?_-$");
+			view.userCheck.setText(WRONG_SYNTAX);
 			qualified = false;
 		}
 		
 		//check if user name is empty
 		if (user.getText().equals("")){
-			view.userCheck.setText("Need to be filled");
+			view.userCheck.setText(EMPTY);
 			qualified = false;
 		}
 
 		//check if password is allowed
 		if (!pw.getText().matches(pattern)){
-			view.passCheck.setText("Can have only maximum length of 15 of normal alphabet, number and following special character: ,.;:?_-$");
+			view.passCheck.setText(WRONG_SYNTAX);
 			qualified = false;
 		}
 
 		//check if password is empty
 		if (pw.getText().equals("")){
-			view.passCheck.setText("Need to be filled");
+			view.passCheck.setText(EMPTY);
 			qualified = false;
 		}
 	
 		//check if password retype is empty
 		if (pwRe.getText().equals("")){
-			view.retypePassCheck.setText("Need to be filled");
+			view.retypePassCheck.setText(EMPTY);
 			qualified = false;
 		}
 						
 		//check if password and password retype is the same
 		if (!pw.getText().equals(pwRe.getText())){
-			view.retypePassCheck.setText("Not the same password");
+			view.retypePassCheck.setText(NOT_SAME_PASSWORD);
 			qualified = false;
 		}
 							
@@ -91,10 +96,11 @@ public class RegistrationController  extends Controller implements EventHandler<
 			UserDetails newUser = new UserDetails(user.getText(), pw.getText());
 			
 			//send form to database
-			view.internetCheck.setText(getModel().registerNewUser(newUser));;
+			view.internetCheck.setText(getModel().registerNewUser(newUser));
 			
 			//all text field is qualified, go back to login
-			switchView(new LoginView());
+			if (getModel().registerNewUser(newUser)==null)
+				switchView(new LoginView());
 		}
 		event.consume();
 	}
