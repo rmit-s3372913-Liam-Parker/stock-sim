@@ -1,7 +1,7 @@
 package controller.registration;
 
+import java.util.Random;
 import java.util.regex.Matcher;
-
 import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,7 +14,7 @@ import view.RegistrationView;
 /**
  * RegistrationController handles input from the registration screen, including user data and parsing.
  * */
-public class RegistrationController  extends Controller implements EventHandler<ActionEvent>
+public class RegistrationController extends Controller implements EventHandler<ActionEvent>
 {
 	private static final String EMPTY = "Need to be filled";
 	private static final String WRONG_SYNTAX = 
@@ -46,6 +46,9 @@ public class RegistrationController  extends Controller implements EventHandler<
 	@Override
 	public void handle(ActionEvent event)
 	{
+		//create form to send to database
+		UserDetails newUser = new UserDetails(user.getText(), pw.getText());
+		
 		boolean qualified = true;
 		String pattern = "^[0-9a-zA-Z,.;:?_-dollar]{0,15}$";
 		pattern.replace("dollar", Matcher.quoteReplacement("$"));
@@ -90,20 +93,29 @@ public class RegistrationController  extends Controller implements EventHandler<
 			view.retypePassCheck.setText(NOT_SAME_PASSWORD);
 			qualified = false;
 		}
-							
+		
+		//check username
+		if (getModel().checkUsername(newUser)!=null){
+			view.internetCheck.setText(getModel().checkUsername(newUser));
+			qualified = false;
+		}
+		
 		if (qualified) {
-			//create form to send to database
-			UserDetails newUser = new UserDetails(user.getText(), pw.getText());
+			//generate pin of 4 number
+			String pin = "";
+			Random random = new Random();
+			for (int i=0; i<4; i++){
+				pin.concat(String.valueOf(random.nextInt(10)));
+			}
 			
-			//send form to database
-			view.internetCheck.setText(getModel().registerNewUser(newUser));
-			
-			//all text field is qualified, go back to login
-			if (getModel().registerNewUser(newUser)==null)
+			//register user to database
+			if (getModel().registerNewUser(newUser, pin)==null){
+				//send email with pin number
+
+				//all text field is qualified, go back to login
 				switchView(new LoginView());
+			}
 		}
 		event.consume();
 	}
-	
-	
 }

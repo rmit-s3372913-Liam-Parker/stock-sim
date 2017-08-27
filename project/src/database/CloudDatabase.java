@@ -2,7 +2,6 @@ package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,14 +27,32 @@ public class CloudDatabase
     public CloudDatabase(){
     }
     
-    public String register(UserDetails user){
+
+    public String checkUsername(UserDetails user){
         if (createConnection()){
             if (playerExist(user.getUsername())){
             	shutdown();
             	return EXISTED_NAME;
             }
-            insertPlayer(user.getUsername(), user.getPassword());
-//            updatePlayer(5, "lol", "otz");
+            shutdown();
+            return null;
+        }
+    	return NO_INTERNET;
+    }
+    
+    public String register(UserDetails user, String pin){
+        if (createConnection()){
+            insertPlayer(user.getUsername(), user.getPassword(), pin);
+            select();
+            shutdown();
+            return null;
+        }
+    	return NO_INTERNET;
+    }
+    
+    public String confirm(UserDetails user){
+        if (createConnection()){
+            confirmPlayer(user.getUsername(), user.getPassword());
             select();
             shutdown();
             return null;
@@ -77,20 +94,14 @@ public class CloudDatabase
     	return false;
     }
     
-    private void insertPlayer(String username, String password)
+    private void insertPlayer(String username, String password, String pin)
     {
         try
         {
-        	int id = 1;
             stmt = conn.createStatement();
-            ResultSet results = stmt.executeQuery("select * from " + playerTable + " order by id DESC");
-            if (results.next()){
-	            id = results.getInt(1);
-	            id++;
-            }
             
-            stmt.execute("insert into " + playerTable + " values (" +
-                    id + ",'" + username + "','" + password +"')");
+            stmt.execute("insert into " + playerTable + " values ('" +
+            		username + "','" + password + "', '" + pin + "')");
             stmt.close();
         }
         catch (SQLException sqlExcept)
@@ -99,19 +110,33 @@ public class CloudDatabase
         }
     }
     
-    private void updatePlayer(int id, String username, String password)
+    private void confirmPlayer(String username, String confirm)
     {
         try
         {
-        	PreparedStatement pstmt = conn.prepareStatement(
-            	      "UPDATE " + playerTable + " SET username = ?, password = ? WHERE id = ?");
+        	stmt = conn.createStatement();
 
-            pstmt.setString(1,username);
-            pstmt.setString(2,password);
-            pstmt.setInt(3,id);
-            
-        	pstmt.executeUpdate();
-            pstmt.close();
+        	stmt.execute(
+          	      "UPDATE " + playerTable + " SET confirm = '" + confirm
+          	      + "' WHERE username = '" + username + "'");
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+    }
+    
+    private void updatePlayer(String username, String password)
+    {
+        try
+        {
+        	stmt = conn.createStatement();
+
+        	stmt.execute(
+          	      "UPDATE " + playerTable + " SET username = '" + username
+          	      + "', password = '" + password + "' WHERE username = '" + username + "'");
+            stmt.close();
         }
         catch (SQLException sqlExcept)
         {
@@ -137,10 +162,9 @@ public class CloudDatabase
 
             while(results.next())
             {
-                int id = results.getInt(1);
-                String restName = results.getString(2);
-                String cityName = results.getString(3);
-                System.out.println(id + "\t\t" + restName + "\t\t" + cityName);
+                String username = results.getString(1);
+                String password = results.getString(2);
+                System.out.println(username + "\t\t" + password);
             }
             results.close();
             stmt.close();

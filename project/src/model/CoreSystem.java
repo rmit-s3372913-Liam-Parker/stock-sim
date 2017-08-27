@@ -19,22 +19,36 @@ public class CoreSystem implements CoreAPI
 	}
 	
 	@Override
-	public String registerNewUser(UserDetails details) 
+	public String checkUsername(UserDetails details)
 	{
-    	return cloudDatabase.register(details);
+		return cloudDatabase.checkUsername(details);
+	}
+	
+	@Override
+	public String registerNewUser(UserDetails details, String pin) 
+	{
+    	return cloudDatabase.register(details, pin);
+	}
+	
+	@Override
+	public String confirmNewUser(UserDetails details) 
+	{
+    	return cloudDatabase.confirm(details);
 	}
 
 	@Override
 	public boolean beginSession(UserDetails details) 
 	{
-		// TODO Auto-generated method stub
+		curUserSession = details;
+		//more stuffs
 		return true;
 	}
 
 	@Override
 	public boolean endSession() 
 	{
-		// TODO Auto-generated method stub
+		curUserSession = null;
+		curPlayerStats = null;
 		return true;
 	}
 
@@ -44,5 +58,4 @@ public class CoreSystem implements CoreAPI
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }
