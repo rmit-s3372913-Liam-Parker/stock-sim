@@ -20,12 +20,14 @@ public class RegistrationView extends BorderPane
 {	
 	private static final String REGISTRATION_TITLE = "ASX Registration";
 	private static final String USERNAME_LABEL = "Username:";
+	private static final String EMAIL_LABEL = "Email:";
 	private static final String PASSWORD_LABEL = "Password:";
 	private static final String RETYPE_PASSWORD_LABEL = "Retype Password:";
 	
 	private static final String REGISTER_BUTTON = "Register";
 
 	public Text userCheck = new Text();
+	public Text emailCheck = new Text();
 	public Text passCheck = new Text();
 	public Text retypePassCheck = new Text();
 	public Text internetCheck = new Text();
@@ -62,35 +64,44 @@ public class RegistrationView extends BorderPane
 
 		//Creating an alert Text 
 		gridPane.add(userCheck, 2, 1);
+		
+		// Setup email field
+		Label email = new Label(EMAIL_LABEL);
+		gridPane.add(email, 0, 2);
+		TextField emailField = new TextField();
+		gridPane.add(emailField, 1, 2);
+
+		//Creating an alert Text 
+		gridPane.add(emailCheck, 2, 2);
 
 		// Setup password field
 		Label password = new Label(PASSWORD_LABEL);
-		gridPane.add(password, 0, 2);
+		gridPane.add(password, 0, 3);
 		PasswordField passwordField = new PasswordField();
-		gridPane.add(passwordField, 1, 2);
+		gridPane.add(passwordField, 1, 3);
 
 		//Creating an alert Text 
-		gridPane.add(passCheck, 2, 2);
+		gridPane.add(passCheck, 2, 3);
 		
 		// Setup password retype field
 		Label retypePassword = new Label(RETYPE_PASSWORD_LABEL);
-		gridPane.add(retypePassword, 0, 3);
+		gridPane.add(retypePassword, 0, 4);
 		PasswordField retypePasswordField = new PasswordField();
-		gridPane.add(retypePasswordField, 1, 3);
+		gridPane.add(retypePasswordField, 1, 4);
 
 		//Creating an alert Text 
-		gridPane.add(retypePassCheck, 2, 3);
+		gridPane.add(retypePassCheck, 2, 4);
 		
 		//Creating an alert Text 
-		gridPane.add(internetCheck, 1, 4);
+		gridPane.add(internetCheck, 1, 5);
 		
 		// Set up buttons
 		Button registerButton = new Button(REGISTER_BUTTON);
-		registerButton.setOnAction(new RegistrationController(this, usernameField, passwordField, retypePasswordField));
+		registerButton.setOnAction(new RegistrationController(this, usernameField, emailField, passwordField, retypePasswordField));
 		gridPane.add(registerButton, 1, 3);
 		HBox buttons = new HBox(2.5);
 		buttons.getChildren().addAll(registerButton);
-		gridPane.add(buttons, 1, 5);
+		gridPane.add(buttons, 1, 6);
 		return gridPane;
 	}
 }

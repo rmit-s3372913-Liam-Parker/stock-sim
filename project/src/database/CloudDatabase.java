@@ -42,7 +42,7 @@ public class CloudDatabase
     
     public String register(UserDetails user, String pin){
         if (createConnection()){
-            insertPlayer(user.getUsername(), user.getPassword(), pin);
+            insertPlayer(user.getUsername(), user.getPassword(), user.getEmail(), pin);
             select();
             shutdown();
             return null;
@@ -94,14 +94,14 @@ public class CloudDatabase
     	return false;
     }
     
-    private void insertPlayer(String username, String password, String pin)
+    private void insertPlayer(String username, String password, String email, String pin)
     {
         try
         {
             stmt = conn.createStatement();
             
             stmt.execute("insert into " + playerTable + " values ('" +
-            		username + "','" + password + "', '" + pin + "')");
+            		username + "','" + password + "', '" + email + "', 'No', '" + pin + "')");
             stmt.close();
         }
         catch (SQLException sqlExcept)
@@ -164,7 +164,10 @@ public class CloudDatabase
             {
                 String username = results.getString(1);
                 String password = results.getString(2);
-                System.out.println(username + "\t\t" + password);
+                String email = results.getString(3);
+                String confirm = results.getString(4);
+                String pin = results.getString(5);
+                System.out.println(username + "\t\t\t" + password + "\t\t\t" + email + "\t\t\t" + confirm + "\t\t" + pin);
             }
             results.close();
             stmt.close();
