@@ -10,7 +10,7 @@ if(isset($_POST['login']))
 	$password = mysqli_escape_string($conn, $_POST['password']);
 	$password = md5($password);
 
-	$query = mysqli_query($conn, "Select * FROM test WHERE username='".$uname."' AND password='".$password."'");
+	$query = mysqli_query($conn, "Select * FROM player WHERE username='".$uname."' AND password='".$password."'");
 	/* database query */
 	$result = mysqli_num_rows($query);
 

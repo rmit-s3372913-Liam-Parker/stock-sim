@@ -42,7 +42,7 @@ session_start();
         echo $_SESSION['email_error']; unset($_SESSION['email_error']); 
         }
       ?>
-      <form action="validate.php" method="POST">
+      <form action="registration_validation.php" method="POST">
         <div class="form-group">
           <input type="text" class="form-control" name="username" placeholder="Username" required>
         </div>

@@ -1,13 +1,14 @@
 <?php
 session_start();
+include 'connection.php';
 
 if(isset($_POST['confirm']))
 {
-	$conn = mysqli_connect('localhost', 'root', '', 'testing');
-	$code_match = mysqli_escape_string($conn, $_POST['confimation-code']);
-	$match = $_SESSION['$code'];
 	
 	echo "TEST!";
+	$code_match = mysqli_escape_string($conn, $_POST['confimation-code']);
+	$match = $_SESSION['$code'];
+
 	if ($code_match == $match)
 	{
 		echo "Email confirmed!";
@@ -16,7 +17,7 @@ if(isset($_POST['confirm']))
 	else
 	{
 		$_SESSION['code_error'] = "Incorrect Code";
-		header('Location: confirmation_form.php');
+		header('Location: registration_confirmation_form.php');
 	}
 	
 }

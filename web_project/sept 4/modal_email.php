@@ -6,7 +6,7 @@ if(isset($_POST['reset']))
 {
 	$email = mysqli_escape_string($conn, $_POST['email']);
 
-	$query = mysqli_query($conn, "Select * FROM test WHERE email='".$email."' ");
+	$query = mysqli_query($conn, "Select * FROM player WHERE email='".$email."' ");
 
 	$numrow = mysqli_num_rows($query);
 

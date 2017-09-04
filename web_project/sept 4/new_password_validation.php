@@ -8,7 +8,7 @@ if(isset($_POST['change']))
 	$con_password = mysqli_escape_string($conn, $_POST['con-password']);
 	
 
-	$query = mysqli_query($conn, "Select * from test where email='".$_SESSION['address']."' ");
+	$query = mysqli_query($conn, "Select * from player where email='".$_SESSION['address']."' ");
 
 
 	$numrow = mysqli_num_rows($query);
