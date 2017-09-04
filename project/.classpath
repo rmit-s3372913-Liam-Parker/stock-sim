@@ -22,7 +22,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/derbyrun.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-beanutils-1.9.3-javadoc.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-beanutils-1.9.3.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-2.5-javadoc.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-2.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-io-2.5-javadoc.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-io-2.5.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

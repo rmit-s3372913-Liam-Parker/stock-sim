@@ -2,14 +2,27 @@ package controller.registration;
 
 import java.util.Random;
 import java.util.regex.Matcher;
+import java.util.Properties;
+
 import controller.Controller;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+
 import model.UserDetails;
+
 import view.RegistrationConfirmationView;
 import view.RegistrationView;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.Session;
+import javax.mail.Transport;
 
 /**
  * RegistrationController handles input from the registration screen, including user data and parsing.
@@ -64,65 +77,76 @@ public class RegistrationController extends Controller implements EventHandler<A
 		view.retypePassCheck.setText("");
 
 		//check if user name is allowed
-		if (!user.getText().matches(inputPattern)){
+		if (!user.getText().matches(inputPattern))
+		{
 			view.userCheck.setText(WRONG_SYNTAX);
 			qualified = false;
 		}
 
 		//check if user name is empty
-		if (user.getText().equals("")){
+		if (user.getText().equals(""))
+		{
 			view.userCheck.setText(EMPTY);
 			qualified = false;
 		}
 
 		//check if email is allowed
-		if (!email.getText().matches(emailPattern)){
+		if (!email.getText().matches(emailPattern))
+		{
 			view.emailCheck.setText(INVALID_EMAIL);
 			qualified = false;
 		}
 
 		//check if email is empty
-		if (email.getText().equals("")){
+		if (email.getText().equals(""))
+		{
 			view.emailCheck.setText(EMPTY);
 			qualified = false;
 		}
 
 		//check if password is allowed
-		if (!pw.getText().matches(inputPattern)){
+		if (!pw.getText().matches(inputPattern))
+		{
 			view.passCheck.setText(WRONG_SYNTAX);
 			qualified = false;
 		}
 
 		//check if password is empty
-		if (pw.getText().equals("")){
+		if (pw.getText().equals(""))
+		{
 			view.passCheck.setText(EMPTY);
 			qualified = false;
 		}
 	
 		//check if password retype is empty
-		if (pwRe.getText().equals("")){
+		if (pwRe.getText().equals(""))
+		{
 			view.retypePassCheck.setText(EMPTY);
 			qualified = false;
 		}
 						
 		//check if password and password retype is the same
-		if (!pw.getText().equals(pwRe.getText())){
+		if (!pw.getText().equals(pwRe.getText()))
+		{
 			view.retypePassCheck.setText(NOT_SAME_PASSWORD);
 			qualified = false;
 		}
 		
 		//check username in database
-		if (getModel().checkUsername(newUser)!=null){
+		if (getModel().checkUsername(newUser)!=null)
+		{
 			view.internetCheck.setText(getModel().checkUsername(newUser));
 			qualified = false;
 		}
 		
-		if (qualified) {
+		if (qualified) 
+		{
 			String pin = generatePin();
 			//register user to database
-			if (getModel().registerNewUser(newUser, pin)==null){
+			if (getModel().registerNewUser(newUser, pin) == null)
+			{
 				//send email with pin number
-				sendMail(pin);
+				sendMail(email.getText(), pin);
 				
 				//all text field is qualified, go back to login
 				switchView(new RegistrationConfirmationView());
@@ -131,17 +155,44 @@ public class RegistrationController extends Controller implements EventHandler<A
 		event.consume();
 	}
 	
-	private String generatePin(){
+	private String generatePin()
+	{
 		//generate pin of 4 number
 		String pin = "";
 		Random random = new Random();
-		for (int i=0; i<4; i++){
+		for (int i=0; i<4; i++)
+		{
 			pin+=random.nextInt(10);
 		}
 		return pin;
 	}
 	
-	private void sendMail(String pin){
-		
+	/**
+	 * Sends an email containing registration confirmation data.
+	 * @param email The email for the pin to be sent to.
+	 * @param pin The pin to send.
+	 */
+	private void sendMail(String email, String pin)
+	{
+		String senderEmail = "parker.liam5@gmail.com";
+	    Properties properties = System.getProperties();
+	    properties.setProperty("mail.smtp.host", "localhost");
+
+		Session session = Session.getDefaultInstance(properties);
+
+		try 
+		{
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(senderEmail));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+			message.setSubject("ASX Simulator - Registration Confirmation");
+			message.setText("To finalize your registration, input the following pin \n\n" + pin +
+					"If you leave the application before inputting the pin you'll be sent a new email and prompted again " + ""
+							+ "on your next login. \n\n");
+
+			Transport.send(message);
+
+		} 
+		catch (MessagingException e) { e.printStackTrace(); }
 	}
 }
