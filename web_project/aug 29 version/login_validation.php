@@ -3,12 +3,13 @@
 if(isset($_POST['login']))
 {
 	
-	$conn = mysqli_connect('localhost', 'root', '', 'testing');
+  $conn = mysqli_connect('capstonedatabase.cszu3gvo32mp.ap-southeast-2.rds.amazonaws.com',
+                         'admin', 'password', 'CapstoneDatabase');
 	$uname = mysqli_escape_string($conn, $_POST['username']);
 	$password = mysqli_escape_string($conn, $_POST['password']);
 	
 
-	$query = mysqli_query($conn, "Select * FROM test WHERE username='".$uname."' AND password='".$password."' ");
+	$query = mysqli_query($conn, "Select * FROM player WHERE username='".$uname."' AND password='".$password."' ");
 	$numrows = mysqli_num_rows($query);
 
 	
