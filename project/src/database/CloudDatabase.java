@@ -15,8 +15,9 @@ public class CloudDatabase
 {
 	private static final String EXISTED_NAME = "Username already existed";
 	private static final String NO_INTERNET = "Internet connection unavailable";
+	private static final String INVALID = "Incorrect username or password";
 	
-    private static String dbURL = "jdbc:derby://52.65.208.133:1368/Database";
+    private static String dbURL = "jdbc:mysql://capstonedatabase.cszu3gvo32mp.ap-southeast-2.rds.amazonaws.com:3306/CapstoneDatabase?user=admin&password=password";
     private static String playerTable = "player";
     
     // jdbc Connection
@@ -24,10 +25,8 @@ public class CloudDatabase
     
     private Statement stmt = null;
 
-    public CloudDatabase(){
-    }
+    public CloudDatabase(){}
     
-
     public String checkUsername(UserDetails user){
         if (createConnection()){
             if (playerExist(user.getUsername())){
@@ -39,11 +38,21 @@ public class CloudDatabase
         }
     	return NO_INTERNET;
     }
-    
+
     public String register(UserDetails user, String pin){
         if (createConnection()){
             insertPlayer(user.getUsername(), user.getPassword(), user.getEmail(), pin);
-            select();
+            //select();
+            shutdown();
+            return null;
+        }
+    	return NO_INTERNET;
+    }
+    
+    public String login(UserDetails user){
+        if (createConnection()){
+            if (!loginCheck(user))
+            	return INVALID;
             shutdown();
             return null;
         }
@@ -53,7 +62,7 @@ public class CloudDatabase
     public String confirm(UserDetails user){
         if (createConnection()){
             confirmPlayer(user.getUsername(), user.getPassword());
-            select();
+            //select();
             shutdown();
             return null;
         }
@@ -64,7 +73,7 @@ public class CloudDatabase
     {
         try
         {
-            Class.forName("org.apache.derby.jdbc.ClientDriver").newInstance();
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
             //Get a connection
             conn = DriverManager.getConnection(dbURL); 
         }
@@ -81,6 +90,27 @@ public class CloudDatabase
         {
             stmt = conn.createStatement();
             ResultSet results = stmt.executeQuery("select * from " + playerTable + " where username = '" + username + "'");
+            if (results.next()){
+                stmt.close();
+            	return true;
+            }
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+    	return false;
+    }
+    
+    private boolean loginCheck(UserDetails user){
+    	try
+        {
+            stmt = conn.createStatement();
+            ResultSet results = stmt.executeQuery("select * from "
+            + playerTable + " where username = '"
+            + user.getUsername() + "' and password = '"
+            + user.getPassword() + "'");
             if (results.next()){
                 stmt.close();
             	return true;

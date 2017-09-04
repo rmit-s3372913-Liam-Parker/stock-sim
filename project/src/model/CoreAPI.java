@@ -34,7 +34,7 @@ public interface CoreAPI
 	 * @param details 
 	 * @return True when the session was successfully started, false otherwise.
 	 */
-	public boolean beginSession(UserDetails details);
+	public String beginSession(UserDetails details);
 	
 	/**
 	 * Attempts to end the current session.

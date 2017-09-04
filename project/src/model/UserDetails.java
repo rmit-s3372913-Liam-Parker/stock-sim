@@ -11,7 +11,7 @@ public class UserDetails
 	private String email;
 	
 	/**
-	 * Constructs a user data object representing the given username and password.
+	 * Constructs a user data object representing the given username, password and email.
 	 * @param username
 	 * @param password
 	 * @param email
@@ -22,7 +22,17 @@ public class UserDetails
 		this.password = password;
 		this.email = email;
 	}
-	
+
+	/**
+	 * Constructs a user data object representing the given username and password.
+	 * @param username
+	 * @param password
+	 */
+	public UserDetails(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+
 	/**
 	 * @return The username of this user.
 	 */
@@ -37,6 +47,14 @@ public class UserDetails
 	public String getPassword()
 	{
 		return password;
+	}
+	
+	/**
+	 * @return The email of this user.
+	 */
+	public void setEmail(String email)
+	{
+		this.email = email;
 	}
 	
 	/**

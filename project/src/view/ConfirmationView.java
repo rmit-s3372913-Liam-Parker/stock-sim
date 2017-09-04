@@ -1,7 +1,9 @@
 package view;
 
+import controller.confirmation.CancelButtonController;
 import controller.confirmation.ConfirmationController;
 import controller.login.LoginController;
+import controller.login.RegisterController;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,12 +12,14 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 
 public class ConfirmationView extends GridPane {
 	private static final String TITLE = "Confirmation";
 	private static final String EXPLAINATION = "Please enter PIN number sent to your email for confirmation";
 	private static final String PIN_LABEL = "PIN:";
 	private static final String CONFIRM_BUTTON = "Confirm";
+	private static final String CANCEL_BUTTON = "Cancel";
 	
 	/**
 	 *  Constructs a ConfirmationView object with default positioning.
@@ -49,11 +53,16 @@ public class ConfirmationView extends GridPane {
 		// Explaination
 		Text explaination = new Text(EXPLAINATION);
 		explaination.setFont(Font.font("Tahoma", FontWeight.NORMAL, 12));
-		add(explaination, 0, 0, 2, 1);
+		add(explaination, 0, 2, 2, 1);
 
 		// Set up buttons
 		Button confirmButton = new Button(CONFIRM_BUTTON);
 		confirmButton.setOnAction(new ConfirmationController(pinField));
-		add(confirmButton, 1, 3);
+		Button cancelButton = new Button(CANCEL_BUTTON);
+		cancelButton.setOnAction(new CancelButtonController());
+		add(cancelButton, 1, 3);
+		HBox buttons = new HBox(2.5);
+		buttons.getChildren().addAll(confirmButton, cancelButton);
+		add(buttons, 1, 5);
 	}
 }

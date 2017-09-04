@@ -37,11 +37,10 @@ public class CoreSystem implements CoreAPI
 	}
 
 	@Override
-	public boolean beginSession(UserDetails details) 
+	public String beginSession(UserDetails details) 
 	{
 		curUserSession = details;
-		//more stuffs
-		return true;
+		return cloudDatabase.login(curUserSession);
 	}
 
 	@Override

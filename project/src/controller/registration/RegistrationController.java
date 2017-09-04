@@ -135,7 +135,7 @@ public class RegistrationController extends Controller implements EventHandler<A
 		//generate pin of 4 number
 		String pin = "";
 		Random random = new Random();
-		for (int i=0; i<4; i++){
+		for (int i=0; i<5; i++){
 			pin+=random.nextInt(10);
 		}
 		return pin;
