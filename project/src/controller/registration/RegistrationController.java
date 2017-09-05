@@ -132,7 +132,7 @@ public class RegistrationController extends Controller implements EventHandler<A
 			qualified = false;
 		}
 		
-		//check username in database
+		//check user name in database
 		if (getModel().checkUsername(newUser)!=null)
 		{
 			view.internetCheck.setText(getModel().checkUsername(newUser));
@@ -173,25 +173,25 @@ public class RegistrationController extends Controller implements EventHandler<A
 	 */
 	private void sendMail(String email, String pin)
 	{
-		String senderEmail = "parker.liam5@gmail.com";
-	    Properties properties = System.getProperties();
-	    properties.setProperty("mail.smtp.host", "localhost");
+		//String senderEmail = "parker.liam5@gmail.com";
+	    //Properties properties = System.getProperties();
+	    //properties.setProperty("mail.smtp.host", "localhost");
 
-		Session session = Session.getDefaultInstance(properties);
+		//Session session = Session.getDefaultInstance(properties);
 
-		try 
-		{
-			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(senderEmail));
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
-			message.setSubject("ASX Simulator - Registration Confirmation");
-			message.setText("To finalize your registration, input the following pin \n\n" + pin +
-					"If you leave the application before inputting the pin you'll be sent a new email and prompted again " + ""
-							+ "on your next login. \n\n");
+		//try 
+		//{
+		//	Message message = new MimeMessage(session);
+		//	message.setFrom(new InternetAddress(senderEmail));
+		//	message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+		//	message.setSubject("ASX Simulator - Registration Confirmation");
+		//	message.setText("To finalize your registration, input the following pin \n\n" + pin +
+		//			"If you leave the application before inputting the pin you'll be sent a new email and prompted again " + ""
+		//					+ "on your next login. \n\n");
 
-			Transport.send(message);
+		//	Transport.send(message);
 
-		} 
-		catch (MessagingException e) { e.printStackTrace(); }
+		//} 
+		//catch (MessagingException e) { e.printStackTrace(); }
 	}
 }
