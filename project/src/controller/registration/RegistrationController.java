@@ -2,27 +2,15 @@ package controller.registration;
 
 import java.util.Random;
 import java.util.regex.Matcher;
-import java.util.Properties;
 
 import controller.Controller;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
 import model.UserDetails;
-
 import view.RegistrationConfirmationView;
 import view.RegistrationView;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.mail.Session;
-import javax.mail.Transport;
 
 /**
  * RegistrationController handles input from the registration screen, including user data and parsing.
