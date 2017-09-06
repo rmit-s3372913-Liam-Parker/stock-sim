@@ -14,10 +14,10 @@ if(isset($_POST['submit']))
 	$check_email = '';
 	$errors = array();
 
-	$query_uname = mysqli_query($conn, "Select * FROM player WHERE username='".$uname."' ");
+	$query_uname = mysqli_query($conn, "Select * FROM player1 WHERE username='".$uname."' ");
 	$numrow_uname = mysqli_num_rows($query_uname);
 
-	$query_email = mysqli_query($conn, "Select * FROM player WHERE email='".$email."' ");
+	$query_email = mysqli_query($conn, "Select * FROM player1 WHERE email='".$email."' ");
 	$numrow_email = mysqli_num_rows($query_email);
 
 	$_SESSION['email-name'] = $email;
@@ -48,7 +48,7 @@ if(isset($_POST['submit']))
 			$hash = md5(rand(0, 1000));
 
 
-			$sql = "INSERT INTO player(username, password, email, email_code, active) VALUES('$uname', '$encrypt_password', '$email', '$hash', '0')";
+			$sql = "INSERT INTO player1(username, password, email, email_code, active) VALUES('$uname', '$encrypt_password', '$email', '$hash', '0')";
 
 			if ($conn->query($sql) === TRUE) 
 			{
