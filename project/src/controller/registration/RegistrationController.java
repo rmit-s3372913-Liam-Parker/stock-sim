@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 
 import model.UserDetails;
 
-import view.RegistrationConfirmationView;
+import view.ConfirmationView;
 import view.RegistrationView;
 
 import javax.mail.Message;
@@ -149,7 +149,7 @@ public class RegistrationController extends Controller implements EventHandler<A
 				sendMail(email.getText(), pin);
 				
 				//all text field is qualified, go back to login
-				switchView(new RegistrationConfirmationView());
+				switchView(new ConfirmationView());
 			}
 		}
 		event.consume();
@@ -177,7 +177,7 @@ public class RegistrationController extends Controller implements EventHandler<A
 	    Properties properties = System.getProperties();
 	    properties.setProperty("mail.smtp.host", "localhost");
 
-		Session session = Session.getDefaultInstance(properties);
+		Session session = Session.getInstance(properties, null);
 
 		try 
 		{

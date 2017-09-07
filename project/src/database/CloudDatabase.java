@@ -130,7 +130,7 @@ public class CloudDatabase
         {
             stmt = conn.createStatement();
             
-            stmt.execute("insert into " + playerTable + " values ('" +
+            stmt.execute("insert into " + playerTable + " (username, password, email, confirm, pin) values ('" +
             		username + "','" + password + "', '" + email + "', 'No', '" + pin + "')");
             stmt.close();
         }

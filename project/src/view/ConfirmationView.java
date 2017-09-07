@@ -16,7 +16,7 @@ import javafx.scene.layout.HBox;
 
 public class ConfirmationView extends GridPane {
 	private static final String TITLE = "Confirmation";
-	private static final String EXPLAINATION = "Please enter PIN number sent to your email for confirmation";
+	private static final String EXPLAINATION = "Account is created, please enter PIN number sent to your email for confirmation";
 	private static final String PIN_LABEL = "PIN:";
 	private static final String CONFIRM_BUTTON = "Confirm";
 	private static final String CANCEL_BUTTON = "Cancel";
