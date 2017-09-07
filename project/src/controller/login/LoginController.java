@@ -3,15 +3,11 @@ package controller.login;
 import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.CheckBox;
-import javafx.stage.Stage;
+import javafx.scene.control.TextField;
 import model.UserDetails;
 import view.ConfirmationView;
 import view.LoginView;
-import view.StockApplication;
 
 /**
  * LoginController handles login and input validation.

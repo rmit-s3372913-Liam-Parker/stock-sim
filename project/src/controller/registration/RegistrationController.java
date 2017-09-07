@@ -2,27 +2,16 @@ package controller.registration;
 
 import java.util.Random;
 import java.util.regex.Matcher;
-import java.util.Properties;
 
 import controller.Controller;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
 import model.UserDetails;
 
 import view.ConfirmationView;
 import view.RegistrationView;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.mail.Session;
-import javax.mail.Transport;
 
 /**
  * RegistrationController handles input from the registration screen, including user data and parsing.
@@ -132,7 +121,7 @@ public class RegistrationController extends Controller implements EventHandler<A
 			qualified = false;
 		}
 		
-		//check username in database
+		//check user name in database
 		if (getModel().checkUsername(newUser)!=null)
 		{
 			view.internetCheck.setText(getModel().checkUsername(newUser));
@@ -173,25 +162,25 @@ public class RegistrationController extends Controller implements EventHandler<A
 	 */
 	private void sendMail(String email, String pin)
 	{
-		String senderEmail = "parker.liam5@gmail.com";
-	    Properties properties = System.getProperties();
-	    properties.setProperty("mail.smtp.host", "localhost");
+		//String senderEmail = "parker.liam5@gmail.com";
+	    //Properties properties = System.getProperties();
+	    //properties.setProperty("mail.smtp.host", "localhost");
 
-		Session session = Session.getInstance(properties, null);
+		//Session session = Session.getDefaultInstance(properties);
 
-		try 
-		{
-			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(senderEmail));
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
-			message.setSubject("ASX Simulator - Registration Confirmation");
-			message.setText("To finalize your registration, input the following pin \n\n" + pin +
-					"If you leave the application before inputting the pin you'll be sent a new email and prompted again " + ""
-							+ "on your next login. \n\n");
+		//try 
+		//{
+		//	Message message = new MimeMessage(session);
+		//	message.setFrom(new InternetAddress(senderEmail));
+		//	message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+		//	message.setSubject("ASX Simulator - Registration Confirmation");
+		//	message.setText("To finalize your registration, input the following pin \n\n" + pin +
+		//			"If you leave the application before inputting the pin you'll be sent a new email and prompted again " + ""
+		//					+ "on your next login. \n\n");
 
-			Transport.send(message);
+		//	Transport.send(message);
 
-		} 
-		catch (MessagingException e) { e.printStackTrace(); }
+		//} 
+		//catch (MessagingException e) { e.printStackTrace(); }
 	}
 }
