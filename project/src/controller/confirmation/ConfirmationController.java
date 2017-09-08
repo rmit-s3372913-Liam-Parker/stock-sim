@@ -4,22 +4,30 @@ import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
+import model.UserDetails;
+import view.ConfirmationView;
+import view.DashboardView;
 
 public class ConfirmationController extends Controller implements EventHandler<ActionEvent>{
-	private String pin;
+	private UserDetails user;
+	private TextField pinField;
+	private ConfirmationView view;
 	
-	public ConfirmationController(TextField pinField){
-		//store pin
-		this.pin = pinField.getText();
+	public ConfirmationController(UserDetails user, TextField pinField, ConfirmationView view){
+		this.user = user;
+		this.pinField = pinField;
+		this.view = view;
 	}
 	
 	@Override
 	public void handle(ActionEvent event) {
-		//compare pin
-		
-		//activate user account
-		//getModel().confirmNewUser(user);
-		
+		//compare pin and activate user account
+		String alert = getModel().confirmNewUser(user, pinField.getText());
+		if (alert==null)
+			switchView(new DashboardView());
+		else
+			view.warning.setText(alert);
+		event.consume();
 	}
 
 }

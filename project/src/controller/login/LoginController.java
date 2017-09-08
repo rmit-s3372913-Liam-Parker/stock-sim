@@ -7,6 +7,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import model.UserDetails;
 import view.ConfirmationView;
+import view.DashboardView;
 import view.LoginView;
 
 /**
@@ -14,6 +15,8 @@ import view.LoginView;
  * */
 public class LoginController extends Controller implements EventHandler<ActionEvent>
 {
+	private static final String NOT_CONFIRM = "Email is not confirmed";
+			
 	LoginView view;
 	TextField user;
 	TextField pw;
@@ -37,6 +40,7 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 	{
 		String userString = user.getText();
 		String pwString = pw.getText();
+		boolean qualified = true;
 		
 		view.alert.setText(null);
 		
@@ -45,22 +49,32 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 		// check username if empty
 		if(userString.isEmpty()) {
 			view.alert.setText("Please enter a username");
+			qualified = false;
 		}
 		
 		// check password if null
 		if(pwString.isEmpty()) {
 			newline();
 			view.alert.setText(view.alert.getText()+"Please enter the password");
+			qualified = false;
 		}
 		
-		
-		// connect to database and get match
-		UserDetails user = new UserDetails(userString, pwString);
-		if (getModel().beginSession(user)==null){
-			System.out.println("TEST OUTPUT: Username: " + userString + " Password: " + pwString);
-			
-			//switchView(new DashboardView());
-			switchView(new ConfirmationView());
+		if (qualified){
+			// connect to database and get match
+			UserDetails user = new UserDetails(userString, pwString);
+			String loginAlert = getModel().login(user);
+			if (loginAlert==null){
+				String confirmAlert = getModel().confirmedUser(user);
+				if (confirmAlert==null)
+					switchView(new DashboardView());
+				else
+					if (confirmAlert.equals(NOT_CONFIRM))
+						switchView(new ConfirmationView(user));
+				newline();
+				view.alert.setText(view.alert.getText()+confirmAlert);
+			}
+			newline();
+			view.alert.setText(view.alert.getText()+loginAlert);
 		}
 		event.consume();
 	}

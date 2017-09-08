@@ -32,16 +32,30 @@ public class CoreSystem implements CoreAPI
 	}
 	
 	@Override
-	public String confirmNewUser(UserDetails details) 
+	public String confirmNewUser(UserDetails details, String pin) 
 	{
-    	return cloudDatabase.confirm(details);
+    	return cloudDatabase.confirm(details, pin);
+	}
+
+	@Override
+	public String login(UserDetails details) 
+	{
+		curUserSession = details;
+		return cloudDatabase.login(curUserSession);
+		
+	}
+	
+	@Override
+	public String confirmedUser(UserDetails details) 
+	{
+		return cloudDatabase.confirmedUser(details);
+		
 	}
 
 	@Override
 	public String beginSession(UserDetails details) 
 	{
-		curUserSession = details;
-		return cloudDatabase.login(curUserSession);
+		return "temp";
 	}
 
 	@Override

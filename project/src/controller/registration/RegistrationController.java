@@ -132,13 +132,16 @@ public class RegistrationController extends Controller implements EventHandler<A
 		{
 			String pin = generatePin();
 			//register user to database
-			if (getModel().registerNewUser(newUser, pin) == null)
+			String alert = getModel().registerNewUser(newUser, pin);
+			if (alert == null)
 			{
 				//send email with pin number
 				sendMail(email.getText(), pin);
 				
 				//all text field is qualified, go back to login
-				switchView(new ConfirmationView());
+				switchView(new ConfirmationView(newUser));
+			} else {
+				view.internetCheck.setText(alert);
 			}
 		}
 		event.consume();

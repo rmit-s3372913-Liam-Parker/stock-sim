@@ -25,9 +25,19 @@ public interface CoreAPI
 	/**
 	 * Attempts to confirm a new user with the system.
 	 * @param details The new user to attempt to confirm with the system.
+	 * @param pin The pin sent to user
 	 * @return null when the details were accepted, pass along reason for failure otherwise. ?? need to work on design
 	 */
-	public String confirmNewUser(UserDetails details);
+	public String confirmNewUser(UserDetails details, String pin);
+	
+	/**
+	 * Begins a session for the given user.
+	 * @param details The logging in user's details
+	 * @return True when the session was successfully started, false otherwise.
+	 */
+	public String login(UserDetails details);
+
+	public String confirmedUser(UserDetails details);
 	
 	/**
 	 * Begins a session for the given user.
@@ -48,6 +58,7 @@ public interface CoreAPI
 	 * @return A List<> containing all players in the system and their stats.
 	 */
 	public List<PlayerStats> getPlayerList();
+
 
 	
 	//TODO: Create callback functions for different ASX interface events

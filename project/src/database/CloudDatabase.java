@@ -20,6 +20,8 @@ public class CloudDatabase
 	private static final String NO_INTERNET = "Internet connection unavailable";
 	private static final String INVALID = "Incorrect username or password";
 	private static final String DATABASE_ERROR = "Encountered error when contacting database";
+	private static final String WRONG_PIN = "Incorrect PIN";
+	private static final String NOT_CONFIRM = "Email is not confirmed";
 	
     private static String dbURL = "jdbc:mysql://capstonedatabase.cszu3gvo32mp.ap-southeast-2.rds.amazonaws.com:3306/CapstoneDatabase?user=admin&password=password";
     private static String playerTable = "player";
@@ -45,17 +47,8 @@ public class CloudDatabase
 
     public String register(UserDetails user, String pin){
         if (createConnection()){
-            try {
-				if (!insertPlayer(user.getUsername(), hashPassword(user.getPassword()), user.getEmail(), pin))
-					return DATABASE_ERROR;
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            //select();
+			if (!insertPlayer(user, pin))
+				return DATABASE_ERROR;
             shutdown();
             return null;
         }
@@ -71,13 +64,28 @@ public class CloudDatabase
         }
     	return NO_INTERNET;
     }
-    
-    public String confirm(UserDetails user){
+
+    public String confirm(UserDetails user, String pin){
         if (createConnection()){
-            confirmPlayer(user.getUsername());
-            //select();
-            shutdown();
-            return null;
+        	if (checkPin(user, pin)){
+        		confirmPlayer(user);
+                shutdown();
+                return null;
+        	}
+        	shutdown();
+        	return WRONG_PIN;
+        }
+    	return NO_INTERNET;
+    }
+    
+    public String confirmedUser(UserDetails user){
+        if (createConnection()){
+        	if (checkConfirm(user)){
+                shutdown();
+                return null;
+        	}
+        	shutdown();
+        	return NOT_CONFIRM;
         }
     	return NO_INTERNET;
     }
@@ -129,9 +137,7 @@ public class CloudDatabase
             	return true;
             }
             stmt.close();
-        }
-        catch (SQLException sqlExcept)
-        {
+        } catch (SQLException sqlExcept) {
             sqlExcept.printStackTrace();
         } catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -143,83 +149,80 @@ public class CloudDatabase
     	return false;
     }
     
-    private boolean insertPlayer(String username, String password, String email, String pin)
+    private boolean insertPlayer(UserDetails user, String pin)
     {
         try
         {
             stmt = conn.createStatement();
             
             stmt.execute("insert into " + playerTable + " (username, password, email, confirm, pin) values ('" +
-            		username + "','" + password + "', '" + email + "', 'No', '" + pin + "')");
+            		user.getUsername() + "','" + hashPassword(user.getPassword()) + "', '" + user.getEmail() + "', 'no', '" + pin + "')");
             stmt.close();
         }
         catch (SQLException sqlExcept)
         {
             sqlExcept.printStackTrace();
             return false;
-        }
+        } catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return true;
     }
     
-    private void confirmPlayer(String username)
-    {
-        try
-        {
-        	stmt = conn.createStatement();
-
-        	stmt.execute(
-          	      "UPDATE " + playerTable + " SET confirm = 'yes' WHERE username = '" + username + "'");
-            stmt.close();
-        }
-        catch (SQLException sqlExcept)
-        {
-            sqlExcept.printStackTrace();
-        }
-    }
-    
-    private void updatePlayer(String username, byte[] password)
-    {
-        try
-        {
-        	stmt = conn.createStatement();
-
-        	stmt.execute(
-          	      "UPDATE " + playerTable + " SET username = '" + username
-          	      + "', password = '" + password + "' WHERE username = '" + username + "'");
-            stmt.close();
-        }
-        catch (SQLException sqlExcept)
-        {
-            sqlExcept.printStackTrace();
-        }
-    }
-    
-    private void select()
-    {
-        try
+    private boolean checkPin(UserDetails user, String pin){
+    	try
         {
             stmt = conn.createStatement();
-            ResultSet results = stmt.executeQuery("select * from " + playerTable);
-            ResultSetMetaData rsmd = results.getMetaData();
-            int numberCols = rsmd.getColumnCount();
-            for (int i=1; i<=numberCols; i++)
-            {
-                //print Column Names
-                System.out.print(rsmd.getColumnLabel(i)+"\t\t");  
+            ResultSet results = stmt.executeQuery("select * from "
+            + playerTable + " where username = '"
+            + user.getUsername() + "' and pin = '"
+            + pin + "'");
+            if (results.next()){
+                stmt.close();
+            	return true;
             }
+            stmt.close();
+        }
+    	catch (SQLException sqlExcept)
+    	{
+    		sqlExcept.printStackTrace();
+    	}
+    	return false;
+    }
 
-            System.out.println("\n-------------------------------------------------");
-
-            while(results.next())
-            {
-                String username = results.getString(1);
-                String password = results.getString(2);
-                String email = results.getString(3);
-                String confirm = results.getString(4);
-                String pin = results.getString(5);
-                System.out.println(username + "\t\t\t" + password + "\t\t\t" + email + "\t\t\t" + confirm + "\t\t" + pin);
+    private boolean checkConfirm(UserDetails user){
+    	try
+        {
+            stmt = conn.createStatement();
+            ResultSet results = stmt.executeQuery("select * from "
+            + playerTable + " where username = '"
+            + user.getUsername() + "' and confirm = 'yes'");
+            if (results.next()){
+                stmt.close();
+            	return true;
             }
-            results.close();
+            stmt.close();
+        }
+    	catch (SQLException sqlExcept)
+    	{
+    		sqlExcept.printStackTrace();
+    	}
+    	return false;
+    }
+
+    
+    private void confirmPlayer(UserDetails user)
+    {
+        try
+        {
+        	stmt = conn.createStatement();
+
+        	stmt.execute(
+          	      "UPDATE " + playerTable + " SET confirm = 'yes' WHERE username = '" + user.getUsername() + "'");
             stmt.close();
         }
         catch (SQLException sqlExcept)
@@ -227,6 +230,57 @@ public class CloudDatabase
             sqlExcept.printStackTrace();
         }
     }
+    
+//    private void updatePlayer(String username, byte[] password)
+//    {
+//        try
+//        {
+//        	stmt = conn.createStatement();
+//
+//        	stmt.execute(
+//          	      "UPDATE " + playerTable + " SET username = '" + username
+//          	      + "', password = '" + password + "' WHERE username = '" + username + "'");
+//            stmt.close();
+//        }
+//        catch (SQLException sqlExcept)
+//        {
+//            sqlExcept.printStackTrace();
+//        }
+//    }
+//    
+//    private void select()
+//    {
+//        try
+//        {
+//            stmt = conn.createStatement();
+//            ResultSet results = stmt.executeQuery("select * from " + playerTable);
+//            ResultSetMetaData rsmd = results.getMetaData();
+//            int numberCols = rsmd.getColumnCount();
+//            for (int i=1; i<=numberCols; i++)
+//            {
+//                //print Column Names
+//                System.out.print(rsmd.getColumnLabel(i)+"\t\t");  
+//            }
+//
+//            System.out.println("\n-------------------------------------------------");
+//
+//            while(results.next())
+//            {
+//                String username = results.getString(1);
+//                String password = results.getString(2);
+//                String email = results.getString(3);
+//                String confirm = results.getString(4);
+//                String pin = results.getString(5);
+//                System.out.println(username + "\t\t\t" + password + "\t\t\t" + email + "\t\t\t" + confirm + "\t\t" + pin);
+//            }
+//            results.close();
+//            stmt.close();
+//        }
+//        catch (SQLException sqlExcept)
+//        {
+//            sqlExcept.printStackTrace();
+//        }
+//    }
     
     private void shutdown()
     {
@@ -255,7 +309,7 @@ public class CloudDatabase
     	byte[] digest = md.digest(bytesOfPassword);
     	BigInteger bigInt = new BigInteger(1,digest);
     	String hash = bigInt.toString(16);
-    	// Now we need to zero pad it if you actually want the full 32 chars.
+    	//Zero pad for the full 32 chars.
     	while(hash.length() < 32 ){
     	  hash = "0" + hash;
     	}
