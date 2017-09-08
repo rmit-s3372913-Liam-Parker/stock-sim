@@ -1,5 +1,9 @@
 package database;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -15,6 +19,7 @@ public class CloudDatabase
 	private static final String EXISTED_NAME = "Username already existed";
 	private static final String NO_INTERNET = "Internet connection unavailable";
 	private static final String INVALID = "Incorrect username or password";
+	private static final String DATABASE_ERROR = "Encountered error when contacting database";
 	
     private static String dbURL = "jdbc:mysql://capstonedatabase.cszu3gvo32mp.ap-southeast-2.rds.amazonaws.com:3306/CapstoneDatabase?user=admin&password=password";
     private static String playerTable = "player";
@@ -40,7 +45,16 @@ public class CloudDatabase
 
     public String register(UserDetails user, String pin){
         if (createConnection()){
-            insertPlayer(user.getUsername(), user.getPassword(), user.getEmail(), pin);
+            try {
+				if (!insertPlayer(user.getUsername(), hashPassword(user.getPassword()), user.getEmail(), pin))
+					return DATABASE_ERROR;
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             //select();
             shutdown();
             return null;
@@ -60,7 +74,7 @@ public class CloudDatabase
     
     public String confirm(UserDetails user){
         if (createConnection()){
-            confirmPlayer(user.getUsername(), user.getPassword());
+            confirmPlayer(user.getUsername());
             //select();
             shutdown();
             return null;
@@ -109,7 +123,7 @@ public class CloudDatabase
             ResultSet results = stmt.executeQuery("select * from "
             + playerTable + " where username = '"
             + user.getUsername() + "' and password = '"
-            + user.getPassword() + "'");
+            + hashPassword(user.getPassword()) + "'");
             if (results.next()){
                 stmt.close();
             	return true;
@@ -119,11 +133,17 @@ public class CloudDatabase
         catch (SQLException sqlExcept)
         {
             sqlExcept.printStackTrace();
-        }
+        } catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	return false;
     }
     
-    private void insertPlayer(String username, String password, String email, String pin)
+    private boolean insertPlayer(String username, String password, String email, String pin)
     {
         try
         {
@@ -136,18 +156,19 @@ public class CloudDatabase
         catch (SQLException sqlExcept)
         {
             sqlExcept.printStackTrace();
+            return false;
         }
+        return true;
     }
     
-    private void confirmPlayer(String username, String confirm)
+    private void confirmPlayer(String username)
     {
         try
         {
         	stmt = conn.createStatement();
 
         	stmt.execute(
-          	      "UPDATE " + playerTable + " SET confirm = '" + confirm
-          	      + "' WHERE username = '" + username + "'");
+          	      "UPDATE " + playerTable + " SET confirm = 'yes' WHERE username = '" + username + "'");
             stmt.close();
         }
         catch (SQLException sqlExcept)
@@ -156,7 +177,7 @@ public class CloudDatabase
         }
     }
     
-    private void updatePlayer(String username, String password)
+    private void updatePlayer(String username, byte[] password)
     {
         try
         {
@@ -225,5 +246,19 @@ public class CloudDatabase
         {
         }
 
+    }
+    
+    private String hashPassword(String password) throws UnsupportedEncodingException, NoSuchAlgorithmException{
+    	byte[] bytesOfPassword;
+		bytesOfPassword = password.getBytes("UTF-8");
+    	MessageDigest md = MessageDigest.getInstance("MD5");
+    	byte[] digest = md.digest(bytesOfPassword);
+    	BigInteger bigInt = new BigInteger(1,digest);
+    	String hash = bigInt.toString(16);
+    	// Now we need to zero pad it if you actually want the full 32 chars.
+    	while(hash.length() < 32 ){
+    	  hash = "0" + hash;
+    	}
+    	return hash;
     }
 }
