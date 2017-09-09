@@ -1,8 +1,6 @@
 package database;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import model.UserDetails;
+import ultilities.Hash;
 
 
 public class CloudDatabase
@@ -21,7 +20,7 @@ public class CloudDatabase
 	private static final String INVALID = "Incorrect username or password";
 	private static final String DATABASE_ERROR = "Encountered error when contacting database";
 	private static final String WRONG_PIN = "Incorrect PIN";
-	private static final String NOT_CONFIRM = "Email is not confirmed";
+	public static final String NOT_CONFIRM = "Email is not confirmed";
 	
     private static String dbURL = "jdbc:mysql://capstonedatabase.cszu3gvo32mp.ap-southeast-2.rds.amazonaws.com:3306/CapstoneDatabase?user=admin&password=password";
     private static String playerTable = "player";
@@ -131,7 +130,7 @@ public class CloudDatabase
             ResultSet results = stmt.executeQuery("select * from "
             + playerTable + " where username = '"
             + user.getUsername() + "' and password = '"
-            + hashPassword(user.getPassword()) + "'");
+            + Hash.hashPassword(user.getPassword()) + "'");
             if (results.next()){
                 stmt.close();
             	return true;
@@ -156,7 +155,7 @@ public class CloudDatabase
             stmt = conn.createStatement();
             
             stmt.execute("insert into " + playerTable + " (username, password, email, confirm, pin) values ('" +
-            		user.getUsername() + "','" + hashPassword(user.getPassword()) + "', '" + user.getEmail() + "', 'no', '" + pin + "')");
+            		user.getUsername() + "','" + Hash.hashPassword(user.getPassword()) + "', '" + user.getEmail() + "', 'no', '" + pin + "')");
             stmt.close();
         }
         catch (SQLException sqlExcept)
@@ -302,17 +301,4 @@ public class CloudDatabase
 
     }
     
-    private String hashPassword(String password) throws UnsupportedEncodingException, NoSuchAlgorithmException{
-    	byte[] bytesOfPassword;
-		bytesOfPassword = password.getBytes("UTF-8");
-    	MessageDigest md = MessageDigest.getInstance("MD5");
-    	byte[] digest = md.digest(bytesOfPassword);
-    	BigInteger bigInt = new BigInteger(1,digest);
-    	String hash = bigInt.toString(16);
-    	//Zero pad for the full 32 chars.
-    	while(hash.length() < 32 ){
-    	  hash = "0" + hash;
-    	}
-    	return hash;
-    }
 }

@@ -1,15 +1,13 @@
 package controller.registration;
 
 import java.util.Random;
-import java.util.regex.Matcher;
-
 import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import model.UserDetails;
-
+import ultilities.InputValidation;
 import view.ConfirmationView;
 import view.RegistrationView;
 
@@ -56,9 +54,6 @@ public class RegistrationController extends Controller implements EventHandler<A
 		UserDetails newUser = new UserDetails(user.getText(), pw.getText(), email.getText());
 		
 		boolean qualified = true;
-		String inputPattern = "^[0-9a-zA-Z,.;:?_-dollar]{0,15}$";
-		String emailPattern = "^[0-9a-zA-Z][0-9a-zA-Z._]*@[0-9a-zA-Z]+([.][a-zA-Z]+)+$";
-		inputPattern.replace("dollar", Matcher.quoteReplacement("$"));
 		
 		//reset alert Text
 		view.userCheck.setText("");
@@ -66,7 +61,7 @@ public class RegistrationController extends Controller implements EventHandler<A
 		view.retypePassCheck.setText("");
 
 		//check if user name is allowed
-		if (!user.getText().matches(inputPattern))
+		if (!InputValidation.inputValidation(user.getText()))
 		{
 			view.userCheck.setText(WRONG_SYNTAX);
 			qualified = false;
@@ -80,7 +75,7 @@ public class RegistrationController extends Controller implements EventHandler<A
 		}
 
 		//check if email is allowed
-		if (!email.getText().matches(emailPattern))
+		if (!InputValidation.emailValidation(email.getText()))
 		{
 			view.emailCheck.setText(INVALID_EMAIL);
 			qualified = false;
@@ -94,7 +89,7 @@ public class RegistrationController extends Controller implements EventHandler<A
 		}
 
 		//check if password is allowed
-		if (!pw.getText().matches(inputPattern))
+		if (!InputValidation.inputValidation(pw.getText()))
 		{
 			view.passCheck.setText(WRONG_SYNTAX);
 			qualified = false;
@@ -120,12 +115,15 @@ public class RegistrationController extends Controller implements EventHandler<A
 			view.retypePassCheck.setText(NOT_SAME_PASSWORD);
 			qualified = false;
 		}
-		
-		//check user name in database
-		if (getModel().checkUsername(newUser)!=null)
+
+		if (qualified) 
 		{
-			view.internetCheck.setText(getModel().checkUsername(newUser));
-			qualified = false;
+			//check user name in database
+			if (getModel().checkUsername(newUser)!=null)
+			{
+				view.internetCheck.setText(getModel().checkUsername(newUser));
+				qualified = false;
+			}
 		}
 		
 		if (qualified) 

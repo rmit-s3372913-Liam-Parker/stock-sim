@@ -2,11 +2,16 @@ package model;
 
 import java.util.List;
 
+import database.CloudDatabase;
+
 /**
  * Acts as the interface to all major system functionality.
  */
 public interface CoreAPI 
 {
+
+	public CloudDatabase getCloudDatabase();
+	
 	/**
 	 * Attempts to check if user name already exist with the system.
 	 * @param details The new user to attempt to check with the system.
@@ -58,8 +63,6 @@ public interface CoreAPI
 	 * @return A List<> containing all players in the system and their stats.
 	 */
 	public List<PlayerStats> getPlayerList();
-
-
 	
 	//TODO: Create callback functions for different ASX interface events
 }

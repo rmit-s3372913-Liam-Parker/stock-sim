@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import model.UserDetails;
+import ultilities.InputValidation;
 import view.ConfirmationView;
 import view.DashboardView;
 import view.LoginView;
@@ -15,7 +16,8 @@ import view.LoginView;
  * */
 public class LoginController extends Controller implements EventHandler<ActionEvent>
 {
-	private static final String NOT_CONFIRM = "Email is not confirmed";
+	private static final String WRONG_SYNTAX = 
+			"Can have only maximum length of 15 of normal alphabet, number and following special character: ,.;:?_-$";
 			
 	LoginView view;
 	TextField user;
@@ -44,18 +46,26 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 		
 		view.alert.setText(null);
 		
-		//TODO: Input validation
+		//Input validation
 		
 		// check username if empty
-		if(userString.isEmpty()) {
+		if (userString.isEmpty()) {
 			view.alert.setText("Please enter a username");
 			qualified = false;
 		}
 		
-		// check password if null
-		if(pwString.isEmpty()) {
+		// check password if empty
+		if (pwString.isEmpty()) {
 			newline();
 			view.alert.setText(view.alert.getText()+"Please enter the password");
+			qualified = false;
+		}
+
+		//check if password is allowed
+		if (!InputValidation.inputValidation(pw.getText()) || !InputValidation.inputValidation(user.getText()))
+		{
+			newline();
+			view.alert.setText(view.alert.getText() + WRONG_SYNTAX);
 			qualified = false;
 		}
 		
@@ -68,7 +78,7 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 				if (confirmAlert==null)
 					switchView(new DashboardView());
 				else
-					if (confirmAlert.equals(NOT_CONFIRM))
+					if (confirmAlert.equals(getModel().getCloudDatabase().NOT_CONFIRM))
 						switchView(new ConfirmationView(user));
 				newline();
 				view.alert.setText(view.alert.getText()+confirmAlert);
