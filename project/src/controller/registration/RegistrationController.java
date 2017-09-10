@@ -166,10 +166,6 @@ public class RegistrationController extends Controller implements EventHandler<A
 	 * 			Sendgrid integration tutorial 
 	 * 			https://app.sendgrid.com/guide/integrate/langs/java
 	 * 
-	 * 			Run the following shell command in your local environment otherwise email won't work.
-	 * 			 
-	 * 				echo "export SENDGRID_API_KEY='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'" > sendgrid.env
-	 * 
 	 * @param email The email for the pin to be sent to.
 	 * @param pin The pin to send.
 	 */
@@ -185,7 +181,7 @@ public class RegistrationController extends Controller implements EventHandler<A
 	    
 	    Mail mail = new Mail(from, subject, to, content);
 
-	    SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
+	    SendGrid sg = new SendGrid("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");
 	    Request request = new Request();
 	    try 
 	    {
