@@ -4,6 +4,9 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import database.CloudDatabase;
@@ -78,7 +81,39 @@ public class CoreSystem implements CoreAPI
 	@Override
 	public List<PlayerStats> getPlayerList() 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		// TODO: Implement correct player stats, currently mocked.
+		List<PlayerStats> mockPlayerList = new ArrayList<PlayerStats>()
+		{{
+			  add(new PlayerStats(123425, new ArrayList<>()));
+			  add(new PlayerStats(2321, new ArrayList<>()));
+			  add(new PlayerStats(44555, new ArrayList<>()));
+			  add(new PlayerStats(1342143, new ArrayList<>()));
+			  add(new PlayerStats(35623, new ArrayList<>()));
+			  add(new PlayerStats(6523, new ArrayList<>()));
+			  add(new PlayerStats(53214, new ArrayList<>()));
+			  add(new PlayerStats(1234, new ArrayList<>()));
+			  add(new PlayerStats(34534, new ArrayList<>()));
+			  add(new PlayerStats(999999, new ArrayList<>()));
+		}};
+		
+		// Sort players based on earnings
+		Collections.sort(mockPlayerList, new Comparator<PlayerStats>() {
+		    @Override
+		    public int compare(PlayerStats lhs, PlayerStats rhs) 
+		    {
+		    	double lhsValue = lhs.getCurrentEarnings();
+		    	double rhsValue = rhs.getCurrentEarnings();
+		    	
+		        return lhsValue > rhsValue ? -1 : (lhsValue < rhsValue) ? 1 : 0;
+		    }
+		});
+			
+		return mockPlayerList;
+	}
+	
+	@Override
+	public ASXInterface getMarketInterface()
+	{
+		return marketInterface;
 	}
 }

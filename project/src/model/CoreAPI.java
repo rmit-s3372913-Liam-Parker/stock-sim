@@ -64,5 +64,10 @@ public interface CoreAPI
 	 */
 	public List<PlayerStats> getPlayerList();
 	
+	/**
+	 * @return Access to functions for querying the ASX marketplace.
+	 */
+	public ASXInterface getMarketInterface();
+	
 	//TODO: Create callback functions for different ASX interface events
 }

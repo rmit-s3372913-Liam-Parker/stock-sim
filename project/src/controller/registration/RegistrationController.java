@@ -39,13 +39,13 @@ public class RegistrationController extends Controller implements EventHandler<A
 			PasswordField pwField, PasswordField pwFieldRetype)
 	{
 		this.view = view;
-		if (userField!=null)
+		if (userField != null)
 			this.user = userField;
-		if (emailField!=null)
+		if (emailField != null)
 			this.email = emailField;
-		if (pwField!=null)
+		if (pwField != null)
 			this.pw = pwField;
-		if (pwFieldRetype!=null)
+		if (pwFieldRetype != null)
 			this.pwRe = pwFieldRetype;
 	}
 	
@@ -140,7 +140,9 @@ public class RegistrationController extends Controller implements EventHandler<A
 				
 				//all text field is qualified, go back to login
 				switchView(new ConfirmationView(newUser));
-			} else {
+			} 
+			else 
+			{
 				view.internetCheck.setText(alert);
 			}
 		}

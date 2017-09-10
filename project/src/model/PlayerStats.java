@@ -9,7 +9,19 @@ import java.util.List;
 public class PlayerStats 
 {
 	private double currentEarnings;
-	private List<Transaction> transactions = new ArrayList<Transaction>();
+	private List<Transaction> transactions;
+	
+	public PlayerStats()
+	{
+		this.currentEarnings = 0.0d;
+		transactions = new ArrayList<>();
+	}
+	
+	public PlayerStats(double currentEarnings, List<Transaction> transactions)
+	{
+		this.currentEarnings = currentEarnings;
+		this.transactions = transactions;
+	}
 	
 	/**
 	 * @return The current earnings of this player.
