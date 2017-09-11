@@ -82,6 +82,7 @@ public class CoreSystem implements CoreAPI
 	public List<PlayerStats> getPlayerList() 
 	{
 		// TODO: Implement correct player stats, currently mocked.
+		cloudDatabase.getHighScore();
 		List<PlayerStats> mockPlayerList = new ArrayList<PlayerStats>()
 		{{
 			  add(new PlayerStats(123425, new ArrayList<>()));

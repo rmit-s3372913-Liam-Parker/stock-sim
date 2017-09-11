@@ -154,8 +154,8 @@ public class CloudDatabase
         {
             stmt = conn.createStatement();
             
-            stmt.execute("insert into " + playerTable + " (username, password, email, confirm, pin) values ('" +
-            		user.getUsername() + "','" + Hash.hashPassword(user.getPassword()) + "', '" + user.getEmail() + "', 'no', '" + pin + "')");
+            stmt.execute("insert into " + playerTable + " (username, password, email, pin) values ('" +
+            		user.getUsername() + "','" + Hash.hashPassword(user.getPassword()) + "', '" + user.getEmail() + "', '" + pin + "')");
             stmt.close();
         }
         catch (SQLException sqlExcept)
@@ -230,6 +230,23 @@ public class CloudDatabase
         }
     }
     
+    public ResultSet getHighScore(){
+    	try
+        {
+            stmt = conn.createStatement();
+            ResultSet results = stmt.executeQuery("select * from " + playerTable + " where confirm = 'yes' order by winning");
+            if (results.next()){
+                stmt.close();
+            	return results;
+            }
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+    	return null;
+    }
 //    private void updatePlayer(String username, byte[] password)
 //    {
 //        try
