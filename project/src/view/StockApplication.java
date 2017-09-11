@@ -3,7 +3,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.CoreAPI;
-import model.CoreTest;
+import model.CoreSystem;
 
 /**
  * StockApplication serves as the main entry point for the program.
@@ -21,7 +21,7 @@ public class StockApplication extends Application
 	public void start(Stage stage) throws Exception 
 	{
 		StockApplication.stage = stage;
-		StockApplication.model = new CoreTest();
+		StockApplication.model = new CoreSystem();
 		
 		// We begin the application on the login page.
 		LoginView initialView = new LoginView();

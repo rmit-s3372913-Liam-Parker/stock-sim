@@ -21,4 +21,19 @@ public class CompanyInfo
 		marketCode = code;
 		description = desc;
 	}
+	
+	public String getCompanyName()
+	{
+		return companyName;
+	}
+	
+	public String getStockCode()
+	{
+		return marketCode;
+	}
+	
+	public String getDescription()
+	{
+		return description;
+	}
 }

@@ -28,6 +28,8 @@ public class LoginView extends GridPane
 	private static final String LOGIN_BUTTON = "Login";
 	private static final String REGISTER_BUTTON = "Register";
 	
+	public Text alert = new Text();
+	
 	/**
 	 *  Constructs a LoginView object with default positioning.
 	 **/
@@ -66,10 +68,13 @@ public class LoginView extends GridPane
 		add(rPassword, 2, 2);
 		CheckBox rPasswordCheckbox = new CheckBox();
 		add(rPasswordCheckbox, 3, 2);
+
+		//Creating an alert Text 
+		add(alert, 0, 4);
 		
 		// Set up buttons
 		Button loginButton = new Button(LOGIN_BUTTON);
-		loginButton.setOnAction(new LoginController(usernameField, passwordField));
+		loginButton.setOnAction(new LoginController(this, usernameField, passwordField, rPasswordCheckbox));
 		Button registerButton = new Button(REGISTER_BUTTON);
 		registerButton.setOnAction(new RegisterController());
 		add(registerButton, 1, 3);
