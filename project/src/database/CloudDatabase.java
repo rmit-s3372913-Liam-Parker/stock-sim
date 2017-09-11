@@ -8,7 +8,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
+import model.PlayerStats;
 import model.UserDetails;
 import ultilities.Hash;
 
@@ -230,21 +233,37 @@ public class CloudDatabase
         }
     }
     
-    public ResultSet getHighScore(){
+    public List<PlayerStats> getHighScore(){
     	try
         {
             stmt = conn.createStatement();
-            ResultSet results = stmt.executeQuery("select * from " + playerTable + " where confirm = 'yes' order by winning");
-            if (results.next()){
-                stmt.close();
-            	return results;
+            ResultSet results = stmt.executeQuery("select username, winning from " + playerTable + " where confirm = 'yes' order by winning desc");
+            List<PlayerStats> players = new ArrayList<PlayerStats>();
+            
+            if (results.next())
+            {
+            	
+        		try 
+        		{
+        			while(results.next())
+        			{
+        				String username = results.getString(1);
+        				Double winnings = Double.parseDouble(results.getString(2));
+        				players.add(new PlayerStats(username, winnings));
+        				
+        			}
+        		} 
+        		catch (SQLException e) { e.printStackTrace(); }
             }
+            
             stmt.close();
+            return players;
         }
         catch (SQLException sqlExcept)
         {
             sqlExcept.printStackTrace();
         }
+    	
     	return null;
     }
 //    private void updatePlayer(String username, byte[] password)

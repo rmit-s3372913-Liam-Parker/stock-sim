@@ -8,19 +8,39 @@ import java.util.List;
  * */
 public class PlayerStats 
 {
+	private String username;
 	private double currentEarnings;
-	private List<Transaction> transactions;
+	private List<Transaction> transactions = new ArrayList<Transaction>();
 	
-	public PlayerStats()
+	/**
+	 * Constructs a player statistics object without transaction data.
+	 * @param username The user name of the player
+	 * @param currentEarnings The current earnings of the player.
+	 */
+	public PlayerStats(String username, double currentEarnings)
 	{
-		this.currentEarnings = 0.0d;
-		transactions = new ArrayList<>();
+		this.username = username;
+		this.currentEarnings = currentEarnings;
 	}
 	
-	public PlayerStats(double currentEarnings, List<Transaction> transactions)
+	/**
+	 * Constructs a player statistics object with included transaction data.
+	 * @param username The user name of the player
+	 * @param currentEarnings The current earnings of the player.
+	 * @param transactions The historical transactions of this player.
+	 */
+	public PlayerStats(String username, double currentEarnings, List<Transaction> transactions)
 	{
-		this.currentEarnings = currentEarnings;
+		this(username, currentEarnings);
 		this.transactions = transactions;
+	}
+	
+	/**
+	 * @return The name of this user.
+	 */
+	public String getUsername()
+	{
+		return username;
 	}
 	
 	/**

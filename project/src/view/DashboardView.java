@@ -67,7 +67,7 @@ public class DashboardView extends GridPane
 	{
 		VBox verticalLayout = new VBox();
 		
-		Text title = new Text("Leaderboard (MOCK DATA)");
+		Text title = new Text("Leaderboard");
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		
 		ObservableList<String> leaderboardList = FXCollections.observableArrayList();
@@ -77,7 +77,7 @@ public class DashboardView extends GridPane
 		for(int i = 0; i < Math.min(10, info.size()); ++i)
 		{
 			PlayerStats curPlayer = info.get(i);
-			leaderboardList.add("Undefined Player - " + curPlayer.getCurrentEarnings());
+			leaderboardList.add(curPlayer.getUsername() + " - " + curPlayer.getCurrentEarnings());
 		}
 		
 		final ListView<String> leaderList = new ListView<String>(leaderboardList);
