@@ -12,6 +12,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import model.UserDetails;
+import ultilities.NumberField;
 
 public class ConfirmationView extends GridPane {
 	private static final String TITLE = "Confirmation";
@@ -56,6 +57,7 @@ public class ConfirmationView extends GridPane {
 		Label pin = new Label(PIN_LABEL);
 		add(pin, 0, 2);
 		TextField pinField = new TextField();
+		NumberField.numberField(pinField);
 		add(pinField, 1, 2);
 		
 		// Explanation
