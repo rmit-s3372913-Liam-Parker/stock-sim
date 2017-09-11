@@ -28,6 +28,8 @@ import model.PlayerStats;
  * */
 public class DashboardView extends GridPane 
 {
+	private StockView stockView = new StockView();
+	
 	public DashboardView()
 	{
 		setAlignment(Pos.TOP_LEFT);
@@ -58,7 +60,7 @@ public class DashboardView extends GridPane
         
 		// Setup title
         buildLeaderboardView();
-        buildStockView();
+        add(stockView, 1, 0);
         buildCompanyView();
 		
 	}
@@ -86,19 +88,6 @@ public class DashboardView extends GridPane
 		// Embed into main view.
 		verticalLayout.getChildren().addAll(title, leaderList);
 		add(verticalLayout, 0, 0);
-	}
-	
-	
-	private void buildStockView()
-	{
-		VBox verticalLayout = new VBox();
-		
-		Text title = new Text("Selected Stock");
-		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		
-		// Embed into main view.
-		verticalLayout.getChildren().addAll(title);
-		add(verticalLayout, 1, 0);
 	}
 	
 	private void buildCompanyView()
@@ -131,6 +120,7 @@ public class DashboardView extends GridPane
 		    {
 		    	String[] tokens = newVal.split(" -");
 		        String code = tokens[0];
+		        stockView.setCurrentStock(code);
 		    }
 		});
 		

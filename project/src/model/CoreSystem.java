@@ -56,14 +56,12 @@ public class CoreSystem implements CoreAPI
 	{
 		curUserSession = details;
 		return cloudDatabase.login(curUserSession);
-		
 	}
 	
 	@Override
 	public String confirmedUser(UserDetails details) 
 	{
 		return cloudDatabase.confirmedUser(details);
-		
 	}
 
 	@Override
@@ -84,19 +82,6 @@ public class CoreSystem implements CoreAPI
 	public List<PlayerStats> getPlayerList() 
 	{
 		List<PlayerStats> players = cloudDatabase.getHighScore();
-		
-		// Sort players based on earnings
-		//Collections.sort(mockPlayerList, new Comparator<PlayerStats>() {
-		//    @Override
-		//    public int compare(PlayerStats lhs, PlayerStats rhs) 
-		//    {
-		//    	double lhsValue = lhs.getCurrentEarnings();
-		//    	double rhsValue = rhs.getCurrentEarnings();
-		//    	
-		//        return lhsValue > rhsValue ? -1 : (lhsValue < rhsValue) ? 1 : 0;
-		//    }
-		//});
-			
 		return players;
 	}
 	

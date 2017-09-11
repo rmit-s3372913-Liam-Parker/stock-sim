@@ -55,14 +55,14 @@ public class Stock
 		code = (String)obj.get("code");
 		description = (String)obj.get("desc_full");
 		lastPrice = (double)obj.get("last_price");
-		openPrice = (double)obj.get("open_price");
-		dayHighPrice = (double)obj.get("day_high_price");
-		dayLowPrice = (long)obj.get("day_low_price");
-		changePrice = (double)obj.get("change_price");
+		//openPrice = (double)obj.get("open_price");
+		//dayHighPrice = (double)obj.get("day_high_price");
+		//dayLowPrice = (double)obj.get("day_low_price");
+		//changePrice = (double)obj.get("change_price");
 		//changePercentage = (String)obj.get("change_in_percent");
 		volume = (long)obj.get("volume");
-		bidPrice = (double)obj.get("bid_price");
-		offerPrice = (double)obj.get("offer_price");
+		//bidPrice = (double)obj.get("bid_price");
+		//offerPrice = (double)obj.get("offer_price");
 		//previousClosePrice = (double)obj.get("previous_close_price");
 		//previousDayChangePercentage = (String)obj.get("previous_day_percent_change");
 		//yearHighPrice = (double)obj.get("year_high_price");
@@ -76,13 +76,69 @@ public class Stock
 		//yearChangePercentage = (String)obj.get("year_change_in_percentage");
 		//pe = (double)obj.get("pe");
 		//eps = (double)obj.get("eps");
-		averageDailyVolume = (long)obj.get("average_daily_volume");
+		//averageDailyVolume = (long)obj.get("average_daily_volume");
 		//annualDividendYield = (double)obj.get("annual_dividend_yield");
 		marketCap = (long)obj.get("market_cap");
 		numShares = (long)obj.get("number_of_shares");
 		//deprecatedMarketCap = (long)obj.get("deprecated_market_cap");
 		//deprecatedNumShares = (long)obj.get("deprecated_number_of_shares");
 		suspended = (boolean)obj.get("suspended");
+	}
+	
+	public String getCode() {
+		return code;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public boolean isSuspended() {
+		return suspended;
+	}
+
+	public long getVolume() {
+		return volume;
+	}
+
+	public long getAverageDailyVolume() {
+		return averageDailyVolume;
+	}
+
+	public long getMarketCap() {
+		return marketCap;
+	}
+
+	public long getNumShares() {
+		return numShares;
+	}
+
+	public double getLastPrice() {
+		return lastPrice;
+	}
+
+	public double getOpenPrice() {
+		return openPrice;
+	}
+
+	public double getDayHighPrice() {
+		return dayHighPrice;
+	}
+
+	public double getDayLowPrice() {
+		return dayLowPrice;
+	}
+
+	public double getChangePrice() {
+		return changePrice;
+	}
+
+	public double getBidPrice() {
+		return bidPrice;
+	}
+
+	public double getOfferPrice() {
+		return offerPrice;
 	}
 	
 }
