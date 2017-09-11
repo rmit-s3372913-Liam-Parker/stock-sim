@@ -19,7 +19,7 @@ if(isset($_POST['change']))
 		if($numrow != 0)
 		{
 			$password = md5($password);
-			$sql = "update test set password='".$password."' ";
+			$sql = "update player set password='".$password."' ";
 
 			if($conn->query($sql) == TRUE)
 			{

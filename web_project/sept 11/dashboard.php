@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'downloadCSV.php';
+
 
 ?>
 <!DOCTYPE html>
@@ -27,15 +27,11 @@ include 'downloadCSV.php';
 				<div class="leader-board">
 					<h2 align="center">Leaderboard</h2>
 					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th>Rank</th>
-								<th>User</th>
-							</tr>
-						</thead>
+						
 						<tbody>
 							<tr>
-								<td></td>
+								<!-- display top 5 by winnings -->
+								<td><?php include 'leader_board.php' ?></td>
 							</tr>
 							<tr>
 								<td></td>
@@ -51,6 +47,7 @@ include 'downloadCSV.php';
 
 			<div class="col-md-8">
 				<h2 align="center">Winnings</h2>
+				<h2 align="center"><?php include 'winning.php'; ?></h2>
 			</div>
 		</div>
 
@@ -67,7 +64,7 @@ include 'downloadCSV.php';
 						</thead>
 						<tbody>
 							<tr>
-								<td><?php include 'read_asx_csv.php'; ?></td>
+								<td></td>
 							</tr>
 							<tr>
 								<td></td>

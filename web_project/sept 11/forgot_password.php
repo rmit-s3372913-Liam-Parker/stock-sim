@@ -1,14 +1,15 @@
 <?php
  session_start();
+ include 'connection.php';
 
 if(isset($_POST['resend']))
 {
 	
-	$conn = mysqli_connect('localhost', 'root', '', 'testing');
+	
 	$email = mysqli_escape_string($conn, $_POST['email']);
 	
 
-	$email_query = mysqli_query($conn, "Select * FROM test WHERE email='".$email."'");
+	$email_query = mysqli_query($conn, "Select * FROM player1 WHERE email='".$email."'");
 	
 	$numrow_email = mysqli_num_rows($email_query);
 

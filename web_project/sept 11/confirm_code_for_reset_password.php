@@ -28,13 +28,14 @@ include 'connection.php';
     
       <h2>Enter You Confirmation Code</h2>
       <p style="font-size:16px">We have sent an email confirmation code to 
+      <strong>
       <?php 
       if (isset($_SESSION['address'])) 
         { 
         echo $_SESSION['address']; unset($_SESSION['address']); 
         }
       ?>.
-      
+      </strong>
       <br>
       Please enter the code below:
       </p>

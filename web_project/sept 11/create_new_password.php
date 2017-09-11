@@ -41,7 +41,7 @@ include 'connection.php';
               <div class="col-xs-12">
                   <div  class="text-center">
                       <button type="submit" class="btn btn-success" name="change">Change Password</button>
-                      <button type="submit" class="btn btn-danger">Cancel</button>
+                      <button type="submit" class="btn btn-danger" onClick="location.href='login.php'">Cancel</button>
                   </div>
               </div>
           </div>
