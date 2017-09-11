@@ -17,6 +17,10 @@ $records = mysqli_query($conn, $sql);
 		Code &nbsp <input type="text" name="code" id="code"> &nbsp
 		Company &nbsp <input type="text" name="company" id="company"> &nbsp
 		Price &nbsp <input type="text" name="price" id="price">
+		
+		<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#buy-function-modal">Buy</button>
+
+		<button type="button" class="btn btn-danger btn-sm">Sell</button>
 	</div>
 	<br>
 	<div class="container">
@@ -27,42 +31,58 @@ $records = mysqli_query($conn, $sql);
 	    <li><a href="#">Charts</a></li>
 	  </ul>
 	</div>
-	<div class="container">
-		<div class="tab-content">
-			<div id="summary" class="tab-pane fade in active">
-				<h3>Stocks</h3>
-				<table id="table" class="table table-striped table-hover">
-				    <thead>
-				      <tr>
-				        <th>Code</th>
-				        <th>Company</th>
-				        <th>Last Price</th>
-				        <th>Change</th>
-				      </tr>
-				    </thead>
-				    <tbody>
-				      <?php
-				      while ($list = mysqli_fetch_assoc($records))
-				      {
-				      	echo "<tr>";
-				      	echo "<td>".$list['Code']."</td>";
-				      	echo "<td>".$list['name']."</td>";
-				      	echo "<td>". "$".$list['last_price']."</td>";
-				      	echo "<td>".$list['change']."%"."</td>";
-				      }
-				      ?>
-				    </tbody>
-				</table>
-			</div>
+	
+	<!-- include file stock_summary.php display a table div -->
+	<?php include 'stock_summary.php'; ?>
 
-			<div id="top5" class="tab-pane fade">
-		      <?php include 'top5.php' ?>
-		    </div>
 
-		</div>
-		
+	<!-- Modal - Buy Function  -->
+  <div class="modal fade" id="buy-function-modal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h2 class="modal-title">Buy share in: </h2>
+        </div>
+        <div class="modal-body">
+          <div class="text-center">
+            
+            <table class="table">
+                    <tr>
+                        <th>Company</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Code</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Shares</th>
+                        <td><input id="number" type="number"></td>
+                    </tr>
+                    <tr>
+                        <th>Price</th>
+                        <td></td>
+                    </tr>
+                </table>
+            
+          </div>
+        </div>
 
-	</div>
+        <div class="modal-footer">
+          <div class="col-md-12">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <a href="" id="submit" class="btn btn-success success">Submit</a>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <!-- End of Modal Buy Function -->
+
 
 	<script>
     
@@ -79,5 +99,5 @@ $records = mysqli_query($conn, $sql);
                     };
                 }
     
-         </script>
+    </script>
 
