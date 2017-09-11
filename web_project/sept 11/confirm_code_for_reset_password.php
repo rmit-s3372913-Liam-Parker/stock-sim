@@ -32,7 +32,7 @@ include 'connection.php';
       <?php 
       if (isset($_SESSION['address'])) 
         { 
-        echo $_SESSION['address']; unset($_SESSION['address']); 
+        echo $_SESSION['address']; 
         }
       ?>.
       </strong>
