@@ -12,31 +12,35 @@ $records = mysqli_query($conn, $sql);
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <?php include("navigation.php");?>
-	<div class="container">
-		<input type="text" name="search" placeholder="Search Company">
-		Code &nbsp <input type="text" name="code" id="code"> &nbsp
-		Company &nbsp <input type="text" name="company" id="company"> &nbsp
-		Price &nbsp <input type="text" name="price" id="price">
-		
-		<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#buy-function-modal">Buy</button>
+  <div class="container">
+    <form>
 
-		<button type="button" class="btn btn-danger btn-sm">Sell</button>
-	</div>
-	<br>
-	<div class="container">
-		<ul class="nav nav-tabs">
-	    <li class="active"><a data-toggle="tab" href="#summary">Summary</a></li>
-	    <li><a data-toggle="tab" href="#top5">Top 5</a></li>
-	    <li><a href="#">Value</a></li>
-	    <li><a href="#">Charts</a></li>
-	  </ul>
-	</div>
-	
-	<!-- include file stock_summary.php display a table div -->
-	<?php include 'stock_summary.php'; ?>
+      <input type="text" name="search" placeholder="Search Company">
+      Code &nbsp <input type="text" name="code" id="code-input" size="12"> &nbsp
+      Price &nbsp <input type="text" name="price" id="price-input" size="12"> &nbsp
+      Share &nbsp <input type="number" name="share" id="share-input" size="12" step="10" min="0">
+      <!-- Change &nbsp <input type="text" name="price" id="price"> -->
+      
+      <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#buy-function-modal" id="buy-button">Buy</button>
+
+      <button type="button" class="btn btn-danger btn-sm">Sell</button>
+    </form>
+  </div>
+  <br>
+  <div class="container">
+    <ul class="nav nav-tabs">
+      <li class="active"><a data-toggle="tab" href="#summary">Summary</a></li>
+      <li><a data-toggle="tab" href="#top5">Top 5</a></li>
+      <li><a href="#">Value</a></li>
+      <li><a href="#">Charts</a></li>
+    </ul>
+  </div>
+  
+  <!-- include file stock_summary.php display a table div -->
+  <?php include 'stock_summary.php'; ?>
 
 
-	<!-- Modal - Buy Function  -->
+  <!-- Modal - Buy Function  -->
   <div class="modal fade" id="buy-function-modal" role="dialog">
     <div class="modal-dialog">
     
@@ -51,20 +55,28 @@ $records = mysqli_query($conn, $sql);
             
             <table class="table">
                     <tr>
-                        <th>Company</th>
-                        <td></td>
-                    </tr>
-                    <tr>
                         <th>Code</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>Shares</th>
-                        <td><input id="number" type="number"></td>
+                        <td><input id="code" name="code" type="text" value="{{ request.form.code }}" readonly/></td>
                     </tr>
                     <tr>
                         <th>Price</th>
-                        <td></td>
+                        <td><input id="price" name="price" type="text" value="{{ request.form.price }}" readonly/></td>
+                    </tr>
+                    <tr>
+                        <th>Shares</th>
+                        <td><input id="share" name="share" type="text" value="{{ request.form.share }}" readonly/></td>
+                    </tr>
+                    <tr>
+                        <th>Broker Fee:</th>
+                        <td>$50</td>
+                    </tr>
+                    <tr>
+                        <th>Purchase Fee:</th>
+                        <td>1.0%</td>
+                    </tr>
+                    <tr>
+                        <th>Total:</th>
+                        <td><p id="Total" name="Total"></p></td>
                     </tr>
                 </table>
             
@@ -82,9 +94,18 @@ $records = mysqli_query($conn, $sql);
     </div>
   </div>
   <!-- End of Modal Buy Function -->
+  <!-- function to display selection to modal -->
+  <script>
+    $('#buy-button').click(function(){
+      $('#code').val($('#code-input').val());
+      $('#price').val($('#price-input').val());
+      $('#share').val($('#share-input').val());
+      calcTotal();
+    });
+  </script>
 
-
-	<script>
+  <!-- table row selection to be displayed to a div -->
+  <script>
     
                 var table = document.getElementById('table');
                 
@@ -93,11 +114,39 @@ $records = mysqli_query($conn, $sql);
                     table.rows[i].onclick = function()
                     {
                          //rIndex = this.rowIndex;
-                         document.getElementById("code").value = this.cells[0].innerHTML;
-                         document.getElementById("company").value = this.cells[1].innerHTML;
-                         document.getElementById("price").value = this.cells[2].innerHTML;
+                         document.getElementById("code-input").value = this.cells[0].innerHTML;
+                         document.getElementById("price-input").value = this.cells[1].innerHTML;
+                         document.getElementById("share-input").value = this.cells[2].innerHTML;
                     };
                 }
     
     </script>
+
+
+    <script>
+      function calcTotal()
+      {
+        var price = parseFloat(document.getElementById('price').value);
+        var share = parseFloat(document.getElementById('share').value);
+        var sub = price * share + 50;
+        var percent = sub * 0.01;
+        var total = sub + percent;
+
+        document.getElementById("Total").innerHTML = total;
+      }
+
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
 

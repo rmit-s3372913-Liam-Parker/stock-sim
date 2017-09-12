@@ -58,20 +58,31 @@ session_start();
 					<table class="table">
 						<thead>
 							<tr>
-								<th>Top ASX</th>
-								
+								<th>Symbol</th>
+				        		<th>Last price</th>
+
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-							</tr>
+							<?php
+							$url = "http://download.finance.yahoo.com/d/quotes.csv?s=^AORD+BHP.AX+BLT.L+AAPL+EBAY+^NDX+ASX.AX&f=sl1c";
+
+							$line = file_get_contents($url);
+
+							$data =  nl2br($line);
+
+							$company = explode("\n", $data);
+							for ($i = 0; $i<count($company)-1; $i++)
+							{
+							  $row = explode(",", $company[$i]);
+							  echo "\t<tr>\r\n"
+							  . "\t\t<td>" . $row[0] . "</td>"
+							  . "\t\t<td>$" . $row[1] . "</td>"
+							  . "\t</tr>";
+							}
+
+
+							?>
 						</tbody>
 						
 					</table>
