@@ -1,10 +1,10 @@
-package controller.confirmation;
+package controller.cancel;
 
 import controller.Controller;
 import javafx.event.ActionEvent;
 import view.LoginView;
 
-public class CancelButtonController  extends Controller
+public class ReturnToLoginButtonController  extends Controller
 {
 	@Override
 	public void handle(ActionEvent event) 

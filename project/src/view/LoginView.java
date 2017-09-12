@@ -1,5 +1,7 @@
 package view;
 
+import java.io.*;
+
 import controller.login.LoginController;
 import controller.login.RegisterController;
 import javafx.geometry.Pos;
@@ -28,6 +30,10 @@ public class LoginView extends GridPane
 	private static final String LOGIN_BUTTON = "Login";
 	private static final String REGISTER_BUTTON = "Register";
 	
+
+	private TextField usernameField = new TextField();
+	private PasswordField passwordField = new PasswordField();
+	private CheckBox rPasswordCheckbox = new CheckBox();
 	public Text alert = new Text();
 	
 	/**
@@ -39,6 +45,7 @@ public class LoginView extends GridPane
 		setHgap(5);
 		setVgap(5);
 		populate();
+		checkRemember();
 	}
 	
 	/**
@@ -46,7 +53,7 @@ public class LoginView extends GridPane
 	 * any call-backs for functionality should be registered
 	 * here.   
 	 * */
-	public void populate()
+	private void populate()
 	{
 		// Setup title
 		Text loginTitle = new Text(LOGIN_TITLE);
@@ -56,17 +63,14 @@ public class LoginView extends GridPane
 		// Setup user-name field
 		Label username = new Label(USERNAME_LABEL);
 		add(username, 0, 1);
-		TextField usernameField = new TextField();
 		add(usernameField, 1, 1);
 		
 		// Setup password field and remember toggle
 		Label password = new Label(PASSWORD_LABEL);
 		add(password, 0, 2);
-		PasswordField passwordField = new PasswordField();
 		add(passwordField, 1, 2);
 		Label rPassword = new Label(REMEMBER_LABEL);
 		add(rPassword, 2, 2);
-		CheckBox rPasswordCheckbox = new CheckBox();
 		add(rPasswordCheckbox, 3, 2);
 
 		//Creating an alert Text 
@@ -83,5 +87,26 @@ public class LoginView extends GridPane
 		add(buttons, 1, 5);
 	}
 	
-	
+	private void checkRemember(){
+		try {
+			FileReader reader = new FileReader("./dataStorage/lastLogin.txt");
+			BufferedReader bufferedReader = new BufferedReader(reader);
+ 
+            String line;
+ 
+            if ((line = bufferedReader.readLine()) != null) {
+                usernameField.setText(line);
+            }
+
+            if ((line = bufferedReader.readLine()) != null) {
+                passwordField.setText(line);
+                rPasswordCheckbox.setSelected(true);
+            }
+            
+            reader.close();
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

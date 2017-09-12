@@ -1,5 +1,6 @@
 package view;
 
+import controller.cancel.ReturnToLoginButtonController;
 import controller.registration.RegistrationController;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -25,6 +26,7 @@ public class RegistrationView extends BorderPane
 	private static final String RETYPE_PASSWORD_LABEL = "Retype Password:";
 	
 	private static final String REGISTER_BUTTON = "Register";
+	private static final String CANCEL_BUTTON = "Cancel";
 
 	public Text userCheck = new Text();
 	public Text emailCheck = new Text();
@@ -99,8 +101,11 @@ public class RegistrationView extends BorderPane
 		Button registerButton = new Button(REGISTER_BUTTON);
 		registerButton.setOnAction(new RegistrationController(this, usernameField, emailField, passwordField, retypePasswordField));
 		gridPane.add(registerButton, 1, 3);
+		Button cancelButton = new Button(CANCEL_BUTTON);
+		cancelButton.setOnAction(new ReturnToLoginButtonController());
+		gridPane.add(cancelButton, 1, 4);
 		HBox buttons = new HBox(2.5);
-		buttons.getChildren().addAll(registerButton);
+		buttons.getChildren().addAll(registerButton, cancelButton);
 		gridPane.add(buttons, 1, 6);
 		return gridPane;
 	}

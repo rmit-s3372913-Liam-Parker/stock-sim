@@ -1,5 +1,7 @@
 package model;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -67,6 +69,19 @@ public class CoreSystem implements CoreAPI
 	@Override
 	public String beginSession(UserDetails details) 
 	{
+		FileWriter writer;
+		try {
+			writer = new FileWriter("./dataStorage/lastLogin.txt", false);
+			writer.write(details.getUsername());
+			if (details.getRemember()){
+		        writer.write("\r\n");
+		        writer.write(details.getPassword());
+			}
+	        writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "temp";
 	}
 

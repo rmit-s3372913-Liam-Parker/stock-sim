@@ -9,6 +9,7 @@ public class UserDetails
 	private String username;
 	private String password;
 	private String email;
+	private boolean remember;
 	
 	/**
 	 * Constructs a user data object representing the given username, password and email.
@@ -31,6 +32,13 @@ public class UserDetails
 	public UserDetails(String username, String password) {
 		this.username = username;
 		this.password = password;
+	}
+
+	/**
+	 * @param remember
+	 */
+	public void setRemember(boolean remember){
+		this.remember = remember;
 	}
 
 	/**
@@ -63,5 +71,13 @@ public class UserDetails
 	public String getEmail()
 	{
 		return email;
+	}
+	
+	/**
+	 * @return The user remember password setting.
+	 */
+	public boolean getRemember()
+	{
+		return remember;
 	}
 }

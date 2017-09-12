@@ -1,6 +1,6 @@
 package view;
 
-import controller.confirmation.CancelButtonController;
+import controller.cancel.ReturnToLoginButtonController;
 import controller.confirmation.ConfirmationController;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -69,7 +69,7 @@ public class ConfirmationView extends GridPane {
 		Button confirmButton = new Button(CONFIRM_BUTTON);
 		confirmButton.setOnAction(new ConfirmationController(user, pinField, this));
 		Button cancelButton = new Button(CANCEL_BUTTON);
-		cancelButton.setOnAction(new CancelButtonController());
+		cancelButton.setOnAction(new ReturnToLoginButtonController());
 		add(cancelButton, 1, 4);
 		HBox buttons = new HBox(2.5);
 		buttons.getChildren().addAll(confirmButton, cancelButton);

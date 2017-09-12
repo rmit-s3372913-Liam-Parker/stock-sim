@@ -75,8 +75,13 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 			String loginAlert = getModel().login(user);
 			if (loginAlert==null){
 				String confirmAlert = getModel().confirmedUser(user);
+				if (re.isSelected())
+					user.setRemember(true);
 				if (confirmAlert==null)
+				{
+					getModel().beginSession(user);
 					switchView(new DashboardView());
+				}
 				else
 					if (confirmAlert.equals(getModel().getCloudDatabase().NOT_CONFIRM))
 						switchView(new ConfirmationView(user));

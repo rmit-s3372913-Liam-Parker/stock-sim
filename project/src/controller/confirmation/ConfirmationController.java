@@ -26,7 +26,10 @@ public class ConfirmationController extends Controller implements EventHandler<A
 			//compare pin and activate user account
 			String alert = getModel().confirmNewUser(user, pinField.getText());
 			if (alert==null)
+			{
+				getModel().beginSession(user);
 				switchView(new DashboardView());
+			}
 			else
 				view.warning.setText(alert);
 		} else {
