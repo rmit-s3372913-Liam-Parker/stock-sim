@@ -75,6 +75,7 @@ session_start();
 							for ($i = 0; $i<count($company)-1; $i++)
 							{
 							  $row = explode(",", $company[$i]);
+							  $row[0] = substr($row[0], 1, -1);
 							  echo "\t<tr>\r\n"
 							  . "\t\t<td>" . $row[0] . "</td>"
 							  . "\t\t<td>$" . $row[1] . "</td>"

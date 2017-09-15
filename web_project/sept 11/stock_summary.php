@@ -1,11 +1,7 @@
 <?php
 include 'connection.php';
-// select all from the asx_data table in database
-//$sql = "select * from asx_data";
-
-//$records = mysqli_query($conn, $sql);
-
 ?>
+<!-- contents of the tab menu for stock_list.php -->
 <div class="container">
 		<div class="tab-content">
 			<div id="summary" class="tab-pane fade in active">
@@ -30,6 +26,7 @@ include 'connection.php';
 						for ($i = 0; $i<count($company)-1; $i++)
 						{
 						  $row = explode(",", $company[$i]);
+						  $row[0] = substr($row[0], 1, -1);
 						  echo "\t<tr>\r\n"
 						  . "\t\t<td>" . $row[0] . "</td>"
 						  . "\t\t<td>" . $row[1] . "</td>"
@@ -44,6 +41,15 @@ include 'connection.php';
 			<div id="top5" class="tab-pane fade">
 		      <?php include 'top5.php' ?>
 		    </div>
+
+		    <div>
+		    	<!-- ?php include 'history.php' ? -->
+		    </div>
+
+		    <div id="chart" class="tab-pane fade">
+		    	<?php include 'history.php' ?>
+		    </div>
+		    
 
 		</div>
 		

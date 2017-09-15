@@ -1,7 +1,7 @@
 <?php
 include 'connection.php';
 // select all from the asx_data table in database
-$sql = "select * from asx_data order by `change` desc";
+$sql = "select * from asx_data order by `change` desc limit 6";
 
 $records = mysqli_query($conn, $sql);
 
