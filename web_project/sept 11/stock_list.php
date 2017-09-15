@@ -76,7 +76,7 @@ $records = mysqli_query($conn, $sql);
                     </tr>
                     <tr>
                         <th>Total:</th>
-                        <td><p id="Total" name="Total"></p></td>
+                        <td><p id="Total" name="Total" readonly></p></td>
                     </tr>
                 </table>
             
