@@ -83,7 +83,7 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 					switchView(new DashboardView());
 				}
 				else
-					if (confirmAlert.equals(getModel().getCloudDatabase().NOT_CONFIRM))
+					if (confirmAlert.equals(getModel().getCloudDatabase().USER_UNCONFIRMED))
 						switchView(new ConfirmationView(user));
 				newline();
 				view.alert.setText(view.alert.getText()+confirmAlert);

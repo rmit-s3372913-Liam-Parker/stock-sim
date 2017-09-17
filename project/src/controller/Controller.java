@@ -21,6 +21,14 @@ public abstract class Controller implements EventHandler<ActionEvent>
 	}
 	
 	/**
+	 * @return The main application stage for displaying modal windows or making other adjustments.
+	 */
+	protected Stage getStage()
+	{
+		return StockApplication.getMainStage();
+	}
+	
+	/**
 	 * @return Access to the application model.
 	 */
 	protected CoreAPI getModel()

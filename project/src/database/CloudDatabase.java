@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.PlayerStats;
+import model.Transaction;
+import model.TransactionType;
 import model.UserDetails;
 import ultilities.Hash;
 
@@ -23,53 +25,67 @@ public class CloudDatabase
 	private static final String INVALID = "Incorrect username or password";
 	private static final String DATABASE_ERROR = "Encountered error when contacting database";
 	private static final String WRONG_PIN = "Incorrect PIN";
-	public static final String NOT_CONFIRM = "Email is not confirmed";
+	public static final String USER_UNCONFIRMED = "Email is not confirmed";
 	
     private static String dbURL = "jdbc:mysql://capstonedatabase.cszu3gvo32mp.ap-southeast-2.rds.amazonaws.com:3306/CapstoneDatabase?user=admin&password=password";
     private static String playerTable = "player";
+    private static String transactionTable = "transaction";
     
     // jdbc Connection
     private Connection conn = null;
     
     private Statement stmt = null;
 
-    public CloudDatabase(){}
+    public CloudDatabase() {}
     
-    public String checkUsername(UserDetails user){
-        if (createConnection()){
-            if (playerExist(user.getUsername())){
+    public String checkUsername(UserDetails user)
+    {
+        if (createConnection())
+        {
+            if (playerExist(user.getUsername()))
+            {
             	shutdown();
             	return EXISTED_NAME;
             }
+            
             shutdown();
             return null;
         }
     	return NO_INTERNET;
     }
 
-    public String register(UserDetails user, String pin){
-        if (createConnection()){
+    public String register(UserDetails user, String pin)
+    {
+        if (createConnection())
+        {
 			if (!insertPlayer(user, pin))
 				return DATABASE_ERROR;
+			
             shutdown();
             return null;
         }
     	return NO_INTERNET;
     }
     
-    public String login(UserDetails user){
-        if (createConnection()){
+    public String login(UserDetails user)
+    {
+        if (createConnection())
+        {
             if (!loginCheck(user))
             	return INVALID;
+            
             shutdown();
             return null;
         }
     	return NO_INTERNET;
     }
 
-    public String confirm(UserDetails user, String pin){
-        if (createConnection()){
-        	if (checkPin(user, pin)){
+    public String confirm(UserDetails user, String pin)
+    {
+        if (createConnection())
+        {
+        	if (checkPin(user, pin))
+        	{
         		confirmPlayer(user);
                 shutdown();
                 return null;
@@ -80,16 +96,45 @@ public class CloudDatabase
     	return NO_INTERNET;
     }
     
-    public String confirmedUser(UserDetails user){
-        if (createConnection()){
-        	if (checkConfirm(user)){
+    public String confirmedUser(UserDetails user)
+    {
+        if (createConnection())
+        {
+        	if (checkConfirm(user))
+        	{
                 shutdown();
                 return null;
         	}
         	shutdown();
-        	return NOT_CONFIRM;
+        	return USER_UNCONFIRMED;
         }
     	return NO_INTERNET;
+    }
+    
+    public boolean insertTransaction(UserDetails user, String stockID, TransactionType type, int quantity, double price, double postWinnings)
+    {
+    	String transType = (type == TransactionType.Buy) ? "Buy":"Sell";
+    	
+    	try
+        {
+            stmt = conn.createStatement();
+            
+            stmt.execute("insert into " + transactionTable + " (username, stockID, transactionType, stockQuantity, price, winningAfterTransaction) values ('" +
+            		user.getUsername() + "','" +
+            		stockID + "','" +
+            		transType + "','" +
+            		quantity + "','" +
+            		price + "','" +
+            		postWinnings + "')");
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+            return false;
+        } 
+    	
+        return true;
     }
     
     private boolean createConnection()
@@ -139,15 +184,11 @@ public class CloudDatabase
             	return true;
             }
             stmt.close();
-        } catch (SQLException sqlExcept) {
-            sqlExcept.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        } 
+    	catch (SQLException sqlExcept) { sqlExcept.printStackTrace(); }
+    	catch (UnsupportedEncodingException e) { e.printStackTrace(); } 
+    	catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
+    	
     	return false;
     }
     
@@ -165,13 +206,9 @@ public class CloudDatabase
         {
             sqlExcept.printStackTrace();
             return false;
-        } catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        } 
+        catch (UnsupportedEncodingException e) { e.printStackTrace(); } 
+        catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
         return true;
     }
     
