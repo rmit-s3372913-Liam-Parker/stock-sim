@@ -5,7 +5,6 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -111,21 +110,49 @@ public class CloudDatabase
     	return NO_INTERNET;
     }
     
-    public boolean insertTransaction(UserDetails user, String stockID, TransactionType type, int quantity, double price, double postWinnings)
+    public String executeTransaction(Transaction transaction)
     {
-    	String transType = (type == TransactionType.Buy) ? "Buy":"Sell";
+        if (createConnection())
+        {
+        	if (insertTransaction(transaction))
+        	{
+                shutdown();
+                return null;
+        	}
+        	shutdown();
+        	return USER_UNCONFIRMED;
+        }
+    	return NO_INTERNET;
+    }
+    
+    public boolean insertTransaction(Transaction transaction)
+    {
+    	String transType = "Buy";
+    	switch (transaction.getTransactionType()){
+		case Receive:
+    		transType = "Receive";
+			break;
+		case Sell:
+    		transType = "Sell";
+			break;
+		case Send:
+    		transType = "Send";
+			break;
+		default:
+			break;
+    	}
     	
     	try
         {
             stmt = conn.createStatement();
             
             stmt.execute("insert into " + transactionTable + " (username, stockID, transactionType, stockQuantity, price, winningAfterTransaction) values ('" +
-            		user.getUsername() + "','" +
-            		stockID + "','" +
+            		transaction.getUsername() + "','" +
+            		transaction.getStockCode() + "','" +
             		transType + "','" +
-            		quantity + "','" +
-            		price + "','" +
-            		postWinnings + "')");
+            		transaction.getQuantity() + "','" +
+            		transaction.getPrice() + "','" +
+            		transaction.getPostWinnings() + "')");
             stmt.close();
         }
         catch (SQLException sqlExcept)
@@ -252,7 +279,6 @@ public class CloudDatabase
     	}
     	return false;
     }
-
     
     private void confirmPlayer(UserDetails user)
     {
@@ -303,23 +329,43 @@ public class CloudDatabase
     	
     	return null;
     }
-//    private void updatePlayer(String username, byte[] password)
-//    {
-//        try
-//        {
-//        	stmt = conn.createStatement();
-//
-//        	stmt.execute(
-//          	      "UPDATE " + playerTable + " SET username = '" + username
-//          	      + "', password = '" + password + "' WHERE username = '" + username + "'");
-//            stmt.close();
-//        }
-//        catch (SQLException sqlExcept)
-//        {
-//            sqlExcept.printStackTrace();
-//        }
-//    }
-//    
+
+    private boolean changeWinning(String username, int change)
+    {
+	    int winning = 0;
+    	try {
+    		stmt = conn.createStatement();
+    		ResultSet results = stmt.executeQuery("SELECT winning FROM " + playerTable + " WHERE username = '" + username + "'");
+			while(results.next())
+			{
+			    winning = Integer.parseInt(results.getString(1));
+			    System.out.println(winning);
+			}
+			results.close();
+			stmt.close();
+		} 
+    	catch (SQLException sqlExcept)
+    	{
+            sqlExcept.printStackTrace();
+            return false;
+		}
+    	winning += change;
+        try
+        {
+        	stmt = conn.createStatement();
+
+        	stmt.execute(
+          	      "UPDATE " + playerTable + " SET winning = '" + winning + "' WHERE username = '" + username + "'");
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
 //    private void select()
 //    {
 //        try
