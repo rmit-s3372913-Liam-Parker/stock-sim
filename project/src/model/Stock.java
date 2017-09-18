@@ -7,6 +7,9 @@ import org.json.simple.JSONObject;
  * */
 public class Stock 
 {
+	private static final double BROKER_FEE = 50.0;
+	private static final double PURCHASE_FEE_MULTIPLIER = 0.01;
+	
 	//TODO: Thorough commenting of the meaning of each variable.
 	// Unlikely will need many of these variables. I suggest figuring out what
 	// we need and removing everything else.
@@ -83,6 +86,26 @@ public class Stock
 		//deprecatedMarketCap = (long)obj.get("deprecated_market_cap");
 		//deprecatedNumShares = (long)obj.get("deprecated_number_of_shares");
 		suspended = (boolean)obj.get("suspended");
+	}
+	
+	public double calculateBrokerFee()
+	{
+		return BROKER_FEE;
+	}
+	
+	public double calculatePurchaseFee(int quantity)
+	{
+		return calculateStockCost(quantity) * PURCHASE_FEE_MULTIPLIER;
+	}
+	
+	public double calculateStockCost(int quantity)
+	{
+		return quantity * getLastPrice();
+	}
+	
+	public double calculateTotalCost(int quantity)
+	{
+		return calculateBrokerFee() + calculatePurchaseFee(quantity);
 	}
 	
 	public String getCode() {
