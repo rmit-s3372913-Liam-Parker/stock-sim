@@ -84,7 +84,7 @@ public class StockView extends BorderPane implements StockSelectedCallback
 	
 	public void setStockCost(double stockValue)
 	{
-		stockValueText.setText(String.format("Last Value: $%.2f", stockValue));
+		stockValueText.setText(String.format("Share cost: $%.2f", stockValue));
 	}
 	
 	public void setBrokerFee(double brokerFee)

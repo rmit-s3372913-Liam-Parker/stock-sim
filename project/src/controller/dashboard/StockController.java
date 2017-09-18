@@ -36,13 +36,21 @@ public class StockController extends Controller implements ChangeListener<String
 	{
 		TransactionType type = TransactionType.Buy;
 		
+		if(quantity == 0)
+		{
+			displayNotificationModal("Please input a quantity greater than zero!");
+			return;
+		}
+		
 		if(event.getSource() == stockView.getBuyButton())
 		{
 			type = TransactionType.Buy;
+			displayNotificationModal("Purchased " + quantity + " for total of: $" + total);
 		}
 		else if(event.getSource() == stockView.getSellButton())
 		{
 			type = TransactionType.Sell;
+			displayNotificationModal("Sold " + quantity + " for total of: $" + total);
 		}
 		
 		try
@@ -63,8 +71,9 @@ public class StockController extends Controller implements ChangeListener<String
 					targetStock.getCode(),
 					type,
 					quantity,
-					targetStock.getLastPrice(),
-					postWinnings, null);
+					targetStock.getStockPrice(),
+					postWinnings,
+					null);
 			
 			getModel().getCloudDatabase().executeTransaction(transaction);
 		}

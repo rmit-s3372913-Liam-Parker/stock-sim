@@ -100,7 +100,7 @@ public class Stock
 	
 	public double calculateStockCost(int quantity)
 	{
-		return quantity * getLastPrice();
+		return quantity * getStockPrice();
 	}
 	
 	public double calculateTotalCost(int quantity)
@@ -136,7 +136,7 @@ public class Stock
 		return numShares;
 	}
 
-	public double getLastPrice() {
+	public double getStockPrice() {
 		return lastPrice;
 	}
 
