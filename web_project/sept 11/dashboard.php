@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+include 'downloadCSV.php';
 
 ?>
 <!DOCTYPE html>
@@ -12,11 +12,16 @@ session_start();
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+  	<link rel="stylesheet" type="text/css" href="index.css">
   	<style>
   		.leader-board, .asx, .your-stock{
   			border: 1px solid;
   		}
+
+  		.scrollable {
+			height: 300px;
+			overflow: scroll;
+		}
   	</style>
 </head>
 <body>
@@ -58,8 +63,8 @@ session_start();
 		<br>
 		<div class="row">
 			<div class="col-md-4">
-				<div class="asx">
-					<h2 align="center">ASX API LIVE</h2>
+				<div class="your-stock">
+					<h2 align="center">My Stocks</h2>
 					<table class="table">
 						<thead>
 							<tr>
@@ -97,9 +102,9 @@ session_start();
 			</div>
 
 			<div class="col-md-8">
-				<div class="your-stock">
-					<h2 align="center">Your Stocks</h2>
-					<table class="table table-striped">
+				<h2 align="center">ASX Companies</h2>
+					<div class="scrollable">
+					<table class="table table-striped table-bordered text-center">
 						<thead>
 							<tr>
 								<th>Code</th>

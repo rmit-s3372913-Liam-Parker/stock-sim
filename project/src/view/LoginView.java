@@ -1,7 +1,11 @@
 package view;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
+import controller.login.ForgotPasswordController;
 import controller.login.LoginController;
 import controller.login.RegisterController;
 import javafx.geometry.Pos;
@@ -26,13 +30,16 @@ public class LoginView extends GridPane
 	private static final String USERNAME_LABEL = "Username:";
 	private static final String PASSWORD_LABEL = "Password:";
 	private static final String REMEMBER_LABEL = "Remember:";
+	private static final String FORGOT_PASSWORD_LABEL = "Forgot Password";
 	
 	private static final String LOGIN_BUTTON = "Login";
 	private static final String REGISTER_BUTTON = "Register";
+	private static final String FORGOT_PASSWORD_BUTTON = "Forgot Password";
 	
 
 	private TextField usernameField = new TextField();
 	private PasswordField passwordField = new PasswordField();
+	private TextField forgotPasswordField = new PasswordField();
 	private CheckBox rPasswordCheckbox = new CheckBox();
 	public Text alert = new Text();
 	
@@ -69,10 +76,11 @@ public class LoginView extends GridPane
 		Label password = new Label(PASSWORD_LABEL);
 		add(password, 0, 2);
 		add(passwordField, 1, 2);
+		
 		Label rPassword = new Label(REMEMBER_LABEL);
 		add(rPassword, 2, 2);
 		add(rPasswordCheckbox, 3, 2);
-
+		
 		//Creating an alert Text 
 		add(alert, 0, 4);
 		
@@ -81,9 +89,11 @@ public class LoginView extends GridPane
 		loginButton.setOnAction(new LoginController(this, usernameField, passwordField, rPasswordCheckbox));
 		Button registerButton = new Button(REGISTER_BUTTON);
 		registerButton.setOnAction(new RegisterController());
+		Button forgotPasswordButton = new Button(FORGOT_PASSWORD_BUTTON);
+		forgotPasswordButton.setOnAction(new ForgotPasswordController());
 		add(registerButton, 1, 3);
 		HBox buttons = new HBox(2.5);
-		buttons.getChildren().addAll(loginButton, registerButton);
+		buttons.getChildren().addAll(loginButton, registerButton,forgotPasswordButton);
 		add(buttons, 1, 5);
 	}
 	
