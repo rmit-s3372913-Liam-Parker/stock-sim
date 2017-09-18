@@ -15,8 +15,30 @@ include 'connection.php';
 				      </tr>
 				    </thead>
 				    <tbody>
+					
+					<div>
 				      <?php
-				      $url = "http://download.finance.yahoo.com/d/quotes.csv?s=^AORD+BHP.AX+BLT.L+AAPL+EBAY+^NDX+ASX.AX&f=sl1c";
+				      $url = "http://download.finance.yahoo.com/d/quotes.csv?s=";
+
+					  $asx = fopen("files/ASXListedCompanies.csv", "r");
+							$company = explode("\n", fread($asx, filesize("files/ASXListedCompanies.csv")));
+							for ($i = 0; $i<count($company); $i++)
+							{
+								echo $company[$i];
+								$row = explode(",", $company[$i]);
+								if ($i>2){
+								  if ($i=3){
+									$url = $url.$row[1];
+								  }
+								  $url = $url."+".$row[1];
+								}
+								if ($i>50)
+									break;
+							}
+					  
+					  fclose($asx);
+					  
+					  $url += "&f=sl1c";
 
 						$line = file_get_contents($url);
 
