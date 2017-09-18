@@ -27,18 +27,23 @@ session_start();
 				<div class="leader-board">
 					<h2 align="center">Leaderboard</h2>
 					<table class="table table-striped">
-						
+						<thead>
+							<tr>
+								<th>username</th>
+								<th>winning</th>
+
+							</tr>
+						</thead>
 						<tbody>
 							<tr>
 								<!-- display top 5 by winnings -->
-								<td><?php include 'leader_board.php' ?></td>
+								<!-- <td>?php include 'leader_board.php' ?></td> -->
+
 							</tr>
 							<tr>
-								<td></td>
+								<?php include 'leader_board.php' ?>
 							</tr>
-							<tr>
-								<td></td>
-							</tr>
+							
 						</tbody>
 						
 					</table>
@@ -50,7 +55,7 @@ session_start();
 				<h2 align="center"><?php include 'winning.php'; ?></h2>
 			</div>
 		</div>
-
+		<br>
 		<div class="row">
 			<div class="col-md-4">
 				<div class="asx">
@@ -65,6 +70,7 @@ session_start();
 						</thead>
 						<tbody>
 							<?php
+							
 							$url = "http://download.finance.yahoo.com/d/quotes.csv?s=^AORD+BHP.AX+BLT.L+AAPL+EBAY+^NDX+ASX.AX&f=sl1c";
 
 							$line = file_get_contents($url);
@@ -93,23 +99,19 @@ session_start();
 			<div class="col-md-8">
 				<div class="your-stock">
 					<h2 align="center">Your Stocks</h2>
-					<table class="table">
+					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th></th>
+								<th>Code</th>
+								<th>Description</th>
 								
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td></td>
+								<?php include 'read_asx_csv.php'; ?>
 							</tr>
-							<tr>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-							</tr>
+							
 						</tbody>
 						
 					</table>
