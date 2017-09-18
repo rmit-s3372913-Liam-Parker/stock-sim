@@ -1,6 +1,7 @@
 <?php
-
-
+include_once("callApi.php");
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
 ?>
 
 <!DOCTYPE html>
@@ -14,28 +15,35 @@
         <td width="100">Company name</td>
         <td width="200">Code</td>
     </tr>
- --><?php
-$file_handle = fopen("files/ASXListedCompanies.csv", "r");
-
-$file = new SplFileObject('files/ASXListedCompanies.csv');
-$fileIterator = new LimitIterator($file, 3);
-foreach($fileIterator as $line) {
-    $part = explode(",", $line);
-    if ($part[0]=="")
+-->
+<?php
+$asx = fopen("files/ASXListedCompanies.csv", "r");
+$company = explode("\r\n", fread($asx, filesize("files/ASXListedCompanies.csv")));
+for ($i = 0; $i<10; $i++)
+{
+  $row = explode("\"", $company[$i]);
+  $column = explode(",", $row[2]);
+  if ($i>2){
+    if ($company[$i]=="")
       break;
     //echo "<tr><td height='30'>$part[0]</td><td>$part[1]</td></tr>";
-   echo "<tr>";
+    echo "<tr>";
 
-   echo "<td>" . $part[1] . "</td>";
+    echo "<td>" . $column[1] . "</td>";
 
-   echo "<td>" . $part[0] . "</td>";
+    echo "<td>" . $row[1] . "</td>";
 
-   echo "</tr>";
+    $data=CallAPI($column[1]);
+
+    echo "<td>" . $data["last_price"] . "</td>";
+
+    echo "</tr>";
+  }
 }
 
 
 
-fclose($file_handle);
+fclose($asx);
 ?>
 <!-- </table>
 
