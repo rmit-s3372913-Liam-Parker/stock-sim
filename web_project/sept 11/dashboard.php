@@ -22,7 +22,19 @@ include 'downloadCSV.php';
 			height: 300px;
 			overflow: scroll;
 		}
+		.table tr:hover td{
+			background-color: #778899;
+			color: white;
+			cursor: pointer;
+		}
   	</style>
+  	<script type="text/javascript">
+		$(document).ready(function() {
+			$('table tbody tr').click(function() {
+			alert($(this).text());
+			});
+		});
+	</script>
 </head>
 <body>
 <?php include("navigation.php");?>
