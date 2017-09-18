@@ -12,6 +12,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import model.Stock;
+import ultilities.NumberField;
 
 public class StockView extends BorderPane implements StockSelectedCallback
 {	
@@ -29,8 +30,6 @@ public class StockView extends BorderPane implements StockSelectedCallback
 	Button sellBtn = new Button("Sell");
 	StockController controller = new StockController(this);
 	
-	public static final String LAST_VALUE_LABEL = "Last Value: $";
-	
 	public StockView()
 	{
 		populate();
@@ -43,14 +42,16 @@ public class StockView extends BorderPane implements StockSelectedCallback
 		
 		buyBtn.setOnAction(controller);
 		sellBtn.setOnAction(controller);
+		
 		quantityField.textProperty().addListener(controller);
+		NumberField.numberField(quantityField);
 		
 		// Build stock information view
 		stockInfoPane.setAlignment(Pos.CENTER);
 		stockInfoPane.add(stockValueText,         0, 0);
 		stockInfoPane.add(brokerFeeText,          0, 1);
-		stockInfoPane.add(purchaseFeeText,            0, 2);
-		stockInfoPane.add(totalText,                  0, 3);
+		stockInfoPane.add(purchaseFeeText,        0, 2);
+		stockInfoPane.add(totalText,              0, 3);
 		stockInfoPane.add(new Text("Quantity: "), 0, 4);
 		stockInfoPane.add(quantityField,          1, 4);
 		stockInfoPane.add(buyBtn,                 0, 5);
@@ -84,22 +85,22 @@ public class StockView extends BorderPane implements StockSelectedCallback
 	
 	public void setStockCost(double stockValue)
 	{
-		stockValueText.setText("Last Value: $" + stockValue);
+		stockValueText.setText(String.format("Last Value: $%.2f", stockValue));
 	}
 	
 	public void setBrokerFee(double brokerFee)
 	{
-		brokerFeeText.setText("Broker Fee: $" + brokerFee);
+		brokerFeeText.setText(String.format("Broker Fee: $%.2f", brokerFee));
 	}
 	
-	public void setPurchaseFee(double x)
+	public void setPurchaseFee(double purchaseFee)
 	{
-		purchaseFeeText.setText("Purchase Fee: $" + x);
+		purchaseFeeText.setText(String.format("Purchase Fee: $%.2f", purchaseFee));
 	}
 	
 	public void setTotalFee(double totalFee)
 	{
-		totalText.setText("Total: $" + totalFee);
+		totalText.setText(String.format("Total: $%.2f", totalFee));
 	}
 	
 	public TextField getQuantityField()

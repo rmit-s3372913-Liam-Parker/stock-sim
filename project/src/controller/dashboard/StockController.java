@@ -100,7 +100,8 @@ public class StockController extends Controller implements ChangeListener<String
 	@Override
 	public void changed(ObservableValue<? extends String> observable, String oldVal, String newVal) 
 	{
-		refreshStockView();
+		if(!newVal.trim().isEmpty())
+			refreshStockView();
 	}
 
 }
