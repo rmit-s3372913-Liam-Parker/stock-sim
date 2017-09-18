@@ -1,6 +1,8 @@
 package view;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import model.CoreAPI;
 import model.CoreSystem;
@@ -11,8 +13,10 @@ import model.CoreSystem;
 public class StockApplication extends Application 
 {
 	private static final String PROGRAM_NAME =  "ASX Sim";
+	
 	public static final int WINDOW_WIDTH = 1920/2;
 	public static final int WINDOW_HEIGHT = 1080/2;
+	public static final Font APP_HEADING_FONT = Font.font("Tahoma", FontWeight.NORMAL, 20);
 	
 	private static Stage stage;
 	private static CoreAPI model;

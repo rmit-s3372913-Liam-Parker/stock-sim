@@ -1,5 +1,7 @@
 package interfaces;
 
+import model.CompanyInfo;
+
 /**
  * Implemented by classes which expect to update when stock selections change.
  */
@@ -11,5 +13,5 @@ public interface StockSelectedCallback
 	 * 
 	 * @param stockCode The new stock code.
 	 */
-	void stockSelected(String stockCode);
+	void stockSelected(CompanyInfo data);
 }
