@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import model.CompanyInfo;
 import model.Stock;
 import ultilities.NumberField;
 
@@ -58,15 +59,15 @@ public class StockView extends BorderPane implements StockSelectedCallback
 	}
 	
 	@Override
-	public void stockSelected(String stockCode)
+	public void stockSelected(CompanyInfo data)
 	{
-		Stock data = StockApplication.getModel().getMarketInterface().getStockData(stockCode);
-		controller.setTargetStock(data);
+		Stock stock = StockApplication.getModel().getMarketInterface().getStockData(data.getStockCode());
+		controller.setTargetStock(stock);
 			
 		this.setTop(null);
 		this.setCenter(null);
 		
-		title.setText(data.getCode());
+		title.setText(stock.getCode());
 		this.setTop(title);
 		
 		this.setCenter(stockInfoPane);

@@ -105,7 +105,7 @@ public class Stock
 	
 	public double calculateTotalCost(int quantity)
 	{
-		return calculateBrokerFee() + calculatePurchaseFee(quantity);
+		return calculateStockCost(quantity) + calculateBrokerFee() + calculatePurchaseFee(quantity);
 	}
 	
 	public String getCode() {

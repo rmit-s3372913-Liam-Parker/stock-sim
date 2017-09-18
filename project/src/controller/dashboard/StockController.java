@@ -1,5 +1,7 @@
 package controller.dashboard;
 
+import java.awt.TextField;
+
 import controller.Controller;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,50 +37,59 @@ public class StockController extends Controller implements ChangeListener<String
 	public void handle(ActionEvent event) 
 	{
 		TransactionType type = TransactionType.Buy;
+		final String shareString = (quantity > 1) ? "shares":"share";
+		boolean transactionApproved = false;
 		
+		// Validate input quantity
 		if(quantity == 0)
 		{
 			displayNotificationModal("Please input a quantity greater than zero!");
 			return;
 		}
 		
+		// Validate user interaction
 		if(event.getSource() == stockView.getBuyButton())
 		{
 			type = TransactionType.Buy;
-			displayNotificationModal("Purchased " + quantity + " for total of: $" + total);
+			if(displayQuestionModal("Purchasing " + quantity + " " + shareString + " for total of $" + total))
+				transactionApproved = true;
 		}
 		else if(event.getSource() == stockView.getSellButton())
 		{
 			type = TransactionType.Sell;
-			displayNotificationModal("Sold " + quantity + " for total of: $" + total);
+			if(displayQuestionModal("Selling " + quantity + " " + shareString + " for total of $" + total))
+				transactionApproved = true;
 		}
 		
-		try
+		// Attempt to execute the requested transaction on the database
+		if(transactionApproved)
 		{
-			UserDetails curUser = getModel().getSessionDetails();
-			PlayerStats stats = getModel().getSessionStats();
-			
-			//double postWinnings = stats.getCurrentEarnings() + transactionCost;
-			double postWinnings;
-			if (type==TransactionType.Buy)
-				postWinnings = FAKE_EARNINGS - total;
-			else
-				postWinnings = FAKE_EARNINGS + total;
-			
-			Transaction transaction = new Transaction(
-					EMPTY,
-					curUser.getUsername(),
-					targetStock.getCode(),
-					type,
-					quantity,
-					targetStock.getStockPrice(),
-					postWinnings,
-					null);
-			
-			getModel().getCloudDatabase().executeTransaction(transaction);
+			try
+			{
+				UserDetails curUser = getModel().getSessionDetails();
+				PlayerStats stats = getModel().getSessionStats();
+				
+				//double postWinnings = stats.getCurrentEarnings() + transactionCost;
+				double postWinnings;
+				if (type==TransactionType.Buy)
+					postWinnings = FAKE_EARNINGS - total;
+				else
+					postWinnings = FAKE_EARNINGS + total;
+				
+				Transaction transaction = new Transaction(
+						EMPTY,
+						curUser.getUsername(),
+						targetStock.getCode(),
+						type,
+						quantity,
+						targetStock.getStockPrice(),
+						postWinnings,
+						null);
+				
+				getModel().getCloudDatabase().executeTransaction(transaction);
+			}
+			catch(NumberFormatException e) { e.printStackTrace(); }
 		}
-		catch(NumberFormatException e) { e.printStackTrace(); }
-		
 	}
 	
 	public void setTargetStock(Stock stock)
