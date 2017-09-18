@@ -6,11 +6,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import model.PlayerStats;
 import model.Stock;
+import model.Transaction;
 import model.TransactionType;
 import model.UserDetails;
 
 public class StockController extends Controller 
 {
+	private static final int EMPTY = 0;
+	
 	Button buyBtn;
 	Button sellBtn;
 	TextField quantityField;
@@ -45,16 +48,22 @@ public class StockController extends Controller
 			double transactionCost = quantity * targetStock.getLastPrice();
 			
 			//double postWinnings = stats.getCurrentEarnings() + transactionCost;
-			double postWinnings = FAKE_EARNINGS + transactionCost;
+			double postWinnings;
+			if (type==TransactionType.Buy)
+				postWinnings = FAKE_EARNINGS - transactionCost;
+			else
+				postWinnings = FAKE_EARNINGS + transactionCost;
 			
-			getModel().getCloudDatabase().insertTransaction(
-					curUser,
+			Transaction transaction = new Transaction(
+					EMPTY,
+					curUser.getUsername(),
 					targetStock.getCode(),
 					type,
 					quantity,
-					quantity * targetStock.getLastPrice(),
-					postWinnings
-					);
+					targetStock.getLastPrice(),
+					postWinnings, null);
+			
+			getModel().getCloudDatabase().executeTransaction(transaction);
 		}
 		catch(NumberFormatException e) { e.printStackTrace(); }
 		
