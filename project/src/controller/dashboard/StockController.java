@@ -1,10 +1,11 @@
 package controller.dashboard;
 
+import javax.swing.event.ChangeEvent;
+
 import controller.Controller;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 import model.PlayerStats;
 import model.Stock;
 import model.Transaction;
@@ -12,7 +13,7 @@ import model.TransactionType;
 import model.UserDetails;
 import view.StockView;
 
-public class StockController extends Controller
+public class StockController extends Controller implements ChangeListener<String>
 {
 	private static final int EMPTY = 0;
 	
@@ -44,10 +45,6 @@ public class StockController extends Controller
 		else if(event.getSource() == stockView.getSellButton())
 		{
 			type = TransactionType.Sell;
-		}
-		else if(event.getSource() == stockView.getQuantityField())
-		{
-			refreshStockView();
 		}
 		
 		try
@@ -97,6 +94,13 @@ public class StockController extends Controller
 		stockView.setBrokerFee(brokerFee);
 		stockView.setPurchaseFee(purchaseFee);
 		stockView.setTotalFee(total);
+	}
+
+	// Callback for changes to the quantity field
+	@Override
+	public void changed(ObservableValue<? extends String> observable, String oldVal, String newVal) 
+	{
+		refreshStockView();
 	}
 
 }

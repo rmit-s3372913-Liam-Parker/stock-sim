@@ -43,7 +43,7 @@ public class StockView extends BorderPane implements StockSelectedCallback
 		
 		buyBtn.setOnAction(controller);
 		sellBtn.setOnAction(controller);
-		quantityField.setOnAction(controller);
+		quantityField.textProperty().addListener(controller);
 		
 		// Build stock information view
 		stockInfoPane.setAlignment(Pos.CENTER);
