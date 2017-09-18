@@ -10,7 +10,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
 import model.Stock;
 import ultilities.NumberField;
 
@@ -43,8 +42,8 @@ public class StockView extends BorderPane implements StockSelectedCallback
 		buyBtn.setOnAction(controller);
 		sellBtn.setOnAction(controller);
 		
-		quantityField.textProperty().addListener(controller);
 		NumberField.numberField(quantityField);
+		quantityField.textProperty().addListener(controller);
 		
 		// Build stock information view
 		stockInfoPane.setAlignment(Pos.CENTER);

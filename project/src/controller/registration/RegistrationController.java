@@ -2,6 +2,15 @@ package controller.registration;
 
 import java.io.IOException;
 import java.util.Random;
+
+import com.sendgrid.Content;
+import com.sendgrid.Email;
+import com.sendgrid.Mail;
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+
 import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -11,7 +20,6 @@ import model.UserDetails;
 import ultilities.InputValidation;
 import view.ConfirmationView;
 import view.RegistrationView;
-import com.sendgrid.*;
 
 /**
  * RegistrationController handles input from the registration screen, including user data and parsing.

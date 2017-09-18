@@ -1,7 +1,5 @@
 package controller.dashboard;
 
-import javax.swing.event.ChangeEvent;
-
 import controller.Controller;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

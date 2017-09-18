@@ -12,7 +12,6 @@ import java.util.List;
 
 import model.PlayerStats;
 import model.Transaction;
-import model.TransactionType;
 import model.UserDetails;
 import ultilities.Hash;
 
@@ -37,11 +36,11 @@ public class CloudDatabase
 
     public CloudDatabase() {}
     
-    public String checkUsername(UserDetails user)
+    public String usernameExists(String user)
     {
         if (createConnection())
         {
-            if (playerExist(user.getUsername()))
+            if (playerExist(user))
             {
             	shutdown();
             	return EXISTED_NAME;
