@@ -96,7 +96,7 @@ public abstract class Controller implements EventHandler<ActionEvent>
 			}
 		});
 				
-		Button cancelBtn = new Button("OK");
+		Button cancelBtn = new Button("Cancel");
 		cancelBtn.setOnAction(new EventHandler<ActionEvent>() 
 		{
 			@Override 
@@ -108,7 +108,8 @@ public abstract class Controller implements EventHandler<ActionEvent>
 				
 		pane.add(new Text(message), 0, 0);
 		pane.add(okBtn,             0, 1);
-							
+		pane.add(cancelBtn,         1, 1);
+		
 		// Configure modal functionality and display
 		dialog.setScene(scene);
 		dialog.initOwner(this.getStage());
