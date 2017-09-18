@@ -17,6 +17,9 @@ import view.StockApplication;
 
 public abstract class Controller implements EventHandler<ActionEvent> 
 {
+	private static final int POPUP_WIDTH = 300;
+	private static final int POPUP_HEIGHT = 150;
+	
 	/**
 	 * Switches views in the application window.
 	 * @param newView A class inheriting from JavaFX Pane used to represent the new view.
@@ -50,7 +53,7 @@ public abstract class Controller implements EventHandler<ActionEvent>
 		dialog.setTitle("Notification");
 		GridPane pane = new GridPane();
 		pane.setAlignment(Pos.CENTER);
-		Scene scene = new Scene(pane, 300, 150);
+		Scene scene = new Scene(pane, POPUP_WIDTH, POPUP_HEIGHT);
 				
 		// Configure options and add them
 		Button btn = new Button("OK");
@@ -71,5 +74,47 @@ public abstract class Controller implements EventHandler<ActionEvent>
 		dialog.initOwner(this.getStage());
 		dialog.initModality(Modality.APPLICATION_MODAL); 
 		dialog.showAndWait();
+	}
+	
+	protected boolean displayQuestionModal(String message)
+	{
+		// Create frame for modal window
+		Stage dialog = new Stage();
+		dialog.setTitle("User Confirmation");
+		GridPane pane = new GridPane();
+		pane.setAlignment(Pos.CENTER);
+		Scene scene = new Scene(pane, POPUP_WIDTH, POPUP_HEIGHT);
+						
+		// Configure options and add them
+		Button okBtn = new Button("OK");
+		okBtn.setOnAction(new EventHandler<ActionEvent>()
+		{
+			@Override 
+			public void handle(ActionEvent e) 
+			{
+				dialog.hide();
+			}
+		});
+				
+		Button cancelBtn = new Button("OK");
+		cancelBtn.setOnAction(new EventHandler<ActionEvent>() 
+		{
+			@Override 
+			public void handle(ActionEvent e) 
+			{
+				dialog.hide();
+			}
+		});
+				
+		pane.add(new Text(message), 0, 0);
+		pane.add(okBtn,             0, 1);
+							
+		// Configure modal functionality and display
+		dialog.setScene(scene);
+		dialog.initOwner(this.getStage());
+		dialog.initModality(Modality.APPLICATION_MODAL); 
+		dialog.showAndWait();
+				
+		return okBtn.isPressed();
 	}
 }
