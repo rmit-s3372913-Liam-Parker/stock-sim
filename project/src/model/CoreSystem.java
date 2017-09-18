@@ -25,13 +25,9 @@ public class CoreSystem implements CoreAPI
 	private ASXInterface marketInterface = new ASXInterface();
 	private CloudDatabase cloudDatabase = new CloudDatabase();
 	
-	public CoreSystem()
-	{
-		
-	}
-	
 	@Override
-	public CloudDatabase getCloudDatabase(){
+	public CloudDatabase getCloudDatabase()
+	{
 		return cloudDatabase;
 	}
 	
@@ -70,18 +66,21 @@ public class CoreSystem implements CoreAPI
 	public String beginSession(UserDetails details) 
 	{
 		FileWriter writer;
-		try {
+		try 
+		{
 			writer = new FileWriter("./dataStorage/lastLogin.txt", false);
 			writer.write(details.getUsername());
-			if (details.getRemember()){
+			
+			if (details.getRemember())
+			{
 		        writer.write("\r\n");
 		        writer.write(details.getPassword());
 			}
+			
 	        writer.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
+		catch (IOException e) { e.printStackTrace(); }
+		
 		return "temp";
 	}
 
@@ -104,5 +103,17 @@ public class CoreSystem implements CoreAPI
 	public ASXInterface getMarketInterface()
 	{
 		return marketInterface;
+	}
+
+	@Override
+	public UserDetails getSessionDetails() 
+	{
+		return curUserSession;
+	}
+
+	@Override
+	public PlayerStats getSessionStats() 
+	{
+		return curPlayerStats;
 	}
 }

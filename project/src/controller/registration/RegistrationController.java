@@ -183,7 +183,7 @@ public class RegistrationController extends Controller implements EventHandler<A
 	    
 	    Mail mail = new Mail(from, subject, to, content);
 
-	    SendGrid sg = new SendGrid("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");
+	    SendGrid sg = new SendGrid(System.getenv("SENDGRID_API"));
 	    Request request = new Request();
 	    try 
 	    {

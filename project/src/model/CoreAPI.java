@@ -45,6 +45,16 @@ public interface CoreAPI
 	public String confirmedUser(UserDetails details);
 	
 	/**
+	 * @return An object containing the session details of the currently logged in user.
+	 */
+	public UserDetails getSessionDetails();
+	
+	/**
+	 * @return An object containing play stats of currently logged in user. Or NULL if not logged in.
+	 */
+	public PlayerStats getSessionStats();
+	
+	/**
 	 * Begins a session for the given user.
 	 * @param details 
 	 * @return True when the session was successfully started, false otherwise.
@@ -68,6 +78,4 @@ public interface CoreAPI
 	 * @return Access to functions for querying the ASX marketplace.
 	 */
 	public ASXInterface getMarketInterface();
-	
-	//TODO: Create callback functions for different ASX interface events
 }

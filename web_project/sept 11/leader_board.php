@@ -6,11 +6,11 @@ $records = mysqli_query($conn, $sql);
 ?>
 
 
-<table width="300px" border="1">
+<!-- <table width="300px" border="1">
 	<tr>
 		<th>username</th>
 		<th>winning</th>
-	</tr>
+	</tr> -->
 
 <?php
 while ($user = mysqli_fetch_assoc($records)) {
@@ -18,7 +18,7 @@ while ($user = mysqli_fetch_assoc($records)) {
 
 	echo "<td>".$user['username']."</td>";
 
-	echo "<td>". "$" . $user['winning']."</td>";
+	echo "<td>". "$" . number_format($user['winning'], 2)."</td>";
 
 	
 
@@ -26,4 +26,3 @@ while ($user = mysqli_fetch_assoc($records)) {
 }
 
 ?>
-</table>

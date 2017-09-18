@@ -52,6 +52,15 @@ public class PlayerStats
 	}
 	
 	/**
+	 * Update the current earnings of this player.
+	 * @param newVal The new earning amount to be set.
+	 */
+	public void setCurrentEarnings(double newVal)
+	{
+		currentEarnings = newVal;
+	}
+	
+	/**
 	 * @return All transactions registered in the past for this player.
 	 */
 	public List<Transaction> getPreviousTransactions()
