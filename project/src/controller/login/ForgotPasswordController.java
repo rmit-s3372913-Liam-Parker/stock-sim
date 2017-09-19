@@ -21,14 +21,14 @@ public class ForgotPasswordController extends Controller implements EventHandler
 		
 	}
 	
-	private static final String CONFIRM_TEXT = "Confirm";
+	private static final String CONFIRM_TEXT = "Submit";
 	private static final String CANCEL_TEXT = "Cancel";
-	private static final String CONFIRMATION_MSG = "Are you sure you want to log out?";
+	private static final String CONFIRMATION_MSG = "";
 	
 	Text title = new Text(CONFIRMATION_MSG);
 	Stage dialog;
 	Button confirmBtn;
-	Button cancelBtn;
+	Button submitBtn;
 	
 	@Override
 	public void handle(ActionEvent event) 
@@ -41,7 +41,7 @@ public class ForgotPasswordController extends Controller implements EventHandler
 			this.switchView(new LoginView());
 			dialog.hide();
 		}
-		else if(src == cancelBtn)
+		else if(src == submitBtn)
 		{
 			dialog.hide();
 		}
@@ -58,9 +58,9 @@ public class ForgotPasswordController extends Controller implements EventHandler
 			confirmBtn.setOnAction(this);
 			buttonBox.getChildren().add(confirmBtn);
 			
-			cancelBtn = new Button(CANCEL_TEXT);
-			cancelBtn.setOnAction(this);
-			buttonBox.getChildren().add(cancelBtn);
+			submitBtn = new Button(CANCEL_TEXT);
+			submitBtn.setOnAction(this);
+			buttonBox.getChildren().add(submitBtn);
 			
 			pane.setTop(title);
 			pane.setCenter(buttonBox);
@@ -70,6 +70,7 @@ public class ForgotPasswordController extends Controller implements EventHandler
 			dialog.initOwner(this.getStage());
 			dialog.initModality(Modality.APPLICATION_MODAL); 
 			dialog.showAndWait();
+		
 		}
 	
 
