@@ -28,13 +28,7 @@ include 'downloadCSV.php';
 			cursor: pointer;
 		}
   	</style>
-  	<script type="text/javascript">
-		$(document).ready(function() {
-			$('table tbody tr').click(function() {
-			alert($(this).text());
-			});
-		});
-	</script>
+  	
 </head>
 <body>
 <?php include("navigation.php");?>
@@ -116,7 +110,7 @@ include 'downloadCSV.php';
 			<div class="col-md-8">
 				<h2 align="center">ASX Companies</h2>
 					<div class="scrollable">
-					<table class="table table-striped table-bordered text-center">
+					<table id="companies" class="table table-striped table-bordered text-center">
 						<thead>
 							<tr>
 								<th>Code</th>
@@ -138,6 +132,11 @@ include 'downloadCSV.php';
 		</div>
 
 	</div>
-
+<!-- script for selecting code in every row in the table -->
+<script>
+		$("#companies tr").click(function(){
+		    alert($(this).children('td:first').html());
+		});
+	</script>
 </body>
 </html>
