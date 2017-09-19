@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+include 'downloadCSV.php';
 
 ?>
 <!DOCTYPE html>
@@ -12,12 +12,23 @@ session_start();
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+  	<link rel="stylesheet" type="text/css" href="index.css">
   	<style>
   		.leader-board, .asx, .your-stock{
   			border: 1px solid;
   		}
+
+  		.scrollable {
+			height: 300px;
+			overflow: scroll;
+		}
+		.table tr:hover td{
+			background-color: #778899;
+			color: white;
+			cursor: pointer;
+		}
   	</style>
+  	
 </head>
 <body>
 <?php include("navigation.php");?>
@@ -27,18 +38,23 @@ session_start();
 				<div class="leader-board">
 					<h2 align="center">Leaderboard</h2>
 					<table class="table table-striped">
-						
+						<thead>
+							<tr>
+								<th>username</th>
+								<th>winning</th>
+
+							</tr>
+						</thead>
 						<tbody>
 							<tr>
 								<!-- display top 5 by winnings -->
-								<td><?php include 'leader_board.php' ?></td>
+								<!-- <td>?php include 'leader_board.php' ?></td> -->
+
 							</tr>
 							<tr>
-								<td></td>
+								<?php include 'leader_board.php' ?>
 							</tr>
-							<tr>
-								<td></td>
-							</tr>
+							
 						</tbody>
 						
 					</table>
@@ -50,11 +66,11 @@ session_start();
 				<h2 align="center"><?php include 'winning.php'; ?></h2>
 			</div>
 		</div>
-
+		<br>
 		<div class="row">
 			<div class="col-md-4">
-				<div class="asx">
-					<h2 align="center">ASX API LIVE</h2>
+				<div class="your-stock">
+					<h2 align="center">My Stocks</h2>
 					<table class="table">
 						<thead>
 							<tr>
@@ -65,6 +81,7 @@ session_start();
 						</thead>
 						<tbody>
 							<?php
+							
 							$url = "http://download.finance.yahoo.com/d/quotes.csv?s=^AORD+BHP.AX+BLT.L+AAPL+EBAY+^NDX+ASX.AX&f=sl1c";
 
 							$line = file_get_contents($url);
@@ -91,25 +108,21 @@ session_start();
 			</div>
 
 			<div class="col-md-8">
-				<div class="your-stock">
-					<h2 align="center">Your Stocks</h2>
-					<table class="table">
+				<h2 align="center">ASX Companies</h2>
+					<div class="scrollable">
+					<table id="companies" class="table table-striped table-bordered text-center">
 						<thead>
 							<tr>
-								<th></th>
+								<th>Code</th>
+								<th>Description</th>
 								
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td></td>
+								<?php include 'read_asx_csv.php'; ?>
 							</tr>
-							<tr>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-							</tr>
+							
 						</tbody>
 						
 					</table>
@@ -119,6 +132,11 @@ session_start();
 		</div>
 
 	</div>
-
+<!-- script for selecting code in every row in the table -->
+<script>
+		$("#companies tr").click(function(){
+		    alert($(this).children('td:first').html());
+		});
+	</script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 <?php
+//session_start();
 include 'connection.php';
 ?>
 <!-- contents of the tab menu for stock_list.php -->
@@ -10,35 +11,14 @@ include 'connection.php';
 				    <thead>
 				      <tr>
 				        <th>Symbol</th>
+				        <th>Description</th>
 				        <th>Last price</th>
 				        <th>Change</th>
 				      </tr>
 				    </thead>
 				    <tbody>
-					
-					<div>
 				      <?php
-				      $url = "http://download.finance.yahoo.com/d/quotes.csv?s=";
-
-					  $asx = fopen("files/ASXListedCompanies.csv", "r");
-							$company = explode("\n", fread($asx, filesize("files/ASXListedCompanies.csv")));
-							for ($i = 0; $i<count($company); $i++)
-							{
-								echo $company[$i];
-								$row = explode(",", $company[$i]);
-								if ($i>2){
-								  if ($i=3){
-									$url = $url.$row[1];
-								  }
-								  $url = $url."+".$row[1];
-								}
-								if ($i>50)
-									break;
-							}
-					  
-					  fclose($asx);
-					  
-					  $url += "&f=sl1c";
+				      $url = "http://download.finance.yahoo.com/d/quotes.csv?s=^AORD+BHP.AX+BLT.L+AAPL+EBAY+^NDX+ASX.AX&f=snl1c";
 
 						$line = file_get_contents($url);
 
@@ -47,13 +27,22 @@ include 'connection.php';
 						$company = explode("\n", $data);
 						for ($i = 0; $i<count($company)-1; $i++)
 						{
+						  // display
+						  // code
+						  // description
+						  // current price
+						  // change
 						  $row = explode(",", $company[$i]);
 						  $row[0] = substr($row[0], 1, -1);
+						  $row[1] = substr($row[1], 1, -1);
 						  echo "\t<tr>\r\n"
 						  . "\t\t<td>" . $row[0] . "</td>"
 						  . "\t\t<td>" . $row[1] . "</td>"
 						  . "\t\t<td>" . $row[2] . "</td>"
+						  . "\t\t<td>" . $row[3] . "</td>"
 						  . "\t</tr>";
+
+						  $_SESSION['current_Price'] = $row[2];
 						}
 				      ?>
 				    </tbody>

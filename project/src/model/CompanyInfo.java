@@ -36,4 +36,10 @@ public class CompanyInfo
 	{
 		return description;
 	}
+	
+	@Override
+	public String toString() 
+	{ 
+        return marketCode + " - " + companyName;
+    } 
 }

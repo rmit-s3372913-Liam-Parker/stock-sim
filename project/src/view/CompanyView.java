@@ -8,26 +8,33 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import model.CompanyInfo;
 import model.CoreAPI;
+import model.SortType;
 
 public class CompanyView extends BorderPane
 {
 	Text title = new Text("Available Companies");
 	VBox verticalLayout = new VBox();
 	
-	ObservableList<String> availableCompanies = FXCollections.observableArrayList();
-	ListView<String> companyList;
+	// List objects for filtering and display of list view items.
+	SortType sortingType = SortType.Ascending;
+	ObservableList<CompanyInfo> availableCompanies = FXCollections.observableArrayList();
+	FilteredList<CompanyInfo> filteredCompanies = new FilteredList<>(availableCompanies);
+	ListView<CompanyInfo> companyList = new ListView<>(filteredCompanies);
+	
+	// Callbacks for when a new stock object is called.
 	List<StockSelectedCallback> stockChangeListeners = new ArrayList<>();
 	
 	public CompanyView()
@@ -38,7 +45,7 @@ public class CompanyView extends BorderPane
 	private void populate()
 	{
 		// Create title element
-		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		title.setFont(StockApplication.APP_HEADING_FONT);
 		verticalLayout.setSpacing(3.0f);
 		
 		// Build company list view element.
@@ -48,25 +55,22 @@ public class CompanyView extends BorderPane
 		for(int i = 0; i < info.size(); ++i)
 		{
 			CompanyInfo curCompany = info.get(i);
-			availableCompanies.add(curCompany.getStockCode() + " - " + curCompany.getCompanyName());
+			availableCompanies.add(curCompany);
 		}
 		
-		companyList = new ListView<String>(availableCompanies);
-		companyList.setEditable(false);
+		//companyList = new ListView<String>(availableCompanies);
 		
 		// Setup company selected listener
-		companyList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() 
+		companyList.setEditable(false);
+		companyList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CompanyInfo>() 
 		{
 		    @Override
-		    public void changed(ObservableValue<? extends String> observable, String oldVal, String newVal) 
+		    public void changed(ObservableValue<? extends CompanyInfo> observable, CompanyInfo oldVal, CompanyInfo newVal) 
 		    {
-		    	String[] tokens = newVal.split(" -");
-		        String code = tokens[0];
-		        
 		        // Notify any listeners of stock change.
 		        for(int i = 0; i < stockChangeListeners.size(); ++i)
 		        {
-		        	stockChangeListeners.get(i).stockSelected(code);
+		        	stockChangeListeners.get(i).stockSelected(newVal);
 		        }
 		    }
 		});
@@ -74,12 +78,45 @@ public class CompanyView extends BorderPane
 		// Setup search bar.
 		HBox filterBar = new HBox();
 		Text filterTitle = new Text("Filter by:");
-		Button filterBtnOne = new Button("Code");
-		Button filterBtnTwo = new Button("Name");
+		
+		final ToggleGroup toggleGroup = new ToggleGroup();
+		final ToggleButton codeFilterBtn = new ToggleButton("Code");
+		codeFilterBtn.setToggleGroup(toggleGroup);
+		codeFilterBtn.setSelected(true);
+		final ToggleButton nameFilterBtn = new ToggleButton("Name");
+		nameFilterBtn.setToggleGroup(toggleGroup);
+		
 		TextField searchField = new TextField();
+		searchField.textProperty().addListener(new ChangeListener<String>() 
+		{
+		    @Override
+		    public void changed(ObservableValue<? extends String> observable, String oldVal, String newVal) 
+		    {
+		    	String search = searchField.getText().toLowerCase();
+		    	
+		    	if(newVal.trim().isEmpty())
+		    	{
+		    		filteredCompanies.setPredicate(s -> true);
+		    	}
+		    	else
+		    	{
+		    		if(codeFilterBtn.isSelected())
+		    		{
+		    			filteredCompanies.setPredicate(s -> s.getStockCode().toLowerCase().contains(search));
+		    		}
+		    		else if(nameFilterBtn.isSelected())
+		    		{
+		    			filteredCompanies.setPredicate(s -> s.getCompanyName().toLowerCase().contains(search));
+		    		}
+		    	}
+		    }
+		});
+		
 		HBox.setHgrow(searchField, Priority.ALWAYS);
+		
 		Button orderBtn = new Button("Ascending");
-		filterBar.getChildren().addAll(filterTitle, filterBtnOne, filterBtnTwo, searchField, orderBtn);
+		
+		filterBar.getChildren().addAll(filterTitle, codeFilterBtn, nameFilterBtn, searchField, orderBtn);
 		filterBar.setSpacing(5.0f);
 		
 		// Embed into main view.

@@ -2,22 +2,10 @@ package model;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import database.CloudDatabase;
 
-/**
- * A mock core for faster testing and until we get a database running.
- */
 public class CoreSystem implements CoreAPI 
 {
 	private UserDetails curUserSession = null;
@@ -34,7 +22,7 @@ public class CoreSystem implements CoreAPI
 	@Override
 	public String checkUsername(UserDetails details)
 	{
-		return cloudDatabase.checkUsername(details);
+		return cloudDatabase.usernameExists(details.getUsername());
 	}
 	
 	@Override

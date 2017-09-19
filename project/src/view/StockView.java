@@ -10,19 +10,25 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
+import model.CompanyInfo;
 import model.Stock;
+import ultilities.NumberField;
 
 public class StockView extends BorderPane implements StockSelectedCallback
 {	
 	Text title = new Text("No Stock Selected");
 	
 	GridPane stockInfoPane = new GridPane();
-	Text stockValue = new Text();
-	TextField quantityField = new TextField();
+	
+	Text stockValueText = new Text();
+	Text brokerFeeText = new Text();
+	Text purchaseFeeText = new Text();
+	Text totalText = new Text();
+	
+	TextField quantityField = new TextField("0");
 	Button buyBtn = new Button("Buy");
 	Button sellBtn = new Button("Sell");
-	StockController controller = new StockController(buyBtn, sellBtn, quantityField);
+	StockController controller = new StockController(this);
 	
 	public StockView()
 	{
@@ -37,29 +43,68 @@ public class StockView extends BorderPane implements StockSelectedCallback
 		buyBtn.setOnAction(controller);
 		sellBtn.setOnAction(controller);
 		
+		NumberField.numberField(quantityField);
+		quantityField.textProperty().addListener(controller);
+		
 		// Build stock information view
 		stockInfoPane.setAlignment(Pos.CENTER);
-		stockInfoPane.add(stockValue, 0, 0);
-		stockInfoPane.add(new Text("Quantity: "), 0, 1);
-		stockInfoPane.add(quantityField, 1, 1);
-		stockInfoPane.add(buyBtn, 0, 2);
-		stockInfoPane.add(sellBtn, 1, 2);
+		stockInfoPane.add(stockValueText,         0, 0);
+		stockInfoPane.add(brokerFeeText,          0, 1);
+		stockInfoPane.add(purchaseFeeText,        0, 2);
+		stockInfoPane.add(totalText,              0, 3);
+		stockInfoPane.add(new Text("Quantity: "), 0, 4);
+		stockInfoPane.add(quantityField,          1, 4);
+		stockInfoPane.add(buyBtn,                 0, 5);
+		stockInfoPane.add(sellBtn,                1, 5);
 	}
 	
 	@Override
-	public void stockSelected(String stockCode)
+	public void stockSelected(CompanyInfo data)
 	{
-		Stock data = StockApplication.getModel().getMarketInterface().getStockData(stockCode);
-		controller.setTargetStock(data);
-		
-		stockValue.setText("Last Value: " + String.valueOf(data.getLastPrice()));
-		
+		Stock stock = StockApplication.getModel().getMarketInterface().getStockData(data.getStockCode());
+		controller.setTargetStock(stock);
+			
 		this.setTop(null);
 		this.setCenter(null);
 		
-		title.setText(data.getCode());
+		title.setText(stock.getCode());
 		this.setTop(title);
 		
 		this.setCenter(stockInfoPane);
+	}
+	
+	public Button getBuyButton()
+	{
+		return buyBtn;
+	}
+	
+	public Button getSellButton()
+	{
+		return sellBtn;
+	}
+	
+	public void setStockCost(double stockValue)
+	{
+		stockValueText.setText(String.format("Share cost: $%.2f", stockValue));
+	}
+	
+	public void setBrokerFee(double brokerFee)
+	{
+		brokerFeeText.setText(String.format("Broker Fee: $%.2f", brokerFee));
+	}
+	
+	public void setPurchaseFee(double purchaseFee)
+	{
+		purchaseFeeText.setText(String.format("Purchase Fee: $%.2f", purchaseFee));
+	}
+	
+	public void setTotalFee(double totalFee)
+	{
+		totalText.setText(String.format("Total: $%.2f", totalFee));
+	}
+	
+	public TextField getQuantityField()
+	{
+		return quantityField;
 	}
 }

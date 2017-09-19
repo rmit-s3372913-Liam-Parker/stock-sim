@@ -1,8 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Player contains data about a player including transaction history
  * */
@@ -10,7 +7,6 @@ public class PlayerStats
 {
 	private String username;
 	private double currentEarnings;
-	private List<Transaction> transactions = new ArrayList<Transaction>();
 	
 	/**
 	 * Constructs a player statistics object without transaction data.
@@ -21,18 +17,6 @@ public class PlayerStats
 	{
 		this.username = username;
 		this.currentEarnings = currentEarnings;
-	}
-	
-	/**
-	 * Constructs a player statistics object with included transaction data.
-	 * @param username The user name of the player
-	 * @param currentEarnings The current earnings of the player.
-	 * @param transactions The historical transactions of this player.
-	 */
-	public PlayerStats(String username, double currentEarnings, List<Transaction> transactions)
-	{
-		this(username, currentEarnings);
-		this.transactions = transactions;
 	}
 	
 	/**
@@ -60,11 +44,9 @@ public class PlayerStats
 		currentEarnings = newVal;
 	}
 	
-	/**
-	 * @return All transactions registered in the past for this player.
-	 */
-	public List<Transaction> getPreviousTransactions()
-	{
-		return transactions;
-	}
+	@Override
+	public String toString() 
+	{ 
+        return username + " - " + currentEarnings;
+    } 
 }
