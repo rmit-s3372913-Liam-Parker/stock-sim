@@ -37,9 +37,6 @@ public class CompanyView extends BorderPane
 	// Callbacks for when a new stock object is called.
 	List<StockSelectedCallback> stockChangeListeners = new ArrayList<>();
 	
-	private static final String ORDER_BTN_ASCEND = "Ascending";
-	private static final String ORDER_BTN_DESCEND = "Descending";
-	
 	public CompanyView()
 	{
 		populate();

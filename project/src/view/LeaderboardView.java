@@ -22,19 +22,18 @@ public class LeaderboardView extends BorderPane
 	private void populate()
 	{
 		Text title = new Text("Leaderboard");
-		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		title.setFont(StockApplication.APP_HEADING_FONT);
 		
-		ObservableList<String> leaderboardList = FXCollections.observableArrayList();
 		CoreAPI core = StockApplication.getModel();
+		ObservableList<PlayerStats> leaderboardList = FXCollections.observableArrayList();
 		List<PlayerStats> info = core.getPlayerList();
 		
 		for(int i = 0; i < Math.min(10, info.size()); ++i)
 		{
-			PlayerStats curPlayer = info.get(i);
-			leaderboardList.add(curPlayer.getUsername() + " - " + curPlayer.getCurrentEarnings());
+			leaderboardList.add(info.get(i));
 		}
 		
-		final ListView<String> leaderList = new ListView<String>(leaderboardList);
+		final ListView<PlayerStats> leaderList = new ListView<>(leaderboardList);
 		leaderList.setEditable(false);
 		
 		// Embed into main view.

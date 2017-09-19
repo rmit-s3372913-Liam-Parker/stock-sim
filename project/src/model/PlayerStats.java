@@ -43,4 +43,10 @@ public class PlayerStats
 	{
 		currentEarnings = newVal;
 	}
+	
+	@Override
+	public String toString() 
+	{ 
+        return username + " - " + currentEarnings;
+    } 
 }
