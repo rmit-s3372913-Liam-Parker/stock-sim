@@ -25,6 +25,7 @@ public class CloudDatabase
 	private static final String WRONG_PIN = "Incorrect PIN";
 	public static final String USER_UNCONFIRMED = "Email is not confirmed";
 	public static final double WINNING_ERROR = -1;
+	public static final int QUANTITY_ERROR = -1;
 	
     private static String dbURL = "jdbc:mysql://capstonedatabase.cszu3gvo32mp.ap-southeast-2.rds.amazonaws.com:3306/CapstoneDatabase?user=admin&password=password";
     private static String playerTable = "player";
@@ -114,6 +115,7 @@ public class CloudDatabase
     
     public String executeTransaction(Transaction transaction)
     {
+    	boolean failure = false;
         if (createConnection())
         {
         	if (insertTransaction(transaction))
@@ -128,6 +130,11 @@ public class CloudDatabase
 				        		shutdown();
 				                return null;
 		                	}
+		                	else
+		                	{
+		                		failure = true;
+		                		//undo addBuySellDetail
+		                	}
 						break;
 					case Receive:
 					case Send:
@@ -135,6 +142,10 @@ public class CloudDatabase
 						break;
             		}
                 }
+        	if (failure)
+        	{
+        		//undo insert and change winning
+        	}
         	shutdown();
         	return DATABASE_ERROR;
         }
@@ -379,9 +390,20 @@ public class CloudDatabase
     		ResultSet results = stmt.executeQuery("SELECT stockQuantity FROM " + stockTable + " WHERE stockID = '" + transaction.getStockCode() + "' AND username = '" + transaction.getUsername() + "'");
 			if (results.next())
 			{
-			    quantity = Integer.parseInt(results.getString(1)) + transaction.getQuantity();
-	        	stmt.execute(
-	          	      "UPDATE " + stockTable + " SET stockQuantity = '" + quantity + "' WHERE stockID = '" + transaction.getStockCode() + "' AND username = '" + transaction.getUsername() + "'");
+
+				if (transType=="sell")
+					quantity = Integer.parseInt(results.getString(1)) - transaction.getQuantity();
+				else
+					quantity = Integer.parseInt(results.getString(1)) + transaction.getQuantity();
+				if (quantity > 0)
+					stmt.execute("UPDATE " + stockTable +
+							" SET stockQuantity = '" + quantity + 
+							"' WHERE stockID = '" + transaction.getStockCode() +
+							"' AND username = '" + transaction.getUsername() + "'");
+				else
+					stmt.execute("DELETE " + stockTable +
+							" WHERE stockID = '" + transaction.getStockCode() +
+							"' AND username = '" + transaction.getUsername() + "'");
 			}
 			else
 			{
@@ -488,6 +510,26 @@ public class CloudDatabase
             sqlExcept.printStackTrace();
 		}
     	return winning;
+    }
+    
+    public int getStockQuantity(String username, String stockCode){
+	    int quantity = QUANTITY_ERROR;
+    	try {
+    		stmt = conn.createStatement();
+    		ResultSet results = stmt.executeQuery("SELECT stockQuantity FROM " + stockTable + 
+    				" WHERE username = '" + username + "' AND stockID = '" + stockCode + "'");
+			while(results.next())
+			{
+			    quantity = Integer.parseInt((results.getString(1)));
+			}
+			results.close();
+			stmt.close();
+		} 
+    	catch (SQLException sqlExcept)
+    	{
+            sqlExcept.printStackTrace();
+		}
+    	return quantity;
     }
     
     private void shutdown()

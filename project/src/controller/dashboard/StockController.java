@@ -68,6 +68,7 @@ public class StockController extends Controller implements ChangeListener<String
 				
 				//double postWinnings = stats.getCurrentEarnings() + transactionCost;
 				double postWinnings;
+				int stockQuantity;
 				if ((postWinnings = getModel().getCloudDatabase().getWinning(curUser))!=getModel().getCloudDatabase().WINNING_ERROR)
 					if (type==TransactionType.Buy)
 					{
@@ -77,7 +78,21 @@ public class StockController extends Controller implements ChangeListener<String
 						}
 					}
 					else
-						postWinnings += total;
+					{
+						if ((stockQuantity = getModel().getCloudDatabase().getStockQuantity(curUser.getUsername(), targetStock.getCode()))!=getModel().getCloudDatabase().QUANTITY_ERROR)
+							if (stockQuantity > quantity)
+								postWinnings += total;
+							else
+							{
+
+								//error handling when stock user has < stock to sell
+							}
+						else 
+						{
+							//error handling
+							
+						}
+					}
 				else
 				{
 					//error handling
