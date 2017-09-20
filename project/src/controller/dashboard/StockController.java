@@ -1,6 +1,5 @@
 package controller.dashboard;
 
-import java.awt.TextField;
 
 import controller.Controller;
 import javafx.beans.value.ChangeListener;
@@ -25,8 +24,6 @@ public class StockController extends Controller implements ChangeListener<String
 	double brokerFee = 0.0;
 	double purchaseFee = 0.0;
 	double total = 0.0;
-	
-	double FAKE_EARNINGS = 10000.0;
 	
 	public StockController(StockView stockView)
 	{
@@ -71,10 +68,20 @@ public class StockController extends Controller implements ChangeListener<String
 				
 				//double postWinnings = stats.getCurrentEarnings() + transactionCost;
 				double postWinnings;
-				if (type==TransactionType.Buy)
-					postWinnings = FAKE_EARNINGS - total;
+				if ((postWinnings = getModel().getCloudDatabase().getWinning(curUser))!=getModel().getCloudDatabase().WINNING_ERROR)
+					if (type==TransactionType.Buy)
+					{
+						if ((postWinnings -= total)<0)
+						{
+							//error handling
+						}
+					}
+					else
+						postWinnings += total;
 				else
-					postWinnings = FAKE_EARNINGS + total;
+				{
+					//error handling
+				}
 				
 				Transaction transaction = new Transaction(
 						EMPTY,
@@ -101,7 +108,10 @@ public class StockController extends Controller implements ChangeListener<String
 	private void refreshStockView()
 	{
 		// Calculate stock transaction costs
-		quantity = Integer.parseInt(stockView.getQuantityField().getText());
+		if (stockView.getQuantityField().getText().isEmpty())
+			quantity = 0;
+		else
+			quantity = Integer.parseInt(stockView.getQuantityField().getText());
 		stockCost = targetStock.calculateStockCost(quantity);
 		brokerFee = targetStock.calculateBrokerFee();
 		purchaseFee = targetStock.calculatePurchaseFee(quantity);
@@ -118,8 +128,7 @@ public class StockController extends Controller implements ChangeListener<String
 	@Override
 	public void changed(ObservableValue<? extends String> observable, String oldVal, String newVal) 
 	{
-		if(!newVal.trim().isEmpty())
-			refreshStockView();
+		refreshStockView();
 	}
 
 }

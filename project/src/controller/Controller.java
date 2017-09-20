@@ -93,6 +93,7 @@ public abstract class Controller implements EventHandler<ActionEvent>
 			public void handle(ActionEvent e) 
 			{
 				dialog.hide();
+				okBtn.setDisable(true);
 			}
 		});
 				
@@ -115,7 +116,8 @@ public abstract class Controller implements EventHandler<ActionEvent>
 		dialog.initOwner(this.getStage());
 		dialog.initModality(Modality.APPLICATION_MODAL); 
 		dialog.showAndWait();
-				
-		return okBtn.isPressed();
+
+		System.out.println();
+		return okBtn.isDisabled();
 	}
 }

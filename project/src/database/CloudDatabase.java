@@ -24,10 +24,13 @@ public class CloudDatabase
 	private static final String DATABASE_ERROR = "Encountered error when contacting database";
 	private static final String WRONG_PIN = "Incorrect PIN";
 	public static final String USER_UNCONFIRMED = "Email is not confirmed";
+	public static final double WINNING_ERROR = -1;
 	
     private static String dbURL = "jdbc:mysql://capstonedatabase.cszu3gvo32mp.ap-southeast-2.rds.amazonaws.com:3306/CapstoneDatabase?user=admin&password=password";
     private static String playerTable = "player";
     private static String transactionTable = "transaction";
+    private static String buySellDetailTable = "buySellDetail";
+    private static String stockTable = "stock";
     
     // jdbc Connection
     private Connection conn = null;
@@ -114,53 +117,28 @@ public class CloudDatabase
         if (createConnection())
         {
         	if (insertTransaction(transaction))
-        	{
-                shutdown();
-                return null;
-        	}
+                if (changeWinning(transaction))
+                {
+            		switch (transaction.getTransactionType()){
+            		case Buy:
+					case Sell:
+						if (addBuySellDetail(transaction))
+		                	if (changeStock(transaction))
+		                	{
+				        		shutdown();
+				                return null;
+		                	}
+						break;
+					case Receive:
+					case Send:
+						// change other player and add to detail
+						break;
+            		}
+                }
         	shutdown();
-        	return USER_UNCONFIRMED;
+        	return DATABASE_ERROR;
         }
     	return NO_INTERNET;
-    }
-    
-    public boolean insertTransaction(Transaction transaction)
-    {
-    	String transType = "Buy";
-    	switch (transaction.getTransactionType()){
-		case Receive:
-    		transType = "Receive";
-			break;
-		case Sell:
-    		transType = "Sell";
-			break;
-		case Send:
-    		transType = "Send";
-			break;
-		default:
-			break;
-    	}
-    	
-    	try
-        {
-            stmt = conn.createStatement();
-            
-            stmt.execute("insert into " + transactionTable + " (username, stockID, transactionType, stockQuantity, price, winningAfterTransaction) values ('" +
-            		transaction.getUsername() + "','" +
-            		transaction.getStockCode() + "','" +
-            		transType + "','" +
-            		transaction.getQuantity() + "','" +
-            		transaction.getPrice() + "','" +
-            		transaction.getPostWinnings() + "')");
-            stmt.close();
-        }
-        catch (SQLException sqlExcept)
-        {
-            sqlExcept.printStackTrace();
-            return false;
-        } 
-    	
-        return true;
     }
     
     private boolean createConnection()
@@ -319,43 +297,137 @@ public class CloudDatabase
             }
             
             stmt.close();
+        	shutdown();
             return players;
         }
         catch (SQLException sqlExcept)
         {
             sqlExcept.printStackTrace();
         }
-    	
+    	shutdown();
     	return null;
     }
-
-    private boolean changeWinning(String username, int change)
+    
+    private boolean insertTransaction(Transaction transaction)
     {
-	    int winning = 0;
-    	try {
-    		stmt = conn.createStatement();
-    		ResultSet results = stmt.executeQuery("SELECT winning FROM " + playerTable + " WHERE username = '" + username + "'");
-			while(results.next())
-			{
-			    winning = Integer.parseInt(results.getString(1));
-			    System.out.println(winning);
-			}
-			results.close();
-			stmt.close();
-		} 
-    	catch (SQLException sqlExcept)
-    	{
+    	String transType = "buy";
+    	switch (transaction.getTransactionType()){
+		case Receive:
+    		transType = "receive";
+			break;
+		case Sell:
+    		transType = "sell";
+			break;
+		case Send:
+    		transType = "send";
+			break;
+		default:
+			break;
+    	}
+    	
+    	try
+        {
+            stmt = conn.createStatement();
+            
+            stmt.execute("insert into " + transactionTable + " (username, transactionType, postWinning) values ('" +
+            		transaction.getUsername() + "','" +
+            		transType + "','" +
+            		transaction.getPostWinnings() + "')");
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
             sqlExcept.printStackTrace();
             return false;
-		}
-    	winning += change;
+        } 
+    	
+        return true;
+    }
+
+    private boolean changeWinning(Transaction transaction)
+    {
         try
         {
         	stmt = conn.createStatement();
 
         	stmt.execute(
-          	      "UPDATE " + playerTable + " SET winning = '" + winning + "' WHERE username = '" + username + "'");
+          	      "UPDATE " + playerTable + " SET winning = '" + transaction.getPostWinnings() + "' WHERE username = '" + transaction.getUsername() + "'");
             stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean changeStock(Transaction transaction)
+    {
+    	int quantity = 0;
+    	String transType = "buy";
+    	switch (transaction.getTransactionType()){
+		case Sell:
+    		transType = "sell";
+			break;
+		default:
+			break;
+    	}
+
+    	try {
+    		stmt = conn.createStatement();
+    		ResultSet results = stmt.executeQuery("SELECT stockQuantity FROM " + stockTable + " WHERE stockID = '" + transaction.getStockCode() + "' AND username = '" + transaction.getUsername() + "'");
+			if (results.next())
+			{
+			    quantity = Integer.parseInt(results.getString(1)) + transaction.getQuantity();
+	        	stmt.execute(
+	          	      "UPDATE " + stockTable + " SET stockQuantity = '" + quantity + "' WHERE stockID = '" + transaction.getStockCode() + "' AND username = '" + transaction.getUsername() + "'");
+			}
+			else
+			{
+				if (transType=="sell"){
+					results.close();
+					stmt.close();
+					return false;
+				}
+				else 
+				{
+					stmt.execute("insert into " + stockTable + " values ('" +
+		            		transaction.getStockCode() + "','" +
+		            		transaction.getUsername() + "','" +
+		            		transaction.getQuantity() + "')");
+				}
+			}
+			results.close();
+			stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean addBuySellDetail(Transaction transaction)
+    {
+    	try {
+    		stmt = conn.createStatement();
+    		ResultSet results = stmt.executeQuery("SELECT transactionID FROM " + transactionTable + 
+    				" WHERE username = '" + transaction.getUsername() + 
+    				"' AND transactionType = '" + transaction.getTransactionType() + 
+    				"' AND transactionType = '" + transaction.getTransactionType() + 
+    				"' ORDER BY transactionID DESC");
+			if (results.next())
+			{
+	            stmt.execute("insert into " + buySellDetailTable + " values ('" +
+	            		results.getString(1) + "','" +
+	            		transaction.getStockCode() + "','" +
+	            		transaction.getQuantity() + "','" +
+	            		transaction.getPrice() + "')");
+			}
+			results.close();
+			stmt.close();
         }
         catch (SQLException sqlExcept)
         {
@@ -398,6 +470,25 @@ public class CloudDatabase
 //            sqlExcept.printStackTrace();
 //        }
 //    }
+    
+    public double getWinning(UserDetails user){
+	    Double winning = WINNING_ERROR;
+    	try {
+    		stmt = conn.createStatement();
+    		ResultSet results = stmt.executeQuery("SELECT winning FROM " + playerTable + " WHERE username = '" + user.getUsername() + "'");
+			while(results.next())
+			{
+			    winning = Double.parseDouble(results.getString(1));
+			}
+			results.close();
+			stmt.close();
+		} 
+    	catch (SQLException sqlExcept)
+    	{
+            sqlExcept.printStackTrace();
+		}
+    	return winning;
+    }
     
     private void shutdown()
     {
