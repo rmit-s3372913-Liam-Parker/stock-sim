@@ -115,7 +115,6 @@ public class CloudDatabase
     
     public String executeTransaction(Transaction transaction)
     {
-    	boolean failure = false;
         if (createConnection())
         {
         	if (insertTransaction(transaction))
@@ -130,11 +129,6 @@ public class CloudDatabase
 				        		shutdown();
 				                return null;
 		                	}
-		                	else
-		                	{
-		                		failure = true;
-		                		//undo addBuySellDetail
-		                	}
 						break;
 					case Receive:
 					case Send:
@@ -142,10 +136,6 @@ public class CloudDatabase
 						break;
             		}
                 }
-        	if (failure)
-        	{
-        		//undo insert and change winning
-        	}
         	shutdown();
         	return DATABASE_ERROR;
         }
@@ -458,40 +448,6 @@ public class CloudDatabase
         }
         return true;
     }
-    
-//    private void select()
-//    {
-//        try
-//        {
-//            stmt = conn.createStatement();
-//            ResultSet results = stmt.executeQuery("select * from " + playerTable);
-//            ResultSetMetaData rsmd = results.getMetaData();
-//            int numberCols = rsmd.getColumnCount();
-//            for (int i=1; i<=numberCols; i++)
-//            {
-//                //print Column Names
-//                System.out.print(rsmd.getColumnLabel(i)+"\t\t");  
-//            }
-//
-//            System.out.println("\n-------------------------------------------------");
-//
-//            while(results.next())
-//            {
-//                String username = results.getString(1);
-//                String password = results.getString(2);
-//                String email = results.getString(3);
-//                String confirm = results.getString(4);
-//                String pin = results.getString(5);
-//                System.out.println(username + "\t\t\t" + password + "\t\t\t" + email + "\t\t\t" + confirm + "\t\t" + pin);
-//            }
-//            results.close();
-//            stmt.close();
-//        }
-//        catch (SQLException sqlExcept)
-//        {
-//            sqlExcept.printStackTrace();
-//        }
-//    }
     
     public double getWinning(UserDetails user){
 	    Double winning = WINNING_ERROR;
