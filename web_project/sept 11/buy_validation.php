@@ -10,21 +10,28 @@ if(isset($_POST['buy-submit']))
 	$share = mysqli_escape_string($conn, $_POST['share']);
 	$date = date('Y-m-d H:i:s');
 	
+	// select winning field from player table
 	$sql = "select winning FROM player WHERE username = '" . $_SESSION['username'] . "'";
 	$result = mysqli_query($conn, $sql);
 	$row = mysqli_fetch_assoc($result);
 	$currentMoney = $row['winning'];
 
-	// check stock table
-	$sql = "select stockID FROM stock WHERE username = '" . $_SESSION['username'] . "'";
+	// select stockID from stock table
+	$sql = "select stockID FROM stock WHERE username = '" . $_SESSION['username'] . "' AND stockID = '" . $code . "'";
 	$result = mysqli_query($conn, $sql);
 	$row = mysqli_fetch_assoc($result);
 	$currentStockID = $row['stockID'];
 	
-	$sql = "select stockQuantity FROM stock WHERE username = '" . $_SESSION['username'] . "'";
+	// select stock quantity from stock table
+	$sql = "select stockQuantity FROM stock WHERE username = '" . $_SESSION['username'] . "' AND stockID = '" . $code . "'";
 	$result = mysqli_query($conn, $sql);
 	$row = mysqli_fetch_assoc($result);
 	$currentStockQuantity = $row['stockQuantity'];
+
+	// $sql = "Select transactionID from transaction WHERE username = '" . $_SESSION['username'] . "' order by transactionID DESC LIMIT 1";
+	// $result = mysqli_query($conn, $sql);
+	// $row = mysqli_fetch_assoc($result);
+	// $lastID = $row['transactionID'];
 	
 	
 	// check if current money is 0
@@ -36,12 +43,15 @@ if(isset($_POST['buy-submit']))
 			// check if stock exists
 			if($currentStockID == $code)
 			{
+				// update new quantity for existing stock
 				$newQuantity = $currentStockQuantity + $share;
-				$sql = "update stock set stockQuantity='".$newQuantity."' WHERE username = '" . $_SESSION['username'] . "';";
+				$sql = "update stock set stockQuantity = '".$newQuantity."' WHERE username = '" . $_SESSION['username'] . "' 
+						AND stockID = '" . $code . "';";
 
 			}
 			else
 			{
+				// insert new stock
 				$uname = $_SESSION['username'];
 				$sql = "INSERT INTO stock(stockID, username, stockQuantity) VALUES('$code', '$uname', '$share');";
 			}
@@ -50,12 +60,15 @@ if(isset($_POST['buy-submit']))
 				$result = $currentMoney - $total;
 				$sql .= "update player set winning='".$result."' WHERE username = '" . $_SESSION['username'] . "';";
 
-				// set database table for buySellDetail
-				//$sql .= "INSERT INTO buySellDetail(stockId, quantity, price) VALUES('$code', '$share', '$total');";
-
-				// set database for transaction table
+				// insert data for transaction table
 				$uname = $_SESSION['username'];
 				$sql .= "INSERT INTO transaction(username, transactionType, postWinning, timeOfTransaction) VALUES('$uname', 'Buy', '$result', '$date')";
+
+				// get the last transactionID from transaction table
+				//$sql = "Select transactionID from transaction order by transactionID DESC LIMIT 1";
+
+				// set database table for buySellDetail
+				// $sql .= "INSERT INTO buySellDetail(transactionID, stockId, quantity, price) VALUES('$lastID', '$code', '$share', '$total');";
 				
 				if (mysqli_multi_query($conn, $sql))
 				{
