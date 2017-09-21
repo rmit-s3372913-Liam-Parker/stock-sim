@@ -17,14 +17,14 @@ public class StockController extends Controller implements ChangeListener<String
 {
 	private static final int EMPTY = 0;
 	
-	StockView stockView;
-	Stock targetStock;
+	private StockView stockView;
+	private Stock targetStock;
 	
-	int quantity = 0;
-	double stockCost = 0.0;
-	double brokerFee = 0.0;
-	double purchaseFee = 0.0;
-	double total = 0.0;
+	private int quantity = 0;
+	private double stockCost = 0.0;
+	private double brokerFee = 0.0;
+	private double purchaseFee = 0.0;
+	private double total = 0.0;
 	
 	public StockController(StockView stockView)
 	{
@@ -59,65 +59,20 @@ public class StockController extends Controller implements ChangeListener<String
 				transactionApproved = true;
 		}
 		
-		// Attempt to execute the requested transaction on the database
 		if(transactionApproved)
-		{
-			try
-			{
-				UserDetails curUser = getModel().getSessionDetails();
-				PlayerStats stats = getModel().getSessionStats();
-				
-				//double postWinnings = stats.getCurrentEarnings() + transactionCost;
-				double postWinnings;
-				int stockQuantity;
-				if ((postWinnings = getModel().getCloudDatabase().getWinning(curUser)) != CloudDatabase.WINNING_ERROR)
-					if (type==TransactionType.Buy)
-					{
-						if ((postWinnings -= total)<0)
-						{
-							//error handling
-						}
-					}
-					else
-					{
-						if ((stockQuantity = getModel().getCloudDatabase().getStockQuantity(curUser.getUsername(), targetStock.getCode())) != CloudDatabase.QUANTITY_ERROR)
-							if (stockQuantity > quantity)
-								postWinnings += total;
-							else
-							{
-
-								//error handling when stock user has < stock to sell
-							}
-						else 
-						{
-							//error handling
-							
-						}
-					}
-				else
-				{
-					//error handling
-				}
-				
-				Transaction transaction = new Transaction(
-						EMPTY,
-						curUser.getUsername(),
-						targetStock.getCode(),
-						type,
-						quantity,
-						targetStock.getStockPrice(),
-						postWinnings,
-						null);
-				
-				getModel().getCloudDatabase().executeTransaction(transaction);
-			}
-			catch(NumberFormatException e) { e.printStackTrace(); }
-		}
+			executeTransaction(type);
 	}
 	
 	public void setTargetStock(Stock stock)
 	{
 		targetStock = stock;
+		refreshStockView();
+	}
+	
+	// Callback for changes to the quantity field
+	@Override
+	public void changed(ObservableValue<? extends String> observable, String oldVal, String newVal) 
+	{
 		refreshStockView();
 	}
 	
@@ -139,12 +94,49 @@ public class StockController extends Controller implements ChangeListener<String
 		stockView.setPurchaseFee(purchaseFee);
 		stockView.setTotalFee(total);
 	}
-
-	// Callback for changes to the quantity field
-	@Override
-	public void changed(ObservableValue<? extends String> observable, String oldVal, String newVal) 
+	
+	private void executeTransaction(TransactionType type)
 	{
-		refreshStockView();
-	}
+		try
+		{
+			UserDetails curUser = getModel().getSessionDetails();
+			PlayerStats stats = getModel().getSessionStats();
+			CloudDatabase db = getModel().getCloudDatabase();
 
+			int stockQuantity = db.getStockQuantity(curUser.getUsername(),targetStock.getCode());
+			double winnings = stats.getCurrentEarnings();
+			
+			if (type == TransactionType.Buy)
+			{
+				if (winnings - total < 0)
+				{
+					displayNotificationModal("You have insufficient funds to complete this transaction!");
+				}
+				else
+					winnings -= total;
+			}
+			else if(type == TransactionType.Sell)
+			{
+				if (stockQuantity != CloudDatabase.QUANTITY_ERROR)
+				{
+					displayNotificationModal("You have insufficient shares to complete this transaction!");
+				}
+				else
+					winnings += total;
+			}
+
+			Transaction transaction = new Transaction(
+					EMPTY,
+					curUser.getUsername(),
+					targetStock.getCode(),
+					type,
+					quantity,
+					targetStock.getStockPrice(),
+					winnings,
+					null);
+
+			getModel().getCloudDatabase().executeTransaction(transaction);
+		}
+		catch(NumberFormatException e) { e.printStackTrace(); }
+	}
 }

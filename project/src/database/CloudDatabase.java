@@ -449,42 +449,47 @@ public class CloudDatabase
         return true;
     }
     
-    public double getWinning(UserDetails user){
-	    Double winning = WINNING_ERROR;
-    	try {
+    public PlayerStats getCurrentPlayerStats(UserDetails user)
+    {
+	    Double winning = 0.0;
+	    
+    	try 
+    	{
     		stmt = conn.createStatement();
     		ResultSet results = stmt.executeQuery("SELECT winning FROM " + playerTable + " WHERE username = '" + user.getUsername() + "'");
+    		
 			while(results.next())
 			{
 			    winning = Double.parseDouble(results.getString(1));
 			}
+			
 			results.close();
 			stmt.close();
 		} 
-    	catch (SQLException sqlExcept)
-    	{
-            sqlExcept.printStackTrace();
-		}
-    	return winning;
+    	catch (SQLException sqlExcept) { sqlExcept.printStackTrace(); }
+    	
+    	return new PlayerStats(user.getUsername(), winning);
     }
     
-    public int getStockQuantity(String username, String stockCode){
+    public int getStockQuantity(String username, String stockCode)
+    {
 	    int quantity = QUANTITY_ERROR;
-    	try {
+    	try 
+    	{
     		stmt = conn.createStatement();
     		ResultSet results = stmt.executeQuery("SELECT stockQuantity FROM " + stockTable + 
     				" WHERE username = '" + username + "' AND stockID = '" + stockCode + "'");
+    		
 			while(results.next())
 			{
 			    quantity = Integer.parseInt((results.getString(1)));
 			}
+			
 			results.close();
 			stmt.close();
 		} 
-    	catch (SQLException sqlExcept)
-    	{
-            sqlExcept.printStackTrace();
-		}
+    	catch (SQLException sqlExcept) { sqlExcept.printStackTrace(); }
+    	
     	return quantity;
     }
     
@@ -496,15 +501,14 @@ public class CloudDatabase
             {
                 stmt.close();
             }
+            
             if (conn != null)
             {
                 DriverManager.getConnection(dbURL + ";shutdown=true");
                 conn.close();
             }           
         }
-        catch (SQLException sqlExcept)
-        {
-        }
+        catch (SQLException e) {} // TODO: Investigate why exceptions throw here upon login
 
     }
     

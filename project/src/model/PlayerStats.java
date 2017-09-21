@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Player contains data about a player including transaction history
+ * Player contains data about a player
  * */
 public class PlayerStats 
 {

@@ -9,7 +9,6 @@ import database.CloudDatabase;
 public class CoreSystem implements CoreAPI 
 {
 	private UserDetails curUserSession = null;
-	private PlayerStats curPlayerStats = null;
 	private ASXInterface marketInterface = new ASXInterface();
 	private CloudDatabase cloudDatabase = new CloudDatabase();
 	
@@ -76,7 +75,6 @@ public class CoreSystem implements CoreAPI
 	public boolean endSession() 
 	{
 		curUserSession = null;
-		curPlayerStats = null;
 		return true;
 	}
 
@@ -102,6 +100,6 @@ public class CoreSystem implements CoreAPI
 	@Override
 	public PlayerStats getSessionStats() 
 	{
-		return curPlayerStats;
+		return cloudDatabase.getCurrentPlayerStats(curUserSession);
 	}
 }

@@ -2,6 +2,7 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -51,9 +53,14 @@ public abstract class Controller implements EventHandler<ActionEvent>
 	{
 		// Create frame for modal window
 		Stage dialog = new Stage();
+		dialog.setResizable(false);
 		dialog.setTitle("Notification");
-		GridPane pane = new GridPane();
-		pane.setAlignment(Pos.CENTER);
+		
+		BorderPane pane = new BorderPane();
+		VBox vBox = new VBox();
+		vBox.setAlignment(Pos.CENTER);
+		vBox.setSpacing(10.0f);
+		
 		Scene scene = new Scene(pane, POPUP_WIDTH, POPUP_HEIGHT);
 				
 		// Configure options and add them
@@ -67,9 +74,9 @@ public abstract class Controller implements EventHandler<ActionEvent>
 		    }
 		});
 		
-		pane.add(new Text(message), 0, 0);
-		pane.add(btn,               0, 1);
-					
+		vBox.getChildren().addAll(new Text(message), btn);
+		pane.setCenter(vBox);
+		
 		// Configure modal functionality and display
 		dialog.setScene(scene);
 		dialog.initOwner(this.getStage());
@@ -81,9 +88,16 @@ public abstract class Controller implements EventHandler<ActionEvent>
 	{
 		// Create frame for modal window
 		Stage dialog = new Stage();
+		dialog.setResizable(false);
 		dialog.setTitle("User Confirmation");
-		GridPane pane = new GridPane();
-		pane.setAlignment(Pos.CENTER);
+		
+		BorderPane pane = new BorderPane();
+		VBox vBox = new VBox();
+		vBox.setAlignment(Pos.CENTER);
+		vBox.setSpacing(10.0f);
+		HBox btnBox = new HBox();
+		btnBox.setAlignment(Pos.CENTER);
+		btnBox.setSpacing(5.0f);
 		Scene scene = new Scene(pane, POPUP_WIDTH, POPUP_HEIGHT);
 						
 		// Configure options and add them
@@ -109,9 +123,10 @@ public abstract class Controller implements EventHandler<ActionEvent>
 			}
 		});
 				
-		pane.add(new Text(message), 0, 0);
-		pane.add(okBtn,             0, 1);
-		pane.add(cancelBtn,         1, 1);
+		btnBox.getChildren().addAll(okBtn, cancelBtn);
+		vBox.getChildren().addAll(new Text(message), btnBox);
+		pane.setCenter(vBox);
+		
 		
 		// Configure modal functionality and display
 		dialog.setScene(scene);
