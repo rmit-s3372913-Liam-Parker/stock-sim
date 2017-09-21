@@ -2,6 +2,7 @@ package controller.dashboard;
 
 
 import controller.Controller;
+import database.CloudDatabase;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -69,7 +70,7 @@ public class StockController extends Controller implements ChangeListener<String
 				//double postWinnings = stats.getCurrentEarnings() + transactionCost;
 				double postWinnings;
 				int stockQuantity;
-				if ((postWinnings = getModel().getCloudDatabase().getWinning(curUser))!=getModel().getCloudDatabase().WINNING_ERROR)
+				if ((postWinnings = getModel().getCloudDatabase().getWinning(curUser)) != CloudDatabase.WINNING_ERROR)
 					if (type==TransactionType.Buy)
 					{
 						if ((postWinnings -= total)<0)
@@ -79,7 +80,7 @@ public class StockController extends Controller implements ChangeListener<String
 					}
 					else
 					{
-						if ((stockQuantity = getModel().getCloudDatabase().getStockQuantity(curUser.getUsername(), targetStock.getCode()))!=getModel().getCloudDatabase().QUANTITY_ERROR)
+						if ((stockQuantity = getModel().getCloudDatabase().getStockQuantity(curUser.getUsername(), targetStock.getCode())) != CloudDatabase.QUANTITY_ERROR)
 							if (stockQuantity > quantity)
 								postWinnings += total;
 							else
