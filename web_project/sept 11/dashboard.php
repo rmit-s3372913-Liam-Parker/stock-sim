@@ -46,11 +46,7 @@ include 'downloadCSV.php';
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<!-- display top 5 by winnings -->
-								<!-- <td>?php include 'leader_board.php' ?></td> -->
-
-							</tr>
+							
 							<tr>
 								<?php include 'leader_board.php' ?>
 							</tr>
@@ -75,32 +71,15 @@ include 'downloadCSV.php';
 						<thead>
 							<tr>
 								<th>Symbol</th>
-				        		<th>Last price</th>
+				        		<th>Shares</th>
 
 							</tr>
 						</thead>
 						<tbody>
-							<?php
+							<tr>
+								<?php include 'my_stocks.php';?>
+							</tr>
 							
-							$url = "http://download.finance.yahoo.com/d/quotes.csv?s=^AORD+BHP.AX+BLT.L+AAPL+EBAY+^NDX+ASX.AX&f=sl1c";
-
-							$line = file_get_contents($url);
-
-							$data =  nl2br($line);
-
-							$company = explode("\n", $data);
-							for ($i = 0; $i<count($company)-1; $i++)
-							{
-							  $row = explode(",", $company[$i]);
-							  $row[0] = substr($row[0], 1, -1);
-							  echo "\t<tr>\r\n"
-							  . "\t\t<td>" . $row[0] . "</td>"
-							  . "\t\t<td>$" . $row[1] . "</td>"
-							  . "\t</tr>";
-							}
-
-
-							?>
 						</tbody>
 						
 					</table>
@@ -115,6 +94,7 @@ include 'downloadCSV.php';
 							<tr>
 								<th>Code</th>
 								<th>Description</th>
+								<th>Price</th>
 								
 							</tr>
 						</thead>
