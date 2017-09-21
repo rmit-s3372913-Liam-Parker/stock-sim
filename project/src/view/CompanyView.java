@@ -9,6 +9,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -47,6 +48,7 @@ public class CompanyView extends BorderPane
 		// Create title element
 		title.setFont(StockApplication.APP_HEADING_FONT);
 		verticalLayout.setSpacing(3.0f);
+		BorderPane.setAlignment(title, Pos.CENTER);
 		
 		// Build company list view element.
 		CoreAPI core = StockApplication.getModel();

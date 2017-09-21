@@ -11,6 +11,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
@@ -40,7 +41,7 @@ public class LeaderboardView extends BorderPane
 	{
 		Text title = new Text("Leaderboard");
 		title.setFont(StockApplication.APP_HEADING_FONT);
-		
+		BorderPane.setAlignment(title, Pos.CENTER);
 
 		CoreAPI core = StockApplication.getModel();
 		ObservableList<PlayerStats> leaderboardList = FXCollections.observableArrayList();

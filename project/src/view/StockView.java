@@ -39,6 +39,7 @@ public class StockView extends BorderPane implements StockSelectedCallback
 	{
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		this.setCenter(title);
+		BorderPane.setAlignment(title, Pos.CENTER);
 		
 		buyBtn.setOnAction(controller);
 		sellBtn.setOnAction(controller);
