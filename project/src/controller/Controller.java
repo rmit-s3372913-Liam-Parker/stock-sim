@@ -19,6 +19,7 @@ public abstract class Controller implements EventHandler<ActionEvent>
 {
 	private static final int POPUP_WIDTH = 300;
 	private static final int POPUP_HEIGHT = 150;
+	private boolean hasConfirmedDialog = false;
 	
 	/**
 	 * Switches views in the application window.
@@ -93,7 +94,7 @@ public abstract class Controller implements EventHandler<ActionEvent>
 			public void handle(ActionEvent e) 
 			{
 				dialog.hide();
-				okBtn.setDisable(true);
+				hasConfirmedDialog = true;
 			}
 		});
 				
@@ -104,6 +105,7 @@ public abstract class Controller implements EventHandler<ActionEvent>
 			public void handle(ActionEvent e) 
 			{
 				dialog.hide();
+				hasConfirmedDialog = false;
 			}
 		});
 				
@@ -117,7 +119,6 @@ public abstract class Controller implements EventHandler<ActionEvent>
 		dialog.initModality(Modality.APPLICATION_MODAL); 
 		dialog.showAndWait();
 
-		System.out.println();
-		return okBtn.isDisabled();
+		return hasConfirmedDialog;
 	}
 }
