@@ -1,15 +1,26 @@
 package view;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import model.PlayerStats;
 
 public class PlayerStatsView extends BorderPane 
 {
-	Text title = new Text("My Stats");
-	Text earnings = new Text();
+	VBox mainBox = new VBox();
+	Text mainTitle = new Text("My Stats");
+	Text earningsTitle = new Text("Current Earnings:");
+	Text earnings = new Text("$0000000");
+	
+	HBox btnBox = new HBox();
+	Button curStocksBtn = new Button("Current Stocks");
+	Button transactionBtn = new Button("Transaction History");
+	
+	final ListView<PlayerStats> statsList = new ListView<>();
 	
 	public PlayerStatsView()
 	{
@@ -18,10 +29,17 @@ public class PlayerStatsView extends BorderPane
 	
 	private void populate()
 	{
-		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		this.setTop(title);
-		BorderPane.setAlignment(title, Pos.CENTER);
+		mainTitle.setFont(StockApplication.APP_HEADING_FONT);
+		earningsTitle.setFont(StockApplication.APP_DETAIL_FONT);
+		BorderPane.setAlignment(mainBox, Pos.CENTER);
 		
-		this.setCenter(earnings);
+		btnBox.getChildren().addAll(curStocksBtn, transactionBtn);
+		btnBox.setAlignment(Pos.CENTER);
+		btnBox.setSpacing(5.0f);
+		
+		mainBox.getChildren().addAll(mainTitle, earningsTitle, earnings, btnBox, statsList);
+		mainBox.setSpacing(3.0f);
+		
+		this.setCenter(mainBox);
 	}
 }

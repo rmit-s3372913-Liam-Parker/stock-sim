@@ -16,7 +16,9 @@ public class StockApplication extends Application
 	
 	public static final int WINDOW_WIDTH = 1920/2;
 	public static final int WINDOW_HEIGHT = 1080/2;
+	
 	public static final Font APP_HEADING_FONT = Font.font("Tahoma", FontWeight.NORMAL, 20);
+	public static final Font APP_DETAIL_FONT = Font.font("Tahoma", FontWeight.NORMAL, 14);
 	
 	private static Stage stage;
 	private static CoreAPI model;
@@ -33,6 +35,10 @@ public class StockApplication extends Application
 		// Set frame data
 		Scene scene = new Scene(initialView, WINDOW_WIDTH, WINDOW_HEIGHT);
         stage.setTitle(PROGRAM_NAME);
+        
+        stage.setMinHeight(WINDOW_HEIGHT / 2);
+        stage.setMinWidth(WINDOW_WIDTH / 2);
+        
         stage.setScene(scene);
         stage.show();
 	}

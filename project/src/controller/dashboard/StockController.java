@@ -83,6 +83,7 @@ public class StockController extends Controller implements ChangeListener<String
 			quantity = 0;
 		else
 			quantity = Integer.parseInt(stockView.getQuantityField().getText());
+		
 		stockCost = targetStock.calculateStockCost(quantity);
 		brokerFee = targetStock.calculateBrokerFee();
 		purchaseFee = targetStock.calculatePurchaseFee(quantity);
@@ -105,7 +106,7 @@ public class StockController extends Controller implements ChangeListener<String
 
 			int stockQuantity = db.getStockQuantity(curUser.getUsername(),targetStock.getCode());
 			double winnings = stats.getCurrentEarnings();
-			if (winnings == db.WINNING_ERROR)
+			if (winnings == CloudDatabase.WINNING_ERROR)
 			{
 				displayNotificationModal("We are having trouble connecting to server, please try again");
 				return;

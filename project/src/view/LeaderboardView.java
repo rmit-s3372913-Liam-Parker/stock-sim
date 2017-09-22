@@ -21,7 +21,14 @@ import model.PlayerStats;
 
 public class LeaderboardView extends BorderPane 
 {
+	Text title = new Text("Leaderboard");
+	CoreAPI core = StockApplication.getModel();
+	ObservableList<PlayerStats> leaderboardList = FXCollections.observableArrayList();
+	List<PlayerStats> info = core.getPlayerList();
+	final ListView<PlayerStats> leaderList = new ListView<>(leaderboardList);
+	
 	private final int DURATION = 10000;
+	
 	public LeaderboardView()
 	{
 		populate();
@@ -29,7 +36,7 @@ public class LeaderboardView extends BorderPane
 		    new KeyFrame(
 		        Duration.millis( DURATION ),
 		        event -> {
-		            populate();
+		        	refreshLeaderboardList();
 		        }
 		    )
 		);
@@ -39,25 +46,24 @@ public class LeaderboardView extends BorderPane
 	
 	private void populate()
 	{
-		Text title = new Text("Leaderboard");
 		title.setFont(StockApplication.APP_HEADING_FONT);
 		BorderPane.setAlignment(title, Pos.CENTER);
-
-		CoreAPI core = StockApplication.getModel();
-		ObservableList<PlayerStats> leaderboardList = FXCollections.observableArrayList();
-		List<PlayerStats> info = core.getPlayerList();
-		
-		for(int i = 0; i < Math.min(10, info.size()); ++i)
-		{
-			leaderboardList.add(info.get(i));
-		}
-		
-		final ListView<PlayerStats> leaderList = new ListView<>(leaderboardList);
 		leaderList.setEditable(false);
 		
 		// Embed into main view.
 		this.setTop(title);
 		this.setCenter(leaderList);
 		
+		refreshLeaderboardList();
+		
+	}
+	
+	private void refreshLeaderboardList()
+	{
+		leaderboardList.clear();
+		for(int i = 0; i < Math.min(10, info.size()); ++i)
+		{
+			leaderboardList.add(info.get(i));
+		}
 	}
 }
