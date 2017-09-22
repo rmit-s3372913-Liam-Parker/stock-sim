@@ -105,12 +105,17 @@ public class StockController extends Controller implements ChangeListener<String
 
 			int stockQuantity = db.getStockQuantity(curUser.getUsername(),targetStock.getCode());
 			double winnings = stats.getCurrentEarnings();
-			
+			if (winnings == db.WINNING_ERROR)
+			{
+				displayNotificationModal("We are having trouble connecting to server, please try again");
+				return;
+			}
 			if (type == TransactionType.Buy)
 			{
 				if (winnings - total < 0)
 				{
 					displayNotificationModal("You have insufficient funds to complete this transaction!");
+					return;
 				}
 				else
 					winnings -= total;
@@ -119,10 +124,19 @@ public class StockController extends Controller implements ChangeListener<String
 			{
 				if (stockQuantity != CloudDatabase.QUANTITY_ERROR)
 				{
-					displayNotificationModal("You have insufficient shares to complete this transaction!");
+					if (stockQuantity < quantity)
+					{
+						displayNotificationModal("You have insufficient shares to complete this transaction!");
+						return;
+					}
+					else
+						winnings += total;
 				}
 				else
-					winnings += total;
+				{
+					displayNotificationModal("We are having trouble connecting to server, please try again");
+					return;
+				}
 			}
 
 			Transaction transaction = new Transaction(

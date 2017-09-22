@@ -428,7 +428,7 @@ public class CloudDatabase
     		ResultSet results = stmt.executeQuery("SELECT transactionID FROM " + transactionTable + 
     				" WHERE username = '" + transaction.getUsername() + 
     				"' AND transactionType = '" + transaction.getTransactionType() + 
-    				"' AND transactionType = '" + transaction.getTransactionType() + 
+    				"' AND postWinning = '" + transaction.getPostWinnings() + 
     				"' ORDER BY transactionID DESC");
 			if (results.next())
 			{
@@ -466,14 +466,18 @@ public class CloudDatabase
 			results.close();
 			stmt.close();
 		} 
-    	catch (SQLException sqlExcept) { sqlExcept.printStackTrace(); }
+    	catch (SQLException sqlExcept) 
+    	{ 
+    		winning = WINNING_ERROR;
+    		sqlExcept.printStackTrace(); 
+    	}
     	
     	return new PlayerStats(user.getUsername(), winning);
     }
     
     public int getStockQuantity(String username, String stockCode)
     {
-	    int quantity = QUANTITY_ERROR;
+	    int quantity = 0;
     	try 
     	{
     		stmt = conn.createStatement();
@@ -488,7 +492,11 @@ public class CloudDatabase
 			results.close();
 			stmt.close();
 		} 
-    	catch (SQLException sqlExcept) { sqlExcept.printStackTrace(); }
+    	catch (SQLException sqlExcept) 
+    	{ 
+    		quantity = QUANTITY_ERROR;
+    		sqlExcept.printStackTrace(); 
+    	}
     	
     	return quantity;
     }
