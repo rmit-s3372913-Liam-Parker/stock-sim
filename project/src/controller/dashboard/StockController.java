@@ -6,9 +6,9 @@ import database.CloudDatabase;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import model.BuySellTransaction;
 import model.PlayerStats;
 import model.Stock;
-import model.Transaction;
 import model.TransactionType;
 import model.UserDetails;
 import view.StockView;
@@ -121,7 +121,7 @@ public class StockController extends Controller implements ChangeListener<String
 				else
 					winnings -= total;
 			}
-			else if(type == TransactionType.Sell)
+			else
 			{
 				if (stockQuantity != CloudDatabase.QUANTITY_ERROR)
 				{
@@ -140,11 +140,11 @@ public class StockController extends Controller implements ChangeListener<String
 				}
 			}
 
-			Transaction transaction = new Transaction(
+			BuySellTransaction transaction = new BuySellTransaction(
 					EMPTY,
 					curUser.getUsername(),
-					targetStock.getCode(),
 					type,
+					targetStock.getCode(),
 					quantity,
 					targetStock.getStockPrice(),
 					winnings,

@@ -10,8 +10,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.BuySellTransaction;
 import model.PlayerStats;
+import model.SendReceiveTransaction;
 import model.Transaction;
+import model.TransactionType;
 import model.UserDetails;
 import ultilities.Hash;
 
@@ -31,6 +34,7 @@ public class CloudDatabase
     private static String playerTable = "player";
     private static String transactionTable = "transaction";
     private static String buySellDetailTable = "buySellDetail";
+    private static String sendReceiveDetailTable = "sendReceiveDetail";
     private static String stockTable = "stock";
     
     // jdbc Connection
@@ -123,17 +127,29 @@ public class CloudDatabase
             		switch (transaction.getTransactionType()){
             		case Buy:
 					case Sell:
-						if (addBuySellDetail(transaction))
-		                	if (changeStock(transaction))
-		                	{
-				        		shutdown();
-				                return null;
-		                	}
+						if (addBuySellDetail((BuySellTransaction) transaction) 
+								&& changeStock((BuySellTransaction) transaction))
+	                	{
+			        		shutdown();
+			                return null;
+	                	}
 						break;
-					case Receive:
-					case Send:
-						// change other player and add to detail
-						break;
+					default:
+						SendReceiveTransaction sendTransaction = (SendReceiveTransaction) transaction;
+						SendReceiveTransaction receiveTransaction = new SendReceiveTransaction(0, 
+																		sendTransaction.getPartnerUsername(),
+																		TransactionType.Receive,
+																		sendTransaction.getUsername(),
+																		sendTransaction.getWinningAmount(),
+																		getCurrentPlayerStats(new UserDetails(sendTransaction.getPartnerUsername(), null)).getCurrentEarnings() + sendTransaction.getWinningAmount(),
+																		null);
+						if (changeWinning(receiveTransaction) 
+								&& addSendReceiveDetail(sendTransaction)
+								&& addSendReceiveDetail(receiveTransaction))
+						{
+							shutdown();
+			                return null;
+						}
             		}
                 }
         	shutdown();
@@ -363,7 +379,7 @@ public class CloudDatabase
         return true;
     }
     
-    private boolean changeStock(Transaction transaction)
+    private boolean changeStock(BuySellTransaction transaction)
     {
     	int quantity = 0;
     	String transType = "buy";
@@ -421,7 +437,7 @@ public class CloudDatabase
         return true;
     }
     
-    private boolean addBuySellDetail(Transaction transaction)
+    private boolean addBuySellDetail(BuySellTransaction transaction)
     {
     	try {
     		stmt = conn.createStatement();
@@ -437,6 +453,33 @@ public class CloudDatabase
 	            		transaction.getStockCode() + "','" +
 	            		transaction.getQuantity() + "','" +
 	            		transaction.getPrice() + "')");
+			}
+			results.close();
+			stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean addSendReceiveDetail(SendReceiveTransaction transaction)
+    {
+    	try {
+    		stmt = conn.createStatement();
+    		ResultSet results = stmt.executeQuery("SELECT transactionID FROM " + transactionTable + 
+    				" WHERE username = '" + transaction.getUsername() + 
+    				"' AND transactionType = '" + transaction.getTransactionType() + 
+    				"' AND postWinning = '" + transaction.getPostWinnings() + 
+    				"' ORDER BY transactionID DESC");
+			if (results.next())
+			{
+	            stmt.execute("insert into " + sendReceiveDetailTable + " values ('" +
+	            		results.getString(1) + "','" +
+	            		transaction.getPartnerUsername() + "','" +
+	            		transaction.getWinningAmount() + "')");
 			}
 			results.close();
 			stmt.close();
