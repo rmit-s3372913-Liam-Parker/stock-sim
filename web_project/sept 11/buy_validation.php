@@ -8,6 +8,7 @@ if(isset($_POST['buy-submit']))
 	$total = mysqli_escape_string($conn, $_POST['buy-total']);
 	$code = mysqli_escape_string($conn, $_POST['code']);
 	$share = mysqli_escape_string($conn, $_POST['share']);
+	$price = mysqli_escape_string($conn, $_POST['price']);
 	$date = date('Y-m-d H:i:s');
 	
 	// select winning field from player table
@@ -35,8 +36,8 @@ if(isset($_POST['buy-submit']))
 	
 	
 	// check if current money is 0
-	if($currentMoney != 0)
-	{
+	// if($currentMoney != 0)
+	// {
 		// check if purchase amount is greater than money on hand
 		if($currentMoney >= $total)
 		{
@@ -62,23 +63,67 @@ if(isset($_POST['buy-submit']))
 
 				// insert data for transaction table
 				$uname = $_SESSION['username'];
-				$sql .= "INSERT INTO transaction(username, transactionType, postWinning, timeOfTransaction) VALUES('$uname', 'Buy', '$result', '$date')";
+				$sql .= "INSERT INTO transaction(username, transactionType, postWinning, timeOfTransaction) VALUES('$uname', 'buy', '$result', '$date');";
+
+				$_SESSION['code'] = $code;
+				$_SESSION['share'] = $share;
+				$_SESSION['price'] = $price;
+				
+				// $sql = "SELECT transactionID FROM transaction WHERE username = '" . $_SESSION['username'] . "' AND transactionType = 'buy' AND postWinning = '" . $result . "' ORDER BY transactionID DESC LIMIT 1;";
+				// //print_r($sql);
+				// $result = mysqli_query($conn, $sql);
+				// $row = mysqli_fetch_assoc($result);
+				// $currentID = $row['transactionID'];
+				// print_r($currentID);
+				// "SELECT transactionID FROM transaction WHERE username = '" + transaction.getUsername() + 
+    // 				"' AND transactionType = '" + transaction.getTransactionType() + 
+    // 				"' AND postWinning = '" + transaction.getPostWinnings() + 
+    // 				"' ORDER BY transactionID DESC"
 
 				// get the last transactionID from transaction table
-				//$sql = "Select transactionID from transaction order by transactionID DESC LIMIT 1";
+				// $sql .= "Select transactionID from transaction order by transactionID DESC LIMIT 1;";
+				// $result = mysqli_query($conn, $sql);
+				// $row = mysqli_fetch_row($result);
+				// $currentID = $row['transactionID'];
 
 				// set database table for buySellDetail
-				// $sql .= "INSERT INTO buySellDetail(transactionID, stockId, quantity, price) VALUES('$lastID', '$code', '$share', '$total');";
+				// $sql .= "INSERT INTO buySellDetail(transactionID, stockId, quantity, price) VALUES('$currentID', '$code', '$share', '$total');";
+
+				//print_r($sql);
+				// if (mysqli_multi_query($conn, $sql))
+				// {
+		  //         $query = "SELECT transactionID FROM transaction WHERE username = '" . $_SESSION['username'] . "' AND transactionType = 'buy' AND postWinning = '" . $result . "' ORDER BY transactionID DESC LIMIT 1;";
+		  //         $result = mysqli_query($conn, $query);
+		  //         $row = mysqli_fetch_assoc($result);
+		  //         $currentID = $row['transactionID'];
+		          
+		          
+		  //         $query = "INSERT INTO buySellDetail(transactionID, stockId, quantity, price) VALUES('$currentID', '$code', '$share', '$total');";
+		  //         mysqli_query($conn, $query);
+				// }
+				// 	if($conn->query($sql) == TRUE)
+				// 	{
+				// 		header('location: dashboard.php');
+				// 	}
+					
 				
 				if (mysqli_multi_query($conn, $sql))
 				{
-					echo 'Query executed';
-					header('location: dashboard.php');
+					//echo 'Query executed';
+					include 'buySellDetail.php';
+
+					//header('location: dashboard.php');
+
+
 				}
+
 			// if($conn->query($sql) == TRUE)
 			// {
 			// 	header('location: dashboard.php');
 			// }
+
+
+
 			
 		}
 		else
@@ -86,19 +131,20 @@ if(isset($_POST['buy-submit']))
 			$_SESSION['error_buy'] = "Please check your credits.";
 			header('location: stock_list.php');
 		}
-	}
-	else
-	{
-		$_SESSION['error_buy'] = "Please check your credits.";
-		header('location: stock_list.php');
+	// }
+	// else
+	// {
+	// 	$_SESSION['error_buy'] = "Please check your credits.";
+	// 	header('location: stock_list.php');
 
-	}
+	// }
 
 	mysqli_close($conn);
+
+	
 
 
 
 }
 
 ?>
-
