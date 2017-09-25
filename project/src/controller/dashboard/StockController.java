@@ -11,6 +11,7 @@ import model.PlayerStats;
 import model.Stock;
 import model.TransactionType;
 import model.UserDetails;
+import view.PlayerStatsView;
 import view.StockView;
 
 public class StockController extends Controller implements ChangeListener<String>
@@ -151,6 +152,7 @@ public class StockController extends Controller implements ChangeListener<String
 					null);
 
 			getModel().getCloudDatabase().executeTransaction(transaction);
+			PlayerStatsView.SetCurrentEarnings(getModel().getCloudDatabase().getCurrentPlayerStats(curUser).getCurrentEarnings());
 		}
 		catch(NumberFormatException e) { e.printStackTrace(); }
 	}
