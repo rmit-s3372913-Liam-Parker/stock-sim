@@ -17,8 +17,8 @@ import view.StockApplication;
 
 public abstract class Controller implements EventHandler<ActionEvent> 
 {
-	private static final int POPUP_WIDTH = 300;
-	private static final int POPUP_HEIGHT = 150;
+	protected static final int POPUP_WIDTH = 300;
+	protected static final int POPUP_HEIGHT = 150;
 	private boolean hasConfirmedDialog = false;
 	
 	/**

@@ -20,6 +20,8 @@ public class DashboardView extends BorderPane
 	private LeaderboardView leaderboardView = new LeaderboardView();
 	private PlayerStatsView statsView = new PlayerStatsView();
 	private CompanyView companyView = new CompanyView();
+	private Button logout;
+	private Button sendWinning;
 	
 	private static final float PADDING = 3.5f;
 	
@@ -37,10 +39,15 @@ public class DashboardView extends BorderPane
 	private void populate()
 	{
 		// Populate tool bar
-		Button logout = new Button("Log out");
-		logout.setOnAction(new ToolbarController());
+		logout = new Button("Log out");
+		logout.setOnAction(new ToolbarController(this));
+
+		sendWinning = new Button("Send Winning");
+		sendWinning.setOnAction(new ToolbarController(this));
 		
-		ToolBar toolBar = new ToolBar(logout);
+		ToolBar toolBar = new ToolBar();
+		
+        toolBar.getItems().addAll(logout, sendWinning);
 		
 		// Populate main dashboard UI
 		GridPane gridPane = new GridPane();
@@ -70,5 +77,10 @@ public class DashboardView extends BorderPane
 		
         this.setTop(toolBar);
         this.setCenter(gridPane);
+	}
+	
+	public Button getLogOutButton()
+	{
+		return logout;
 	}
 }

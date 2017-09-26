@@ -24,7 +24,7 @@ public class LeaderboardView extends BorderPane
 	Text title = new Text("Leaderboard");
 	CoreAPI core = StockApplication.getModel();
 	ObservableList<PlayerStats> leaderboardList = FXCollections.observableArrayList();
-	List<PlayerStats> info = core.getPlayerList();
+	List<PlayerStats> info;
 	final ListView<PlayerStats> leaderList = new ListView<>(leaderboardList);
 	
 	private final int DURATION = 10000;
@@ -60,6 +60,7 @@ public class LeaderboardView extends BorderPane
 	
 	private void refreshLeaderboardList()
 	{
+		info = core.getPlayerList();
 		leaderboardList.clear();
 		for(int i = 0; i < Math.min(10, info.size()); ++i)
 		{

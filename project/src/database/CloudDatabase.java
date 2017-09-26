@@ -116,7 +116,7 @@ public class CloudDatabase
     		try
             {
                 stmt = conn.createStatement();
-                int results = stmt.executeUpdate("UPDATE "
+                stmt.executeUpdate("UPDATE "
                 + playerTable + " SET pin="+ pin +"where username = '" + username + "'");
                 stmt.close();
                 return "DONE";
@@ -135,9 +135,9 @@ public class CloudDatabase
     		try
             {
                 stmt = conn.createStatement();
-                int results = stmt.executeUpdate("UPDATE "
-                + playerTable + " SET password="+ Hash.hashPassword(password) +"where username = '"
-                + username + "'");
+                stmt.executeUpdate("UPDATE " + playerTable
+                		+ " SET password=" + Hash.hashPassword(password) +
+                		"WHERE username = '" + username + "'");
                 stmt.close();
                 return "DONE";
             } 
@@ -228,7 +228,8 @@ public class CloudDatabase
 																		sendTransaction.getWinningAmount(),
 																		getCurrentPlayerStats(new UserDetails(sendTransaction.getPartnerUsername(), null)).getCurrentEarnings() + sendTransaction.getWinningAmount(),
 																		null);
-						if (changeWinning(receiveTransaction) 
+						if (insertTransaction(receiveTransaction)
+								&& changeWinning(receiveTransaction) 
 								&& addSendReceiveDetail(sendTransaction)
 								&& addSendReceiveDetail(receiveTransaction))
 						{
@@ -241,22 +242,6 @@ public class CloudDatabase
         	return DATABASE_ERROR;
         }
     	return NO_INTERNET;
-    }
-    
-    private boolean createConnection()
-    {
-        try
-        {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            //Get a connection
-            conn = DriverManager.getConnection(dbURL); 
-        }
-        catch (Exception except)
-        {
-            except.printStackTrace();
-            return false;
-        }
-        return true;
     }
     
     private boolean playerExist(String username){
@@ -379,7 +364,7 @@ public class CloudDatabase
     	try
         {
             stmt = conn.createStatement();
-            ResultSet results = stmt.executeQuery("select username, winning from " + playerTable + " where confirm = 'yes' order by winning desc");
+            ResultSet results = stmt.executeQuery("SELECT username, winning FROM " + playerTable + " WHERE confirm = 'yes' ORDER BY winning DESC");
             List<PlayerStats> players = new ArrayList<PlayerStats>();
             
             if (results.next())
@@ -392,7 +377,6 @@ public class CloudDatabase
         				String username = results.getString(1);
         				Double winnings = Double.parseDouble(results.getString(2));
         				players.add(new PlayerStats(username, winnings));
-        				
         			}
         		} 
         		catch (SQLException e) { e.printStackTrace(); }
@@ -627,6 +611,22 @@ public class CloudDatabase
     	}
     	
     	return quantity;
+    }
+    
+    private boolean createConnection()
+    {
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            //Get a connection
+            conn = DriverManager.getConnection(dbURL); 
+        }
+        catch (Exception except)
+        {
+            except.printStackTrace();
+            return false;
+        }
+        return true;
     }
     
     private void shutdown()
