@@ -2,6 +2,8 @@ package model;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import database.CloudDatabase;
@@ -101,5 +103,29 @@ public class CoreSystem implements CoreAPI
 	public PlayerStats getSessionStats() 
 	{
 		return cloudDatabase.getCurrentPlayerStats(curUserSession);
+	}
+
+	@Override
+	public String getUserEmailByUsername(String username) {
+		// TODO Auto-generated method stub
+		return cloudDatabase.getUserEmailByUsername(username);
+	}
+
+	@Override
+	public String updateUserPinByUsername(String username, String pin) {
+		// TODO Auto-generated method stub
+		return cloudDatabase.updateUserPin(username, pin);
+	}
+
+	@Override
+	public String updateUserPasswordByUsername(String username, String password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+		// TODO Auto-generated method stub
+		return cloudDatabase.updateUserPassword(username, password);
+	}
+
+	@Override
+	public String getUserPinByUsername(String username) {
+		// TODO Auto-generated method stub
+		return cloudDatabase.getUserPinByUsername(username);
 	}
 }

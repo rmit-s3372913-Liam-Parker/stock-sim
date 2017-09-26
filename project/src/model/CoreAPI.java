@@ -1,5 +1,7 @@
 package model;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import database.CloudDatabase;
@@ -78,4 +80,14 @@ public interface CoreAPI
 	 * @return Access to functions for querying the ASX marketplace.
 	 */
 	public ASXInterface getMarketInterface();
+	
+	public String getUserEmailByUsername(String username);
+	
+	public String getUserPinByUsername(String username);
+	
+	public String updateUserPinByUsername(String username,String pin);
+	
+	public String updateUserPasswordByUsername(String username,String password) throws UnsupportedEncodingException, NoSuchAlgorithmException;
+	
+	
 }

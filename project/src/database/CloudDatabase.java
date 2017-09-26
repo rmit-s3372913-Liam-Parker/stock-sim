@@ -86,6 +86,91 @@ public class CloudDatabase
     	return NO_INTERNET;
     }
 
+    public String getUserEmailByUsername(String username) {
+    	
+    	if (createConnection())
+        {
+    		try
+            {
+                stmt = conn.createStatement();
+                ResultSet results = stmt.executeQuery("select * from "
+                + playerTable + " where username = '" + username + "'");
+                if (results.next()){
+                	String email = results.getString("email");
+                    stmt.close();
+                	return email;
+                }
+                stmt.close();
+            } 
+        	catch (SQLException sqlExcept) { sqlExcept.printStackTrace(); }
+        	shutdown();
+        	return USER_UNCONFIRMED;
+        }
+    	return NO_INTERNET;
+    }
+    
+    public String updateUserPin(String username,String pin) {
+    	
+    	if (createConnection())
+        {
+    		try
+            {
+                stmt = conn.createStatement();
+                int results = stmt.executeUpdate("UPDATE "
+                + playerTable + " SET pin="+ pin +"where username = '" + username + "'");
+                stmt.close();
+                return "DONE";
+            } 
+        	catch (SQLException sqlExcept) { sqlExcept.printStackTrace(); }
+        	shutdown();
+        	return USER_UNCONFIRMED;
+        }
+    	return NO_INTERNET;
+    }
+    
+    public String updateUserPassword(String username,String password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    	
+    	if (createConnection())
+        {
+    		try
+            {
+                stmt = conn.createStatement();
+                int results = stmt.executeUpdate("UPDATE "
+                + playerTable + " SET password="+ Hash.hashPassword(password) +"where username = '"
+                + username + "'");
+                stmt.close();
+                return "DONE";
+            } 
+        	catch (SQLException sqlExcept) { sqlExcept.printStackTrace(); }
+        	shutdown();
+        	return USER_UNCONFIRMED;
+        }
+    	return NO_INTERNET;
+    }
+    
+    public String getUserPinByUsername(String username) {
+    	if (createConnection())
+        {
+    		try
+            {
+                stmt = conn.createStatement();
+                ResultSet results = stmt.executeQuery("select * from "
+                + playerTable + " where username = '"
+                + username + "'");
+                if (results.next()){
+                	String pin = results.getString("pin");
+                    stmt.close();
+                	return pin;
+                }
+                stmt.close();
+            } 
+        	catch (SQLException sqlExcept) { sqlExcept.printStackTrace(); }
+        	shutdown();
+        	return USER_UNCONFIRMED;
+        }
+    	return NO_INTERNET;
+    }
+    
     public String confirm(UserDetails user, String pin)
     {
         if (createConnection())
