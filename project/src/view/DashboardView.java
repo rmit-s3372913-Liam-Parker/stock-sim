@@ -4,6 +4,7 @@ import controller.dashboard.ToolbarController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -47,7 +48,7 @@ public class DashboardView extends BorderPane
 		
 		ToolBar toolBar = new ToolBar();
 		
-        toolBar.getItems().addAll(logout, sendWinning);
+        toolBar.getItems().addAll(logout, new Separator(), sendWinning);
 		
 		// Populate main dashboard UI
 		GridPane gridPane = new GridPane();

@@ -1,12 +1,19 @@
 package view;
 
+import java.util.Random;
+
 import controller.dashboard.StockController;
 import interfaces.StockSelectedCallback;
 import javafx.geometry.Pos;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -19,6 +26,7 @@ public class StockView extends BorderPane implements StockSelectedCallback
 	Text title = new Text("No Stock Selected");
 	
 	GridPane stockInfoPane = new GridPane();
+	HBox horizontalLayout = new HBox();
 	
 	Text stockValueText = new Text();
 	Text brokerFeeText = new Text();
@@ -29,6 +37,10 @@ public class StockView extends BorderPane implements StockSelectedCallback
 	Button buyBtn = new Button("Buy");
 	Button sellBtn = new Button("Sell");
 	StockController controller = new StockController(this);
+	
+	NumberAxis x = new NumberAxis();
+	NumberAxis y = new NumberAxis();
+	final LineChart<Number,Number> stockHistoryChart = new LineChart<Number,Number>(x,y);
 	
 	public StockView()
 	{
@@ -51,7 +63,6 @@ public class StockView extends BorderPane implements StockSelectedCallback
 		quantityField.textProperty().addListener(controller);
 		
 		// Build stock information view
-		stockInfoPane.setAlignment(Pos.CENTER);
 		stockInfoPane.add(stockValueText,         0, 0);
 		stockInfoPane.add(brokerFeeText,          0, 1);
 		stockInfoPane.add(purchaseFeeText,        0, 2);
@@ -60,6 +71,12 @@ public class StockView extends BorderPane implements StockSelectedCallback
 		stockInfoPane.add(quantityField,          1, 4);
 		stockInfoPane.add(buyBtn,                 0, 5);
 		stockInfoPane.add(sellBtn,                1, 5);
+		
+		//TODO: REMOVE ONCE WE HAVE HISTORY WORKING
+		generateFakeChartData();
+		
+		horizontalLayout.getChildren().addAll(stockInfoPane, stockHistoryChart);
+		HBox.setHgrow(stockHistoryChart, Priority.ALWAYS);  
 	}
 	
 	//create a view upon clicking on a stock
@@ -75,7 +92,8 @@ public class StockView extends BorderPane implements StockSelectedCallback
 		title.setText(stock.getCode());
 		this.setTop(title);
 		
-		this.setCenter(stockInfoPane);
+		this.setCenter(horizontalLayout);
+		generateFakeChartData();
 	}
 	
 	public Button getBuyButton()
@@ -111,5 +129,43 @@ public class StockView extends BorderPane implements StockSelectedCallback
 	public TextField getQuantityField()
 	{
 		return quantityField;
+	}
+	
+	/*
+	 * Purely for testing purposes.
+	 * Utilizing: https://stackoverflow.com/questions/40431966/what-is-the-best-way-to-generate-a-random-float-value-included-into-a-specified
+	 * Unintended for any commercial release.
+	 */
+	private void generateFakeChartData()
+	{
+		stockHistoryChart.getData().clear();
+		
+		XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+		series1.setName("Last Price");
+		for(int i = 1; i <= 12; ++i)
+		{
+			double random = 10.0 + Math.random() * (90.0 - 10.0);
+			series1.getData().add(new XYChart.Data<>(i, random));
+		}
+		stockHistoryChart.getData().add(series1);
+		
+		XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
+		series2.setName("Open Price");
+		for(int i = 1; i <= 12; ++i)
+		{
+			double random = 0.1 + Math.random() * (100.0);
+			series2.getData().add(new XYChart.Data<>(i, random));
+		}
+		stockHistoryChart.getData().add(series2);
+		
+		XYChart.Series<Number, Number> series3 = new XYChart.Series<>();
+		series3.setName("Close Price");
+		for(int i = 1; i <= 12; ++i)
+		{
+			double random = 0.1 + Math.random() * (100.0);
+			series3.getData().add(new XYChart.Data<>(i, random));
+		}
+		stockHistoryChart.getData().add(series3);
+
 	}
 }
