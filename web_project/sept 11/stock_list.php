@@ -27,18 +27,21 @@ $records = mysqli_query($conn, $sql);
       Price &nbsp <input type="text" name="price" id="price-input" size="12"> &nbsp
       Share &nbsp <input type="number" name="share" id="share-input" size="12" step="10" min="0">
       
+      <!-- Buy button open modal -->
       <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#buy-function-modal" id="buy-button">Buy</button>
 
-      <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#sell-function-modal" id="sell-button">Sell</button>
+
+      <!-- <!-- Sell button open modal --
+      <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#sell-function-modal" id="sell-button">Sell</button> -->
     </form>
   </div>
   <br>
-  <!-- bootstrap tab stock_summary.php -->
+  <!-- bootstrap TAB stock_summary.php -->
   <div class="container">
     <ul class="nav nav-tabs">
       <li class="active"><a data-toggle="tab" href="#summary">Summary</a></li>
       <li><a data-toggle="tab" href="#top5">Top 5</a></li>
-      <li><a data-toggle="tab" href="#">Stocks</a></li>
+      <li><a data-toggle="tab" href="#transaction">Transaction</a></li>
       <li><a data-toggle="tab" href="#chart">Charts</a></li>
     </ul>
   </div>
@@ -83,15 +86,12 @@ $records = mysqli_query($conn, $sql);
                     </tr>
                     <tr>
                         <th>Total:</th>
-<<<<<<< Updated upstream
-                        <td><p id="Total" name="Total" readonly></p></td>
-=======
-                        <td><input type="text" id="buy-total" name="buy-total" value="calcTotalBuy()"></td>
+                        <td><input type="text" id="buy-total" name="buy-total" value="calcTotalBuy()" readonly/></td>
                     </tr>
             </table>
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
             
-            <button type="submit" class="btn btn-success success" id="buy-submit" name="buy-submit">Submit</button>
+            <button type="submit" class="btn btn-success success" id="buy-submit" name="buy-submit">Confirm</button>
 
             </form>
             <!-- end of form -->
@@ -124,7 +124,7 @@ $records = mysqli_query($conn, $sql);
         </div>
         <div class="modal-body">
           <div class="text-center">
-            
+            <form action="sell_validation.php" method="POST">
             <table class="table">
                     <tr>
                         <th>Code</th>
@@ -148,18 +148,18 @@ $records = mysqli_query($conn, $sql);
                     </tr>
                     <tr>
                         <th>Total:</th>
-                        <td id="sell-total" name="sell-total"></td>
->>>>>>> Stashed changes
+                        <td><input type="text" id="sell-total" name="sell-total" value="calcTotalSell()" readonly/></td>
                     </tr>
-                </table>
-            
+             </table>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              <button type="submit" class="btn btn-success success" id="sell-submit" name="sell-submit">Submit</button>
+              </form>
           </div>
         </div>
 
         <div class="modal-footer">
           <div class="col-md-12">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-            <a href="" id="sell-submit" class="btn btn-success success">Submit</a>
+            
           </div>
         </div>
       </div>
@@ -180,14 +180,14 @@ $records = mysqli_query($conn, $sql);
                     {
                          //rIndex = this.rowIndex;
                          document.getElementById("code-input").value = this.cells[0].innerHTML;
-                         document.getElementById("price-input").value = this.cells[1].innerHTML;
-                         document.getElementById("share-input").value = this.cells[2].innerHTML;
+                         document.getElementById("price-input").value = this.cells[2].innerHTML;
+                         document.getElementById("share-input").value = this.cells[3].innerHTML;
                     };
                 }
     
     </script>
 
-  <!-- Buy-function to display selection to modal -->
+  <!-- Buy-function script to display selection to modal -->
   <script>
     $('#buy-button').click(function(){
       $('#code').val($('#code-input').val());
@@ -198,19 +198,20 @@ $records = mysqli_query($conn, $sql);
     });
   </script>
 
-  <!-- Sell-function to display selection to modal -->
-  <script>
+  <!-- Sell-function script to display selection to modal -->
+  <!-- <script>
     $('#sell-button').click(function(){
       $('#s-code').val($('#code-input').val());
       $('#s-price').val($('#price-input').val());
       $('#s-share').val($('#share-input').val());
+      
       calcTotalSell();
     });
-  </script>
+  </script> -->
 
   
 
-    <!-- Buy function -->
+    <!-- Buy function script -->
     <script>
       function calcTotalBuy()
       {
@@ -226,22 +227,21 @@ $records = mysqli_query($conn, $sql);
 
     </script>
 
-    <!-- Sell function -->
-    <script>
+    <!-- Sell function script -->
+    <!-- <script>
       function calcTotalSell()
       {
-        var price = parseFloat(document.getElementById('price').value);
-        var share = parseFloat(document.getElementById('share').value);
+        var price = parseFloat(document.getElementById('s-price').value);
+        var share = parseFloat(document.getElementById('s-share').value);
         var sub = price * share + 50;
         var percent = sub * 0.0025;
-        var percent = sub * 0.01;
         var total = (sub + percent).toFixed(2);
 
-        document.getElementById("sell-total").innerHTML = total;
+        document.getElementById("sell-total").value = total;
       }
 
 
-    </script>
+    </script> -->
 
 
 

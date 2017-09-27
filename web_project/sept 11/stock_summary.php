@@ -17,48 +17,21 @@ include 'connection.php';
 				      </tr>
 				    </thead>
 				    <tbody>
-				      <?php
-				      $url = "http://download.finance.yahoo.com/d/quotes.csv?s=^AORD+BHP.AX+BLT.L+AAPL+EBAY+^NDX+ASX.AX&f=snl1c";
-
-						$line = file_get_contents($url);
-
-						$data =  nl2br($line);
-
-						$company = explode("\n", $data);
-						for ($i = 0; $i<count($company)-1; $i++)
-						{
-						  // display
-						  // code
-						  // description
-						  // current price
-						  // change
-						  $row = explode(",", $company[$i]);
-						  $row[0] = substr($row[0], 1, -1);
-						  $row[1] = substr($row[1], 1, -1);
-						  echo "\t<tr>\r\n"
-						  . "\t\t<td>" . $row[0] . "</td>"
-						  . "\t\t<td>" . $row[1] . "</td>"
-						  . "\t\t<td>" . $row[2] . "</td>"
-						  . "\t\t<td>" . $row[3] . "</td>"
-						  . "\t</tr>";
-
-						  $_SESSION['current_Price'] = $row[2];
-						}
-				      ?>
+				      <?php include 'read_asx_csv.php'; ?>
 				    </tbody>
 				</table>
 			</div>
 
 			<div id="top5" class="tab-pane fade">
-		      <?php include 'top5.php' ?>
+		      <?php //include 'top5.php' ?>
 		    </div>
 
-		    <div>
-		    	<!-- ?php include 'history.php' ? -->
+		    <div id="transaction" class="tab-pane fade">
+		    	<?php include 'transaction_dates.php' ?>
 		    </div>
 
 		    <div id="chart" class="tab-pane fade">
-		    	<?php include 'history.php' ?>
+		    	<?php //include 'history.php' ?>
 		    </div>
 		    
 

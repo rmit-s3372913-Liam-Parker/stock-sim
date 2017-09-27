@@ -9,7 +9,8 @@ if(isset($_POST['sell-submit']))
 	$code = mysqli_escape_string($conn, $_POST['code']);
 	$price = mysqli_escape_string($conn, $_POST['price']);
 	$share = mysqli_escape_string($conn, $_POST['share']);
-	
+	$date = date('Y-m-d H:i:s');
+
 	$sql = "select winning FROM player WHERE username = '" . $_SESSION['username'] . "'";
 	$result = mysqli_query($conn, $sql);
 	$row = mysqli_fetch_assoc($result);
@@ -33,10 +34,18 @@ if(isset($_POST['sell-submit']))
 
 		$sql .= "DELETE from stock where stockQuantity = '0';";
 
+		$uname = $_SESSION['username'];
+		$sql .= "INSERT INTO transaction(username, transactionType, postWinning, timeOfTransaction) VALUES('$uname', 'sell', '$result', '$date');";
+
+		$_SESSION['code'] = $code;
+		$_SESSION['share'] = $share;
+		$_SESSION['price'] = $price;
+
 		if (mysqli_multi_query($conn, $sql))
 				{
 					//echo 'Query executed';
 					$_SESSION['stock_message'] = "Success";
+					include 'buySellDetail.php';
 					header('location: dashboard.php');
 
 
