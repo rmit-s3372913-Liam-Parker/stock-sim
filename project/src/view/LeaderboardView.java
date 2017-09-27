@@ -1,12 +1,8 @@
 package view;
 
 import java.util.List;
-import java.util.TimerTask;
-
-import javax.swing.Timer;
 
 import javafx.animation.Animation;
-import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;

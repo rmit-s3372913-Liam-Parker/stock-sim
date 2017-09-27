@@ -360,23 +360,50 @@ public class CloudDatabase
         }
     }
     
-    public List<PlayerStats> getHighScore(){
+    public List<PlayerStats> getHighScore()
+    {
     	try
         {
             stmt = conn.createStatement();
-            ResultSet results = stmt.executeQuery("SELECT username, winning FROM " + playerTable + " WHERE confirm = 'yes' ORDER BY winning DESC");
+            ResultSet results = stmt.executeQuery("SELECT username, winning"
+					            				+ " FROM " + playerTable + ""
+					            				+ " WHERE confirm = 'yes'"
+					            				+ " ORDER BY winning DESC");
             List<PlayerStats> players = new ArrayList<PlayerStats>();
+
+			while(results.next())
+			{
+				String username = results.getString(1);
+				Double winnings = Double.parseDouble(results.getString(2));
+				players.add(new PlayerStats(username, winnings));
+			}
+            
+            stmt.close();
+        	shutdown();
+            return players;
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+    	shutdown();
+    	return null;
+    }
+    
+    public List<String> getFriend(String username){
+    	try
+        {
+            stmt = conn.createStatement();
+            ResultSet results = stmt.executeQuery("SELECT * FROM " + playerTable + " WHERE username !='" + username + "'");
+            List<String> players = new ArrayList<String>();
             
             if (results.next())
             {
-            	
         		try 
         		{
         			while(results.next())
         			{
-        				String username = results.getString(1);
-        				Double winnings = Double.parseDouble(results.getString(2));
-        				players.add(new PlayerStats(username, winnings));
+        				players.add(results.getString(1));
         			}
         		} 
         		catch (SQLException e) { e.printStackTrace(); }

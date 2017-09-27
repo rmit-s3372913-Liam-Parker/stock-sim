@@ -1,5 +1,6 @@
 package controller.dashboard;
 
+import java.util.List;
 import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,8 +16,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
-import model.SendReceiveTransaction;
-import model.TransactionType;
+import ultilities.NumberField;
 import view.DashboardView;
 import view.LoginView;
 
@@ -26,10 +26,9 @@ import view.LoginView;
 public class ToolbarController extends Controller
 {
 	private static final String LOG_OUT_CONFIRMATION_MESSAGE = "Are you sure you want to log out?";
+	private static final String NO_FRIEND = "No friend was found or server error, please try again";
 	
 	private DashboardView view;
-	private Text logoutTitle = new Text(LOG_OUT_CONFIRMATION_MESSAGE);
-	private boolean send;
 	public TextField winningField= new TextField();
 	
 	public ToolbarController(DashboardView view)
@@ -37,6 +36,7 @@ public class ToolbarController extends Controller
 		this.view = view;
 	}
 	
+	//check which button was pressed then execute appropriate function
 	@Override
 	public void handle(ActionEvent event) 
 	{
@@ -47,13 +47,11 @@ public class ToolbarController extends Controller
 				this.getModel().endSession();
 				this.switchView(new LoginView());
 			}
-		} else if(!this.displaySendModal())
-		{
-			//error handling/message
-		}
+		} else 
+			displaySendModal();
 	}
 
-	private boolean displaySendModal()
+	private void displaySendModal()
 	{
 		// Create frame for modal window
 		Stage dialog = new Stage();
@@ -69,11 +67,56 @@ public class ToolbarController extends Controller
 		btnBox.setSpacing(5.0f);
 		Scene scene = new Scene(pane, POPUP_WIDTH, 600);
 		
-		ComboBox<String> comboBox = new ComboBox<String>();
-		comboBox.getItems().addAll("n", "q");
+		//setting up input field and select box
+		NumberField.numberField(winningField);
+		ComboBox<String> friendUsername = new ComboBox<String>();
+		friendUsername.setVisibleRowCount(3);
+		
+		//get list of user from database
+		List<String> friend = getModel().getCloudDatabase().getFriend(getModel().getSessionDetails().getUsername());
+		
+		//setting up label
 		Label winning = new Label("Winning");
 		Label receiver = new Label("Receiver");
+		Text alert = new Text();
 
+		//check if user list is empty
+		if (!friend.isEmpty())
+		{
+			//insert username into slect box
+			int count = 0;
+			friendUsername.setValue(friend.get(count));
+			do 
+				friendUsername.getItems().add(friend.get(count++));
+			while(friend.size()>count);
+		}
+		else
+		{
+			//alert the user
+			alert.setText(NO_FRIEND);
+			Button cancelButton = new Button("Cancel");
+			cancelButton.setOnAction(new EventHandler<ActionEvent>() 
+			{
+				@Override 
+				public void handle(ActionEvent e) 
+				{
+					dialog.hide();
+				}
+			});
+			
+			btnBox.getChildren().addAll(cancelButton);
+			vBox.getChildren().addAll(alert, btnBox);
+			pane.setCenter(vBox);
+			
+			
+			// Configure modal functionality and display
+			dialog.setScene(scene);
+			dialog.initOwner(this.getStage());
+			dialog.initModality(Modality.APPLICATION_MODAL); 
+			dialog.showAndWait();
+			return;
+		}
+		
 		// Configure options and add them
 		Button sendButton = new Button("Send");
 		sendButton.setOnAction(new EventHandler<ActionEvent>()
@@ -81,9 +124,7 @@ public class ToolbarController extends Controller
 			@Override 
 			public void handle(ActionEvent e) 
 			{
-				dialog.hide();
-				new SendController(comboBox.getValue(), Double.parseDouble(winningField.getText()));
-				send = true;
+				new SendController(dialog, alert, friendUsername.getValue(), Double.parseDouble(winningField.getText()));
 			}
 		});
 				
@@ -94,12 +135,11 @@ public class ToolbarController extends Controller
 			public void handle(ActionEvent e) 
 			{
 				dialog.hide();
-				send = false;
 			}
 		});
 				
 		btnBox.getChildren().addAll(sendButton, cancelButton);
-		vBox.getChildren().addAll(new Text(), receiver, comboBox, winning, winningField, btnBox);
+		vBox.getChildren().addAll(alert, receiver, friendUsername, winning, winningField, btnBox);
 		pane.setCenter(vBox);
 		
 		
@@ -108,7 +148,5 @@ public class ToolbarController extends Controller
 		dialog.initOwner(this.getStage());
 		dialog.initModality(Modality.APPLICATION_MODAL); 
 		dialog.showAndWait();
-
-		return send;
 	}
 }

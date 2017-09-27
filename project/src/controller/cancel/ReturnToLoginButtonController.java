@@ -6,6 +6,7 @@ import view.LoginView;
 
 public class ReturnToLoginButtonController  extends Controller
 {
+	//return the user's view to login
 	@Override
 	public void handle(ActionEvent event) 
 	{
@@ -13,5 +14,4 @@ public class ReturnToLoginButtonController  extends Controller
 		
 		event.consume();
 	}
-
 }

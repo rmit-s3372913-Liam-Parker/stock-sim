@@ -37,13 +37,16 @@ public class StockView extends BorderPane implements StockSelectedCallback
 	
 	public void populate()
 	{
+		//setting up title
 		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		this.setCenter(title);
 		BorderPane.setAlignment(title, Pos.CENTER);
 		
+		//setting up buttons
 		buyBtn.setOnAction(controller);
 		sellBtn.setOnAction(controller);
 		
+		//setting up input field
 		NumberField.numberField(quantityField);
 		quantityField.textProperty().addListener(controller);
 		
@@ -59,6 +62,7 @@ public class StockView extends BorderPane implements StockSelectedCallback
 		stockInfoPane.add(sellBtn,                1, 5);
 	}
 	
+	//create a view upon clicking on a stock
 	@Override
 	public void stockSelected(CompanyInfo data)
 	{
