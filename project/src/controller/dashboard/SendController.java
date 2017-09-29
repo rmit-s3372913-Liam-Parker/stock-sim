@@ -35,13 +35,14 @@ public class SendController extends Controller
 							time);
 		
 		//check if sending more winning than available
-		if (postWinning<0){
+		if (postWinning<0)
+		{
 			alert.setText(NOT_ENOUGH);
 			return;
 		}
 		
 		//store the transaction on cloud database
-		if ((error = getModel().getCloudDatabase().executeTransaction(sendTransaction))==null)
+		if ((error = getModel().executeTransaction(sendTransaction)) == null)
 			dialog.hide();
 		else
 			alert.setText(error);

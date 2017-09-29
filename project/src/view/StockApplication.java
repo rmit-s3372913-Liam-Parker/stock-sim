@@ -1,10 +1,10 @@
 package view;
+import interfaces.CoreAPI;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import model.CoreAPI;
 import model.CoreSystem;
 
 /**

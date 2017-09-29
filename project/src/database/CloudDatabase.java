@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.util.Pair;
 import model.BuySellTransaction;
 import model.PlayerStats;
 import model.SendReceiveTransaction;
@@ -44,6 +45,11 @@ public class CloudDatabase
 
     public CloudDatabase() {}
     
+    /**
+     * Checks for a specific user in the database.
+     * @param user The username to check.
+     * @return An error in string form or null otherwise.
+     */
     public String usernameExists(String user)
     {
         if (createConnection())
@@ -59,7 +65,13 @@ public class CloudDatabase
         }
     	return NO_INTERNET;
     }
-
+    
+    /**
+     * Registers a new user with the system
+     * @param user user details for registration
+     * @param pin An authentication pin to be mailed to the user.
+     * @return An error in string form or null otherwise.
+     */
     public String register(UserDetails user, String pin)
     {
         if (createConnection())
@@ -73,6 +85,11 @@ public class CloudDatabase
     	return NO_INTERNET;
     }
     
+    /**
+     * Logs a user into the game.
+     * @param user The user to login.
+     * @return An error in string form or null otherwise.
+     */
     public String login(UserDetails user)
     {
         if (createConnection())
@@ -86,6 +103,96 @@ public class CloudDatabase
     	return NO_INTERNET;
     }
 
+    public int getNumStockOwned(String username, String stockCode)
+    {
+	    int quantity = 0;
+    	try 
+    	{
+    		stmt = conn.createStatement();
+    		ResultSet results = stmt.executeQuery("SELECT stockQuantity FROM " + stockTable + 
+    				" WHERE username = '" + username + "' AND stockID = '" + stockCode + "'");
+    		
+			while(results.next())
+			{
+			    quantity = Integer.parseInt((results.getString(1)));
+			}
+			
+			results.close();
+			stmt.close();
+		} 
+    	catch (SQLException sqlExcept) 
+    	{ 
+    		quantity = QUANTITY_ERROR;
+    		sqlExcept.printStackTrace(); 
+    	}
+    	
+    	return quantity;
+    }
+    
+    public List<Pair<String, String>> getAllStockOwned(String username)
+    {
+    	List<Pair<String, String>> owned = new ArrayList<>();
+    	
+    	try 
+    	{
+    		stmt = conn.createStatement();
+    		ResultSet results = stmt.executeQuery("SELECT stockID, stockQuantity FROM " + stockTable + 
+    				" WHERE username = '" + username + "'");
+    		
+			while(results.next())
+			{
+				owned.add(new Pair<String, String>(results.getString(1), results.getString(2)));
+			}
+			
+			results.close();
+			stmt.close();
+		} 
+    	catch (SQLException sqlExcept) 
+    	{ 
+    		sqlExcept.printStackTrace(); 
+    	}
+    	
+    	return owned;
+    }
+    
+    //TODO: Fix this function? I assume it is incorrect..
+    public List<String> getFriends(String username)
+    {
+    	try
+        {
+            stmt = conn.createStatement();
+            ResultSet results = stmt.executeQuery("SELECT * FROM " + playerTable + " WHERE username !='" + username + "'");
+            List<String> players = new ArrayList<String>();
+            
+            if (results.next())
+            {
+        		try 
+        		{
+        			while(results.next())
+        			{
+        				players.add(results.getString(1));
+        			}
+        		} 
+        		catch (SQLException e) { e.printStackTrace(); }
+            }
+            
+            stmt.close();
+        	shutdown();
+            return players;
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+    	shutdown();
+    	return null;
+    }
+    
+    /**
+     * Finds the email owned by a specific username.
+     * @param username the username
+     * @return The email associated to the username.
+     */
     public String getUserEmailByUsername(String username) {
     	
     	if (createConnection())
@@ -109,46 +216,13 @@ public class CloudDatabase
     	return NO_INTERNET;
     }
     
-    public String updateUserPin(String username,String pin) {
-    	
-    	if (createConnection())
-        {
-    		try
-            {
-                stmt = conn.createStatement();
-                stmt.executeUpdate("UPDATE "
-                + playerTable + " SET pin="+ pin +"where username = '" + username + "'");
-                stmt.close();
-                return "DONE";
-            } 
-        	catch (SQLException sqlExcept) { sqlExcept.printStackTrace(); }
-        	shutdown();
-        	return USER_UNCONFIRMED;
-        }
-    	return NO_INTERNET;
-    }
-    
-    public String updateUserPassword(String username,String password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-    	
-    	if (createConnection())
-        {
-    		try
-            {
-                stmt = conn.createStatement();
-                stmt.executeUpdate("UPDATE " + playerTable
-                		+ " SET password=" + Hash.hashPassword(password) +
-                		"WHERE username = '" + username + "'");
-                stmt.close();
-                return "DONE";
-            } 
-        	catch (SQLException sqlExcept) { sqlExcept.printStackTrace(); }
-        	shutdown();
-        	return USER_UNCONFIRMED;
-        }
-    	return NO_INTERNET;
-    }
-    
-    public String getUserPinByUsername(String username) {
+    /**
+     * Returns the authentication pin associated to a username.
+     * @param username The username
+     * @return The pin associated to the username
+     */
+    public String getUserPinByUsername(String username) 
+    {
     	if (createConnection())
         {
     		try
@@ -171,6 +245,93 @@ public class CloudDatabase
     	return NO_INTERNET;
     }
     
+    public PlayerStats getCurrentPlayerStats(UserDetails user)
+    {
+	    Double winning = 0.0;
+	    
+    	try 
+    	{
+    		stmt = conn.createStatement();
+    		ResultSet results = stmt.executeQuery("SELECT winning FROM " + playerTable + " WHERE username = '" + user.getUsername() + "'");
+    		
+			while(results.next())
+			{
+			    winning = Double.parseDouble(results.getString(1));
+			}
+			
+			results.close();
+			stmt.close();
+		} 
+    	catch (SQLException sqlExcept) 
+    	{ 
+    		winning = WINNING_ERROR;
+    		sqlExcept.printStackTrace(); 
+    	}
+    	
+    	return new PlayerStats(user.getUsername(), winning);
+    }
+    
+    /**
+     * Sets the authentication pin for a given user
+     * @param username the username
+     * @param pin The authentication pin
+     * @return An error in string form or null otherwise.
+     */
+    public String setUserPin(String username,String pin) 
+    {
+    	
+    	if (createConnection())
+        {
+    		try
+            {
+                stmt = conn.createStatement();
+                stmt.executeUpdate("UPDATE "
+                + playerTable + " SET pin="+ pin +"where username = '" + username + "'");
+                stmt.close();
+                return "DONE";
+            } 
+        	catch (SQLException sqlExcept) { sqlExcept.printStackTrace(); }
+        	shutdown();
+        	return USER_UNCONFIRMED;
+        }
+    	return NO_INTERNET;
+    }
+    
+    /**
+     * Sets the password for a given user
+     * @param username The username
+     * @param password The new password
+     * @return An error in string form or null otherwise.
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     */
+    public String setUserPassword(String username,String password) throws UnsupportedEncodingException, NoSuchAlgorithmException 
+    {
+    	
+    	if (createConnection())
+        {
+    		try
+            {
+                stmt = conn.createStatement();
+                stmt.executeUpdate("UPDATE " + playerTable
+                		+ " SET password=" + Hash.hashPassword(password) +
+                		"WHERE username = '" + username + "'");
+                stmt.close();
+                return "DONE";
+            } 
+        	catch (SQLException sqlExcept) { sqlExcept.printStackTrace(); }
+        	shutdown();
+        	return USER_UNCONFIRMED;
+        }
+    	return NO_INTERNET;
+    }
+    
+    /**
+     * Confirms a user with the database by comparing the pin with expected.
+     * @param user The username
+     * @param pin The given pin
+     * @return An error in string form or null otherwise.
+     */
     public String confirm(UserDetails user, String pin)
     {
         if (createConnection())
@@ -187,7 +348,7 @@ public class CloudDatabase
     	return NO_INTERNET;
     }
     
-    public String confirmedUser(UserDetails user)
+    public String isConfirmedUser(UserDetails user)
     {
         if (createConnection())
         {
@@ -390,37 +551,6 @@ public class CloudDatabase
     	return null;
     }
     
-    public List<String> getFriend(String username){
-    	try
-        {
-            stmt = conn.createStatement();
-            ResultSet results = stmt.executeQuery("SELECT * FROM " + playerTable + " WHERE username !='" + username + "'");
-            List<String> players = new ArrayList<String>();
-            
-            if (results.next())
-            {
-        		try 
-        		{
-        			while(results.next())
-        			{
-        				players.add(results.getString(1));
-        			}
-        		} 
-        		catch (SQLException e) { e.printStackTrace(); }
-            }
-            
-            stmt.close();
-        	shutdown();
-            return players;
-        }
-        catch (SQLException sqlExcept)
-        {
-            sqlExcept.printStackTrace();
-        }
-    	shutdown();
-    	return null;
-    }
-    
     private boolean insertTransaction(Transaction transaction)
     {
     	String transType = "buy";
@@ -586,58 +716,6 @@ public class CloudDatabase
             return false;
         }
         return true;
-    }
-    
-    public PlayerStats getCurrentPlayerStats(UserDetails user)
-    {
-	    Double winning = 0.0;
-	    
-    	try 
-    	{
-    		stmt = conn.createStatement();
-    		ResultSet results = stmt.executeQuery("SELECT winning FROM " + playerTable + " WHERE username = '" + user.getUsername() + "'");
-    		
-			while(results.next())
-			{
-			    winning = Double.parseDouble(results.getString(1));
-			}
-			
-			results.close();
-			stmt.close();
-		} 
-    	catch (SQLException sqlExcept) 
-    	{ 
-    		winning = WINNING_ERROR;
-    		sqlExcept.printStackTrace(); 
-    	}
-    	
-    	return new PlayerStats(user.getUsername(), winning);
-    }
-    
-    public int getStockQuantity(String username, String stockCode)
-    {
-	    int quantity = 0;
-    	try 
-    	{
-    		stmt = conn.createStatement();
-    		ResultSet results = stmt.executeQuery("SELECT stockQuantity FROM " + stockTable + 
-    				" WHERE username = '" + username + "' AND stockID = '" + stockCode + "'");
-    		
-			while(results.next())
-			{
-			    quantity = Integer.parseInt((results.getString(1)));
-			}
-			
-			results.close();
-			stmt.close();
-		} 
-    	catch (SQLException sqlExcept) 
-    	{ 
-    		quantity = QUANTITY_ERROR;
-    		sqlExcept.printStackTrace(); 
-    	}
-    	
-    	return quantity;
     }
     
     private boolean createConnection()

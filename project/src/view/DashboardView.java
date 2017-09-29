@@ -16,13 +16,13 @@ import javafx.scene.layout.RowConstraints;
  * */
 public class DashboardView extends BorderPane 
 {
-	// Each sub section of the dashboard is contained within these classes.
+	// Each sub section of the dash-board is contained within these classes.
 	private StockView stockView = new StockView();
 	private LeaderboardView leaderboardView = new LeaderboardView();
 	private PlayerStatsView statsView = new PlayerStatsView();
 	private CompanyView companyView = new CompanyView();
-	private Button logout;
-	private Button sendWinning;
+	private Button logoutBtn;
+	private Button sendMoneyBtn;
 	
 	private static final float PADDING = 3.5f;
 	
@@ -40,15 +40,15 @@ public class DashboardView extends BorderPane
 	private void populate()
 	{
 		// Populate tool bar
-		logout = new Button("Log out");
-		logout.setOnAction(new ToolbarController(this));
+		logoutBtn = new Button("Log out");
+		logoutBtn.setOnAction(new ToolbarController(this));
 
-		sendWinning = new Button("Send Winning");
-		sendWinning.setOnAction(new ToolbarController(this));
+		sendMoneyBtn = new Button("Send Money");
+		sendMoneyBtn.setOnAction(new ToolbarController(this));
 		
 		ToolBar toolBar = new ToolBar();
 		
-        toolBar.getItems().addAll(logout, new Separator(), sendWinning);
+        toolBar.getItems().addAll(logoutBtn, new Separator(), sendMoneyBtn);
 		
 		// Populate main dashboard UI
 		GridPane gridPane = new GridPane();
@@ -82,6 +82,11 @@ public class DashboardView extends BorderPane
 	
 	public Button getLogOutButton()
 	{
-		return logout;
+		return logoutBtn;
+	}
+	
+	public Button getSendMoneyButton()
+	{
+		return sendMoneyBtn;
 	}
 }

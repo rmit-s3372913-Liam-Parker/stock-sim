@@ -151,7 +151,8 @@ public class LoginView extends GridPane
 		}
 	}
 	
-	private void verifyRecoveryEmail() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+	private void verifyRecoveryEmail() throws UnsupportedEncodingException, NoSuchAlgorithmException 
+	{
 		Dialog<Pair<String, String>> dialog = new Dialog<>();
 		dialog.setTitle("Password Recovery");
 		dialog.setHeaderText("Please Enter Username & Email");

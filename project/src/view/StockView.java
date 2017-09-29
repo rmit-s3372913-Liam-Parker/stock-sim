@@ -1,6 +1,6 @@
 package view;
 
-import java.util.Random;
+import java.io.IOException;
 
 import controller.dashboard.StockController;
 import interfaces.StockSelectedCallback;
@@ -83,7 +83,22 @@ public class StockView extends BorderPane implements StockSelectedCallback
 	@Override
 	public void stockSelected(CompanyInfo data)
 	{
-		Stock stock = StockApplication.getModel().getMarketInterface().getStockData(data.getStockCode());
+		Stock stock;
+		try 
+		{
+			stock = StockApplication.getModel().getMarketInterface().getStockData(data.getStockCode());
+		} 
+		catch (IOException e) 
+		{
+			this.setTop(null);
+			this.setCenter(null);
+			
+			title.setText(data.getStockCode() + " stocks currently unavailable!");
+			this.setCenter(title);
+			
+			return;
+		}
+		
 		controller.setTargetStock(stock);
 			
 		this.setTop(null);

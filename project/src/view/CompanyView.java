@@ -3,6 +3,7 @@ package view;
 import java.util.ArrayList;
 import java.util.List;
 
+import interfaces.CoreAPI;
 import interfaces.StockSelectedCallback;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,7 +22,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.CompanyInfo;
-import model.CoreAPI;
 import model.SortType;
 
 public class CompanyView extends BorderPane
@@ -117,6 +117,7 @@ public class CompanyView extends BorderPane
 		HBox.setHgrow(searchField, Priority.ALWAYS);
 		
 		Button orderBtn = new Button("Ascending");
+		orderBtn.setDisable(true);
 		
 		filterBar.getChildren().addAll(filterTitle, codeFilterBtn, nameFilterBtn, searchField, orderBtn);
 		filterBar.setSpacing(5.0f);

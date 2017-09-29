@@ -73,7 +73,7 @@ public class ToolbarController extends Controller
 		friendUsername.setVisibleRowCount(3);
 		
 		//get list of user from database
-		List<String> friend = getModel().getCloudDatabase().getFriend(getModel().getSessionDetails().getUsername());
+		List<String> friend = getModel().getFriends(getModel().getSessionDetails().getUsername());
 		
 		//setting up label
 		Label winning = new Label("Winning");

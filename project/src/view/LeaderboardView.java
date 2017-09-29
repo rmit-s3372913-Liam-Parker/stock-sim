@@ -2,6 +2,7 @@ package view;
 
 import java.util.List;
 
+import interfaces.CoreAPI;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -12,7 +13,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import model.CoreAPI;
 import model.PlayerStats;
 
 public class LeaderboardView extends BorderPane 

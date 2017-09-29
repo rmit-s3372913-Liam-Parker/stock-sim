@@ -1,5 +1,6 @@
 package controller;
 
+import interfaces.CoreAPI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -12,7 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.CoreAPI;
+import model.UserDetails;
 import view.StockApplication;
 
 public abstract class Controller implements EventHandler<ActionEvent> 

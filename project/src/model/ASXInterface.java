@@ -33,7 +33,7 @@ public class ASXInterface
 	 * @param stockCode The stock code to attempt to retrieve data for.
 	 * @return Stock information for given code.
 	 */
-	public Stock getStockData(String stockCode)
+	public Stock getStockData(String stockCode) throws IOException
 	{
 		Stock stock = null;
 		JSONParser parser = new JSONParser();
@@ -47,8 +47,8 @@ public class ASXInterface
 		} 
 		catch (MalformedURLException e) { e.printStackTrace(); }
 	    catch (UnsupportedEncodingException e) { e.printStackTrace(); }
-		catch (IOException e) { e.printStackTrace(); } 
 		catch (ParseException e) { e.printStackTrace(); }
+		catch (IOException e) { throw e; }
 		
 		return stock;
 	}
