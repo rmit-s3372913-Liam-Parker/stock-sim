@@ -4,7 +4,7 @@ include 'connection.php';
 
 if(isset($_POST['buy-submit']))
 {
-
+	// set variables
 	$total = mysqli_escape_string($conn, $_POST['buy-total']);
 	$code = mysqli_escape_string($conn, $_POST['code']);
 	$share = mysqli_escape_string($conn, $_POST['share']);
@@ -17,28 +17,20 @@ if(isset($_POST['buy-submit']))
 	$row = mysqli_fetch_assoc($result);
 	$currentMoney = $row['winning'];
 
-	// select stockID from stock table
+	// select stockID field from stock table
 	$sql = "select stockID FROM stock WHERE username = '" . $_SESSION['username'] . "' AND stockID = '" . $code . "'";
 	$result = mysqli_query($conn, $sql);
 	$row = mysqli_fetch_assoc($result);
 	$currentStockID = $row['stockID'];
 	
-	// select stock quantity from stock table
+	// select stock quantity field from stock table
 	$sql = "select stockQuantity FROM stock WHERE username = '" . $_SESSION['username'] . "' AND stockID = '" . $code . "'";
 	$result = mysqli_query($conn, $sql);
 	$row = mysqli_fetch_assoc($result);
 	$currentStockQuantity = $row['stockQuantity'];
 
-	// $sql = "Select transactionID from transaction WHERE username = '" . $_SESSION['username'] . "' order by transactionID DESC LIMIT 1";
-	// $result = mysqli_query($conn, $sql);
-	// $row = mysqli_fetch_assoc($result);
-	// $lastID = $row['transactionID'];
 	
-	
-	// check if current money is 0
-	// if($currentMoney != 0)
-	// {
-		// check if purchase amount is greater than money on hand
+		// check if purchase amount is greater than or equal to the money on hand
 		if($currentMoney >= $total)
 		{
 			// check if stock exists
@@ -65,85 +57,29 @@ if(isset($_POST['buy-submit']))
 				$uname = $_SESSION['username'];
 				$sql .= "INSERT INTO transaction(username, transactionType, postWinning, timeOfTransaction) VALUES('$uname', 'buy', '$result', '$date');";
 
+				// set session variables to be used in buySellDetail.php
 				$_SESSION['code'] = $code;
 				$_SESSION['share'] = $share;
 				$_SESSION['price'] = $price;
 				
-				// $sql = "SELECT transactionID FROM transaction WHERE username = '" . $_SESSION['username'] . "' AND transactionType = 'buy' AND postWinning = '" . $result . "' ORDER BY transactionID DESC LIMIT 1;";
-				// //print_r($sql);
-				// $result = mysqli_query($conn, $sql);
-				// $row = mysqli_fetch_assoc($result);
-				// $currentID = $row['transactionID'];
-				// print_r($currentID);
-				// "SELECT transactionID FROM transaction WHERE username = '" + transaction.getUsername() + 
-    // 				"' AND transactionType = '" + transaction.getTransactionType() + 
-    // 				"' AND postWinning = '" + transaction.getPostWinnings() + 
-    // 				"' ORDER BY transactionID DESC"
-
-				// get the last transactionID from transaction table
-				// $sql .= "Select transactionID from transaction order by transactionID DESC LIMIT 1;";
-				// $result = mysqli_query($conn, $sql);
-				// $row = mysqli_fetch_row($result);
-				// $currentID = $row['transactionID'];
-
-				// set database table for buySellDetail
-				// $sql .= "INSERT INTO buySellDetail(transactionID, stockId, quantity, price) VALUES('$currentID', '$code', '$share', '$total');";
-
-				//print_r($sql);
-				// if (mysqli_multi_query($conn, $sql))
-				// {
-		  //         $query = "SELECT transactionID FROM transaction WHERE username = '" . $_SESSION['username'] . "' AND transactionType = 'buy' AND postWinning = '" . $result . "' ORDER BY transactionID DESC LIMIT 1;";
-		  //         $result = mysqli_query($conn, $query);
-		  //         $row = mysqli_fetch_assoc($result);
-		  //         $currentID = $row['transactionID'];
-		          
-		          
-		  //         $query = "INSERT INTO buySellDetail(transactionID, stockId, quantity, price) VALUES('$currentID', '$code', '$share', '$total');";
-		  //         mysqli_query($conn, $query);
-				// }
-				// 	if($conn->query($sql) == TRUE)
-				// 	{
-				// 		header('location: dashboard.php');
-				// 	}
-					
-				
+				// check multiple query with connection
 				if (mysqli_multi_query($conn, $sql))
 				{
-					//echo 'Query executed';
+					// include buySellDetail with insert query
 					include 'buySellDetail.php';
-
-					//header('location: dashboard.php');
-
 
 				}
 
-			// if($conn->query($sql) == TRUE)
-			// {
-			// 	header('location: dashboard.php');
-			// }
-
-
-
-			
 		}
 		else
 		{
+			// set session for display error message
 			$_SESSION['error_buy'] = "Please check your credits.";
 			header('location: stock_list.php');
 		}
-	// }
-	// else
-	// {
-	// 	$_SESSION['error_buy'] = "Please check your credits.";
-	// 	header('location: stock_list.php');
-
-	// }
-
-	mysqli_close($conn);
-
 	
-
-
+	// close connection
+	mysqli_close($conn);
 
 }
 

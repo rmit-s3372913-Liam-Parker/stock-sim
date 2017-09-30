@@ -1,5 +1,5 @@
  <?php  
- //login_success.php  
+ // if login is successful start a session  
  session_start();  
  if(isset($_SESSION["username"]))  
  {  

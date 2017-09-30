@@ -25,6 +25,7 @@ session_start();
     <div class="jumbotron" style="margin-top: 150px">
     
       <h2>ASX Simulator</h2>
+      <!-- display a message using a session variable -->
       <?php 
       if (isset($_SESSION['message'])) 
         { 
@@ -42,6 +43,7 @@ session_start();
         echo $_SESSION['email_error']; unset($_SESSION['email_error']); 
         }
       ?>
+      <!-- Form for user registration -->
       <form action="registration_validation.php" method="POST">
         <div class="form-group">
           <input type="text" class="form-control" name="username" placeholder="Username" required>

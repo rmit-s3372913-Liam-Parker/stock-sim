@@ -1,4 +1,6 @@
 <?php
+// start a session
+// include connection
 session_start();
 include 'connection.php';
 // select all from the asx_data table in database
@@ -40,9 +42,9 @@ $records = mysqli_query($conn, $sql);
   <div class="container">
     <ul class="nav nav-tabs">
       <li class="active"><a data-toggle="tab" href="#summary">Summary</a></li>
-      <li><a data-toggle="tab" href="#top5">Top 5</a></li>
-      <li><a data-toggle="tab" href="#transaction">Transaction</a></li>
-      <li><a data-toggle="tab" href="#chart">Charts</a></li>
+      <li><a data-toggle="tab" href="#my_stocks">My Stocks</a></li>
+      <li><a data-toggle="tab" href="#user_transaction">Transaction</a></li>
+      <!-- <li><a data-toggle="tab" href="#chart">Charts</a></li> -->
     </ul>
   </div>
   
@@ -102,7 +104,6 @@ $records = mysqli_query($conn, $sql);
           <div class="col-md-12">
             
             
-
           </div>
         </div>
       </div>
@@ -167,8 +168,6 @@ $records = mysqli_query($conn, $sql);
     </div>
   </div>
 
-
-
   <!-- table row selection to be displayed to a div -->
     <script>
     
@@ -189,7 +188,7 @@ $records = mysqli_query($conn, $sql);
 
   <!-- Buy-function script to display selection to modal -->
   <script>
-    $('#buy-button').click(function(){
+      $('#buy-button').click(function(){
       $('#code').val($('#code-input').val());
       $('#price').val($('#price-input').val());
       $('#share').val($('#share-input').val());
@@ -198,21 +197,8 @@ $records = mysqli_query($conn, $sql);
     });
   </script>
 
-  <!-- Sell-function script to display selection to modal -->
-  <!-- <script>
-    $('#sell-button').click(function(){
-      $('#s-code').val($('#code-input').val());
-      $('#s-price').val($('#price-input').val());
-      $('#s-share').val($('#share-input').val());
-      
-      calcTotalSell();
-    });
-  </script> -->
-
-  
-
-    <!-- Buy function script -->
-    <script>
+  <!-- Buy function script -->
+  <script>
       function calcTotalBuy()
       {
         var price = parseFloat(document.getElementById('price').value);
@@ -224,33 +210,4 @@ $records = mysqli_query($conn, $sql);
         document.getElementById("buy-total").value = total;
       }
 
-
-    </script>
-
-    <!-- Sell function script -->
-    <!-- <script>
-      function calcTotalSell()
-      {
-        var price = parseFloat(document.getElementById('s-price').value);
-        var share = parseFloat(document.getElementById('s-share').value);
-        var sub = price * share + 50;
-        var percent = sub * 0.0025;
-        var total = (sub + percent).toFixed(2);
-
-        document.getElementById("sell-total").value = total;
-      }
-
-
-    </script> -->
-
-
-
-
-
-
-
-
-
-
-
-
+  </script>

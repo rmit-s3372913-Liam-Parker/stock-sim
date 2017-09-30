@@ -29,10 +29,11 @@ include 'connection.php';
       <h2>Enter You Confirmation Code</h2>
       <p style="font-size:16px">We have sent an email confirmation code to 
       <strong>
+      <!-- display session message -->
       <?php 
       if (isset($_SESSION['address'])) 
         { 
-        echo $_SESSION['address']; 
+        echo $_SESSION['address'];
         }
       ?>.
       </strong>
@@ -52,19 +53,15 @@ include 'connection.php';
         </div>
 
         
-
         <input type="submit" class="btn btn-primary form-control" name="reset-confirm" value="Confirm Email">
         
+        <a href="login.php">Cancel</a>
       
       </form>
     </div>
   </div>
 
-
-
 </div>
-
-
 
 </body>
 </html>

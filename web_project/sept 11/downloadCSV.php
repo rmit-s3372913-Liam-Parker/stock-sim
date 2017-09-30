@@ -5,6 +5,7 @@
 </head>
 <body>
 
+<!-- download company list from ASX and save in a file folder -->
 <?php
 $url_to_csv = 'http://www.asx.com.au/asx/research/ASXListedCompanies.csv';
 $save_dir = 'files/';

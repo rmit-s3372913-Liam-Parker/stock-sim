@@ -1,5 +1,6 @@
 <?php
-
+// use session variable to display a players username
+// in the navigation bar
 if(!isset($_SESSION['username']))
 {
 	header("Location: login.php");
@@ -27,7 +28,7 @@ else
       
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><?= $_SESSION['username']; ?> <span class="caret"></span></a>
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><?php echo $_SESSION['username']; ?> <span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><?php include 'winning.php'; ?></li>
           <li><a href="#">Settings</a></li>

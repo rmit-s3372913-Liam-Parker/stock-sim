@@ -4,24 +4,23 @@ include 'connection.php';
 
 if(isset($_POST['submit']))
 {
-	
-	/*$conn = mysqli_connect('localhost', 'root', '', 'testing');*/
+	// set variables from form POST
 	$uname = mysqli_escape_string($conn, $_POST['username']);
 	$email = mysqli_escape_string($conn, $_POST['email']);
 	$password = mysqli_escape_string($conn, $_POST['password']);
 	$con_password = mysqli_escape_string($conn, $_POST['con-password']);
 	
-
+	// query a row from plaer table using a username
 	$query_uname = mysqli_query($conn, "Select * FROM player WHERE username='".$uname."' ");
 	$numrow_uname = mysqli_num_rows($query_uname);
 
+	// query a row from plaer table using an email
 	$query_email = mysqli_query($conn, "Select * FROM player WHERE email='".$email."' ");
 	$numrow_email = mysqli_num_rows($query_email);
 
+	// set a session variable for email
 	$_SESSION['email-name'] = $email;
-	/*if ($conn->connect_error) {
-	    die("Connection failed: " . $conn->connect_error);
-	}*/
+	
 
 	// check if password & confirm password matches
 	if ($password == $con_password) 
@@ -64,7 +63,8 @@ if(isset($_POST['submit']))
 				$message = "Please confirm your email address \n
 							$uname, confirming your email address will give you full access to \n
 							ASX Simulator 2017 \n
-							http://titan.csit.rmit.edu.au/~s3492681/ASX/email_verify.php?email=$email&code=$hash";
+							http://ec2-35-161-71-55.us-west-2.compute.amazonaws.com/email_verify.php?email=$email&code=$hash";
+
 				  
 				// Set header                   
 				$headers = 'From: ASX Simulator.com.au' . "\r\n"; 
@@ -80,12 +80,16 @@ if(isset($_POST['submit']))
 		}
 		else
 		{
+			// display an error message and redirect to 
+			// registration page with a time delay of 3 seconds
 			echo "Invalid username or password";
 			header('Refresh: 3; registration.php');
 		}
 	}
 	else
 	{
+		// set a session varaible for error message
+		// redirect page to registration page
 		$_SESSION['message'] = "Password does not match!";
 		header("Location: registration.php");
 	}

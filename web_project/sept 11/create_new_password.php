@@ -26,7 +26,8 @@ include 'connection.php';
     <div class="jumbotron" style="margin-top: 150px">
     
       <h2>Create A New Password</h2>
-      
+      <!-- form for creating a new password 
+      input for password & confirm password -->
       <form action="new_password_validation.php" method="POST">
         <div class="form-group">
           <input type="password" class="form-control" name="password" placeholder="Password" required>

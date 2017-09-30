@@ -33,6 +33,7 @@ include 'downloadCSV.php';
 </head>
 <body>
 <?php include("navigation.php");?>
+	<!-- display error message with session -->
 	<?php
       if (isset($_SESSION['error_stock']))
       {
@@ -43,6 +44,7 @@ include 'downloadCSV.php';
       }
       ?>
 	<div class="container">
+		<!-- div container for displaying leaderboard -->
 		<div class="row">
 			<div class="col-md-4">
 				<div class="leader-board">
@@ -74,6 +76,7 @@ include 'downloadCSV.php';
 		</div>
 		<br>
 		<div class="row">
+			<!-- div container for displaying users current stock/s with sell function -->
 			<div class="col-md-4">
 				<div class="your-stock">
 					<h2 align="center">My Stocks</h2>
@@ -109,10 +112,11 @@ include 'downloadCSV.php';
 					</table>
 				</div>
 				<div class="my_stocks_footer">
-					<a href="">My Stocks</a>
+					<a href="" id="my_stocks">My Stocks</a>
 				</div>
 			</div>
 
+			<!-- div container displaying a list of companies with prices using ASX API -->
 			<div class="col-md-8">
 				<h2 align="center">ASX Companies</h2>
 					<div class="scrollable">
@@ -194,13 +198,8 @@ include 'downloadCSV.php';
       
     </div>
   </div>
-<!-- script for selecting code in every row in the table -->
-<!-- <script>
-		$("#companies tr").click(function(){
-		    alert($(this).children('td:first').html());
-		});
-	</script> -->
 
+<!-- javascript for clicking a row in users stock and displaying in an input box -->
 <script>
     
                 var table = document.getElementById('stock');
@@ -218,6 +217,7 @@ include 'downloadCSV.php';
     
 </script>
 
+<!-- javascript for sell button to display in bootstrap modal form -->
 <script>
     $('#sell-button').click(function(){
       $('#s-code').val($('#code').val());
@@ -228,7 +228,7 @@ include 'downloadCSV.php';
     });
   </script>
 
-  <!-- Sell function script -->
+  <!-- Sell function script calculation -->
     <script>
       function calcTotalSell()
       {
@@ -243,5 +243,6 @@ include 'downloadCSV.php';
 
 
     </script>
+
 </body>
 </html>

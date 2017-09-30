@@ -1,5 +1,6 @@
 <?php
 session_start();
+unset($_SESSION['address']);
 
 ?>
 <!DOCTYPE html>
@@ -26,6 +27,7 @@ session_start();
     <div class="jumbotron" style="margin-top: 150px">
     
       <h2>ASX Simulator</h2>
+      <!-- display error message or change password with session -->
       <?php
       if (isset($_SESSION['error_login']))
       {
@@ -35,6 +37,8 @@ session_start();
         echo $_SESSION['new-password']; unset($_SESSION['new-password']); 
       }
       ?>
+      
+      <!-- div container form login -->
       <form action="login_validation.php" method="POST">
         <div class="form-group">
           <input type="text" class="form-control" name="username" placeholder="Username" 
@@ -60,7 +64,7 @@ session_start();
     
   </div>
 
-  <!-- Modal -->
+  <!-- Modal for Forgot password -->
   <div class="modal fade" id="forgot-password-modal" role="dialog">
     <div class="modal-dialog">
     
@@ -99,8 +103,6 @@ session_start();
 
 
 </div>
-
-
 
 </body>
 </html>

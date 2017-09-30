@@ -1,8 +1,10 @@
 <?php
+// include a connection file
 include 'connection.php';
 
+// query to select all from transaction table
+// display date in descending order
 $query = "SELECT * FROM transaction ORDER BY timeOfTransaction desc";
-
 $result = mysqli_query($conn, $query);
 
 ?>
@@ -64,6 +66,7 @@ $result = mysqli_query($conn, $query);
 </body>
 </html>
 
+<!-- javascript for selecting a from-date & to-date -->
 <script>
 	$(document).ready(function(){
 		$.datepicker.setDefaults({

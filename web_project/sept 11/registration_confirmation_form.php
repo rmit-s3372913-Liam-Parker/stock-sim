@@ -28,6 +28,7 @@ session_start();
       <h2>Please verify your e-mail</h2>
       <p style="font-size:16px">We have sent an email confirmation code to 
       <strong>
+      <!-- display session message with user email -->
       <?php 
       if (isset($_SESSION['email-name'])) 
         { 
@@ -43,26 +44,19 @@ session_start();
         echo $_SESSION['code_error']; unset($_SESSION['code_error']); 
         }
       ?>
-
+      <!-- input form for code received -->
       <form action="confirm_code.php" method="POST">
         <div class="form-group">
           <input type="text" class="form-control" name="confimation-code" placeholder="Confimation Code" required>
         </div>
 
-        
-
         <input type="submit" class="btn btn-primary form-control" name="confirm" value="Confirm Email">
         
-      
       </form>
     </div>
   </div>
 
-
-
 </div>
-
-
 
 </body>
 </html>

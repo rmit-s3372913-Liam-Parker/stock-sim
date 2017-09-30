@@ -5,31 +5,28 @@
 if(isset($_POST['login']))
 {
 	
-	
+	// set variables
 	$uname = mysqli_escape_string($conn, $_POST['username']);
 	$password = mysqli_escape_string($conn, $_POST['password']);
 	$password = md5($password);
 
+	// select all fields from player with the corresponding username and email
 	$query = mysqli_query($conn, "Select * FROM player WHERE username='".$uname."' AND password='".$password."'");
-	/* database query */
 	$result = mysqli_num_rows($query);
 
-	/* cookie session */
 	$user = mysqli_fetch_array($query);
 
+	// query for unconfirmed player
 	$validate_query = mysqli_query($conn, "Select * FROM player WHERE username='".$uname."' AND confirm='no'");
-
 	$validate_result = mysqli_num_rows($validate_query);
 	
-	/* database query */
-	$result = mysqli_num_rows($query);
-
-
-	/* check for user input */
+	
+	/* check for user */
 	if($user)
 	{
 		if(!empty($_POST['remember']))
 		{
+			// set time for user to be login after closing browser
 			setcookie("member_user", $uname, time() + 300);
 			setcookie("member_password", $password, time() + 300);
 		}
@@ -47,29 +44,35 @@ if(isset($_POST['login']))
 	}
 	header("Location: login.php");
 
+	// check row with username and unconfirmed player
 	if ($validate_result != 1)
 	{
 
-		/* check database */
+		// check for correct username and password
+		// redirect to dashboard for valid username and password
 		if ($result == 1) {
 			$_SESSION['username'] = $uname;
 			$_SESSION['success'] = "You are now logged in";
 			header('location: dashboard.php');
 		}
+		// redirect user to login page for wrong username or password
 		else
 		{
 			$_SESSION['error_login'] = "Wrong username/password combination";
 			header("Location: login.php");
 		}    
 	}
+	// unconfirmed player must activate account using email
+	// display error message
+	// redirect to login page
 	else
 	{
-		$_SESSION['error_login'] = "Please activate your account with your email";
+			$_SESSION['error_login'] = "Please activate your account with your email";
 			header("Location: login.php");
 	}
 
+	// close connection
     mysqli_close($conn);
-	
 	
 	
 }
