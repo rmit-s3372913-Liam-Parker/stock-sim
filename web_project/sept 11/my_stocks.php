@@ -11,9 +11,12 @@ $result = mysqli_query($conn, $sql);
 
 // display a players stock  per row
 // call API for prices per stocks
+$row_count = 1;
 while ($stock = mysqli_fetch_assoc($result)) {
 	echo "<tr>";
 
+	echo "<td>". $row_count ."</td>";
+	
 	echo "<td>".$stock['stockID']."</td>";
 
 	echo "<td>" . $stock['stockQuantity'] . "</td>";
@@ -23,6 +26,8 @@ while ($stock = mysqli_fetch_assoc($result)) {
     echo "<td>" . $data["last_price"] . "</td>";
 
 	echo "</tr>";
+
+	$row_count++;
 }
 
 ?>

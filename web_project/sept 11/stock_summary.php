@@ -27,6 +27,7 @@ include 'connection.php';
 		      	<thead>
 							
 							<tr>
+								<th>No</th>
 								<th>Symbol</th>
 				        		<th>Shares</th>
 				        		<th>Price</th>

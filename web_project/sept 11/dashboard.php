@@ -95,10 +95,10 @@ include 'downloadCSV.php';
 						<thead>
 							
 							<tr>
+								<th>No</th>
 								<th>Symbol</th>
 				        		<th>Shares</th>
 				        		<th>Price</th>
-				        		<th></th>
 
 							</tr>
 						</thead>
@@ -209,9 +209,9 @@ include 'downloadCSV.php';
                     table.rows[i].onclick = function()
                     {
                          //rIndex = this.rowIndex;
-                         document.getElementById("code").value = this.cells[0].innerHTML;
+                         document.getElementById("code").value = this.cells[1].innerHTML;
                          //document.getElementById("price-input").value = this.cells[2].innerHTML;
-                         document.getElementById("price").value = this.cells[2].innerHTML;
+                         document.getElementById("price").value = this.cells[3].innerHTML;
                     };
                 }
     
