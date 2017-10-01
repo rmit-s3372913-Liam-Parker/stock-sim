@@ -25,20 +25,20 @@ include 'connection.php';
 			<div id="my_stocks" class="tab-pane fade">
 		      <table id="table" class="table table-striped table-hover">
 		      	<thead>
-							
+							<tr>
+								<td></td>
+								<td></td>
+								<td>No of Shares: <?php include 'stock_count.php'; ?></td>
+								<td>Average Price </td>
+							</tr>
 							<tr>
 								<th>No</th>
 								<th>Symbol</th>
 				        		<th>Shares</th>
 				        		<th>Price</th>
-				        		<th></th>
 
 							</tr>
-							<tr>
-								<td></td>
-								<td><input type="text" name="no_of_shares" id="no_of_shares" readonly></td>
-								<td><input type="text" name="average_price" id="average_price" readonly></td>
-							</tr>
+							
 						</thead>
 						<tbody>
 
@@ -56,7 +56,7 @@ include 'connection.php';
 		    </div>
 
 		    <!-- <div id="chart" class="tab-pane fade">
-		    	<?php include 'top5.php' ?>
+		    	include 'top5.php' ?>
 		    </div> -->
 		    
 
