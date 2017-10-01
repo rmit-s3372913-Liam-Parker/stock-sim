@@ -48,5 +48,29 @@ public abstract class Transaction
 		return timeOfTransaction;
 	}
 	
-	
+	@Override
+	public String toString()
+	{
+		String type = "null";
+		
+		switch(transactionType)
+		{
+		case Buy:
+			type = "Buy";
+			break;
+		case Receive:
+			type = "Receive";
+			break;
+		case Sell:
+			type = "Sell";
+			break;
+		case Send:
+			type = "Send";
+			break;
+		default:
+			break;
+		}
+		
+		return transactionID + " - " + type + " - " + timeOfTransaction.toString();
+	}
 }

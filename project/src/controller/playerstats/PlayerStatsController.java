@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ToggleButton;
 import javafx.util.Pair;
+import model.Transaction;
 import model.UserDetails;
 
 public class PlayerStatsController extends Controller implements TransactionCallback
@@ -52,11 +53,11 @@ public class PlayerStatsController extends Controller implements TransactionCall
 	private void loadStocks()
 	{
 		list.clear();
-		List<Pair<String, String>> stocks = getModel().getAllStockOwned(player.getUsername());
+		List<Pair<String, String>> stockList = getModel().getAllStockOwned(player.getUsername());
 		
-		for(int i = 0; i < stocks.size(); ++i)
+		for(int i = 0; i < stockList.size(); ++i)
 		{
-			Pair<String, String> pair = stocks.get(i);
+			Pair<String, String> pair = stockList.get(i);
 			list.add(pair.getKey() + " - " + pair.getValue());
 		}
 	}
@@ -64,5 +65,12 @@ public class PlayerStatsController extends Controller implements TransactionCall
 	private void loadTransactions()
 	{
 		list.clear();
+		List<Transaction> transactionList = getModel().getTransactions(player);
+		
+		for(int i = 0; i < transactionList.size(); ++i)
+		{
+			Transaction t = transactionList.get(i);
+			list.add(t.toString());
+		}
 	}
 }

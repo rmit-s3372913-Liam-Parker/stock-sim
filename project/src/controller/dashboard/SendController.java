@@ -6,7 +6,7 @@ import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.SendReceiveTransaction;
+import model.MoneyTransaction;
 import model.TransactionType;
 
 public class SendController extends Controller
@@ -25,8 +25,8 @@ public class SendController extends Controller
 		
 		String error;
 		
-		SendReceiveTransaction sendTransaction =
-				new SendReceiveTransaction(transactionId,
+		MoneyTransaction sendTransaction =
+				new MoneyTransaction(transactionId,
 							sender, 
 							TransactionType.Send,
 							receiver, 

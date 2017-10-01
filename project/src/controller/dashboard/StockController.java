@@ -8,7 +8,7 @@ import database.CloudDatabase;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import model.BuySellTransaction;
+import model.StockTransaction;
 import model.PlayerStats;
 import model.Stock;
 import model.TransactionType;
@@ -152,7 +152,7 @@ public class StockController extends Controller implements ChangeListener<String
 				}
 			}
 
-			BuySellTransaction transaction = new BuySellTransaction(
+			StockTransaction transaction = new StockTransaction(
 					NOT_USED,
 					curUser.getUsername(),
 					type,

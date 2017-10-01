@@ -180,4 +180,10 @@ public class CoreSystem implements CoreAPI
 	{
 		return cloudDatabase.getFriends(username);
 	}
+
+	@Override
+	public List<Transaction> getTransactions(UserDetails details) 
+	{
+		return cloudDatabase.getTransactions(details);
+	}
 }

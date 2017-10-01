@@ -2,12 +2,12 @@ package model;
 
 import java.util.Date;
 
-public class SendReceiveTransaction extends Transaction 
+public class MoneyTransaction extends Transaction 
 {
 	private String partnerUsername;
 	private double winningAmount;
 
-	public SendReceiveTransaction(int transID, String username, TransactionType type,
+	public MoneyTransaction(int transID, String username, TransactionType type,
 			String partnerUsername, double winningAmount, double postWinnings, Date time) {
 		super(transID, username, type, postWinnings, time);
 		this.partnerUsername = partnerUsername;
@@ -22,5 +22,11 @@ public class SendReceiveTransaction extends Transaction
 	public double getWinningAmount()
 	{
 		return winningAmount;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return super.toString() + " - " + partnerUsername + " : " + winningAmount;
 	}
 }

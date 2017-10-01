@@ -3,6 +3,7 @@ package database;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.util.Pair;
-import model.BuySellTransaction;
+import model.StockTransaction;
 import model.PlayerStats;
-import model.SendReceiveTransaction;
+import model.MoneyTransaction;
 import model.Transaction;
 import model.TransactionType;
 import model.UserDetails;
@@ -373,16 +374,16 @@ public class CloudDatabase
             		switch (transaction.getTransactionType()){
             		case Buy:
 					case Sell:
-						if (addBuySellDetail((BuySellTransaction) transaction) 
-								&& changeStock((BuySellTransaction) transaction))
+						if (addBuySellDetail((StockTransaction) transaction) 
+								&& changeStock((StockTransaction) transaction))
 	                	{
 			        		shutdown();
 			                return null;
 	                	}
 						break;
 					default:
-						SendReceiveTransaction sendTransaction = (SendReceiveTransaction) transaction;
-						SendReceiveTransaction receiveTransaction = new SendReceiveTransaction(0, 
+						MoneyTransaction sendTransaction = (MoneyTransaction) transaction;
+						MoneyTransaction receiveTransaction = new MoneyTransaction(0, 
 																		sendTransaction.getPartnerUsername(),
 																		TransactionType.Receive,
 																		sendTransaction.getUsername(),
@@ -551,6 +552,94 @@ public class CloudDatabase
     	return null;
     }
     
+    /**
+     * @return A list of transactions for a given username.
+     */
+    public List<Transaction> getTransactions(UserDetails details)
+    {
+    	List<Transaction> list = new ArrayList<>();
+    	
+    	try
+        {
+            stmt = conn.createStatement();
+            ResultSet results = stmt.executeQuery("SELECT * FROM transaction NATURAL JOIN buySellDetail WHERE username = '" + details.getUsername() + "'");
+
+			while(results.next())
+			{
+				// Retrieve transaction data
+				int id = results.getInt(1);
+				String stock = results.getString(6);
+				int quantity = results.getInt(7);
+				double price = results.getDouble(8);
+				double postWinning = results.getDouble(4);
+				Date date = results.getDate(5);
+				TransactionType type = null;
+				
+				String x = results.getString(3);
+				if(x.equals("sell"))
+					type = TransactionType.Sell;
+				else if(x.equals("buy"))
+					type = TransactionType.Buy;
+				
+				// Append transaction to list.
+				list.add(new StockTransaction(
+						id, 
+						details.getUsername(),
+						type,
+						stock,
+						quantity,
+						price,
+						postWinning,
+						date
+						));
+			}
+            
+            stmt.close();
+        	shutdown();
+        	
+        	stmt = conn.createStatement();
+            results = stmt.executeQuery("SELECT * FROM transaction NATURAL JOIN sendReceiveDetail WHERE username = '" + details.getUsername() + "'");
+
+			while(results.next())
+			{
+				// Retrieve transaction data
+				int id = results.getInt(1);
+				String otherUsername = results.getString(6);
+				double amount = results.getDouble(7);
+				double postWinning = results.getDouble(4);
+				Date date = results.getDate(5);
+				TransactionType type = null;
+				
+				String x = results.getString(3);
+				if(x.equals("send"))
+					type = TransactionType.Send;
+				else if(x.equals("receive"))
+					type = TransactionType.Receive;
+				
+				// Append transaction to list.
+				list.add(new MoneyTransaction(
+						id, 
+						details.getUsername(),
+						type,
+						otherUsername,
+						amount,
+						postWinning,
+						date
+						));
+			}
+            
+            stmt.close();
+        	shutdown();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+    	shutdown();
+    	
+    	return list;
+    }
+    
     private boolean insertTransaction(Transaction transaction)
     {
     	String transType = "buy";
@@ -605,7 +694,7 @@ public class CloudDatabase
         return true;
     }
     
-    private boolean changeStock(BuySellTransaction transaction)
+    private boolean changeStock(StockTransaction transaction)
     {
     	int quantity = 0;
     	String transType = "buy";
@@ -633,7 +722,7 @@ public class CloudDatabase
 							"' WHERE stockID = '" + transaction.getStockCode() +
 							"' AND username = '" + transaction.getUsername() + "'");
 				else
-					stmt.execute("DELETE " + stockTable +
+					stmt.execute("DELETE FROM " + stockTable +
 							" WHERE stockID = '" + transaction.getStockCode() +
 							"' AND username = '" + transaction.getUsername() + "'");
 			}
@@ -663,7 +752,7 @@ public class CloudDatabase
         return true;
     }
     
-    private boolean addBuySellDetail(BuySellTransaction transaction)
+    private boolean addBuySellDetail(StockTransaction transaction)
     {
     	try {
     		stmt = conn.createStatement();
@@ -691,7 +780,7 @@ public class CloudDatabase
         return true;
     }
     
-    private boolean addSendReceiveDetail(SendReceiveTransaction transaction)
+    private boolean addSendReceiveDetail(MoneyTransaction transaction)
     {
     	try {
     		stmt = conn.createStatement();

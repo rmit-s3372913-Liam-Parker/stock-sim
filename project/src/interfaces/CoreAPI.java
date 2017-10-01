@@ -117,6 +117,11 @@ public interface CoreAPI
     public List<Pair<String, String>> getAllStockOwned(String username);
     
     /**
+     * @return A list of all transactions of a certain player.
+     */
+    public List<Transaction> getTransactions(UserDetails details);
+    
+    /**
      * @return The players current stats
      */
     public PlayerStats getCurrentPlayerStats(UserDetails user);
