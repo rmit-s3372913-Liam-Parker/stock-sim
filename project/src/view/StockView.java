@@ -163,24 +163,5 @@ public class StockView extends BorderPane implements StockSelectedCallback
 			series1.getData().add(new XYChart.Data<>(i, random));
 		}
 		stockHistoryChart.getData().add(series1);
-		
-		XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
-		series2.setName("Open Price");
-		for(int i = 1; i <= 12; ++i)
-		{
-			double random = 0.1 + Math.random() * (100.0);
-			series2.getData().add(new XYChart.Data<>(i, random));
-		}
-		stockHistoryChart.getData().add(series2);
-		
-		XYChart.Series<Number, Number> series3 = new XYChart.Series<>();
-		series3.setName("Close Price");
-		for(int i = 1; i <= 12; ++i)
-		{
-			double random = 0.1 + Math.random() * (100.0);
-			series3.getData().add(new XYChart.Data<>(i, random));
-		}
-		stockHistoryChart.getData().add(series3);
-
 	}
 }
