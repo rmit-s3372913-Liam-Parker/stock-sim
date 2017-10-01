@@ -34,6 +34,6 @@ public class StockTransaction extends Transaction
 	@Override
 	public String toString()
 	{
-		return super.toString() + " - " + stockCode + " : " + quantity + " : $" + price;
+		return super.toString() + " - " + " Bought " + quantity + " " + stockCode + " shares at $" + price + " per share.";
 	}
 }
