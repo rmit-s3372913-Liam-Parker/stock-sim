@@ -71,6 +71,6 @@ public abstract class Transaction
 			break;
 		}
 		
-		return transactionID + " - " + type + " - " + timeOfTransaction.toString();
+		return type + " - " + timeOfTransaction.toString();
 	}
 }
