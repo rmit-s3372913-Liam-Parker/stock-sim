@@ -33,7 +33,7 @@ public class StockView extends BorderPane implements StockSelectedCallback
 	Text purchaseFeeText = new Text();
 	Text totalText = new Text();
 	
-	TextField quantityField = new TextField("0");
+	TextField quantityField = new TextField("1");
 	Button buyBtn = new Button("Buy");
 	Button sellBtn = new Button("Sell");
 	StockController controller = new StockController(this);
