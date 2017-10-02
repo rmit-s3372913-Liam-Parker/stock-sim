@@ -287,7 +287,7 @@ public class CloudDatabase
             {
                 stmt = conn.createStatement();
                 stmt.executeUpdate("UPDATE "
-                + playerTable + " SET pin="+ pin +"where username = '" + username + "'");
+                + playerTable + " SET pin="+ pin +" where username = '" + username + "'");
                 stmt.close();
                 return "DONE";
             } 
@@ -316,7 +316,7 @@ public class CloudDatabase
                 stmt = conn.createStatement();
                 stmt.executeUpdate("UPDATE " + playerTable
                 		+ " SET password=" + Hash.hashPassword(password) +
-                		"WHERE username = '" + username + "'");
+                		" WHERE username = '" + username + "'");
                 stmt.close();
                 return "DONE";
             } 
