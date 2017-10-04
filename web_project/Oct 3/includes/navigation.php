@@ -31,8 +31,8 @@ else
       <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><?php echo $_SESSION['username']; ?> <span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><?php include 'winning.php'; ?></li>
-          <li><a href="#">Settings</a></li>
-          <li><a href="#">Messages</a></li>
+          <li><a href="../dashboard/add_friends.php">Friends</a></li>
+          <li><a href="../dashboard/send_message.php">Messages</a></li>
         </ul>
       </li>
       <li><a href="logout.php">Logout</a></li>

@@ -1,5 +1,5 @@
 <?php
-include '../includes/connection.php';
+include '../config/connection.php';
 
 // select transactionID field from transaction table
 $sql = "select transactionID FROM transaction WHERE username = '" . $_SESSION['username'] . "' ORDER BY transactionID DESC LIMIT 1";

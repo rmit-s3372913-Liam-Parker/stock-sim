@@ -78,19 +78,24 @@ include '../config/downloadCSV.php';
 		<div class="row">
 			<!-- div container for displaying users current stock/s with sell function -->
 			<div class="col-md-4">
-				<div class="your-stock">
+				<div class="panel panel-default">
+					<div class="panel-heading">
 					<h2 align="center">My Stocks</h2>
-					<table id="stock" class="table">
-						<form>
+					</div>
+					<form>
+							<br>
 							&nbsp Code &nbsp <input type="text" name="code" id="code" style="width: 60px;" readonly> &nbsp
 								
-							&nbsp Price &nbsp <input type="text" name="price" id="price" style="width: 100px;" readonly> &nbsp&nbsp <br>
+							&nbsp Price &nbsp <input type="text" name="price" id="price" style="width: 100px;" readonly> &nbsp&nbsp <br><br>
 
 							&nbsp Share &nbsp <input type="text" name="share" id="share" style="width: 100px;"> &nbsp&nbsp
 
 							
 							<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#sell-function-modal" id="sell-button">Sell</button>
 						</form>
+					<div class="scrollable">
+					<table id="stock" class="table">
+						
 
 						<thead>
 							
@@ -110,15 +115,17 @@ include '../config/downloadCSV.php';
 						</tbody>
 						
 					</table>
+					</div>
 				</div>
-				<div class="my_stocks_footer">
-					<a href="" id="my_stocks">My Stocks</a>
-				</div>
+				
 			</div>
 
 			<!-- div container displaying a list of companies with prices using ASX API -->
 			<div class="col-md-8">
+				<div class="panel panel-default">
+				<div class="panel-heading">
 				<h2 align="center">ASX Companies</h2>
+				</div>
 					<div class="scrollable">
 					<table id="companies" class="table table-striped table-bordered text-center">
 						<thead>
@@ -137,7 +144,7 @@ include '../config/downloadCSV.php';
 						</tbody>
 						
 					</table>
-					
+				</div>
 				</div>
 			</div>
 		</div>

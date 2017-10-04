@@ -113,61 +113,6 @@ $records = mysqli_query($conn, $sql);
   <!-- End of Modal Buy Function -->
 
 
-  <!-- Modal - Sell Function  -->
-  <div class="modal fade" id="sell-function-modal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h2 class="modal-title">Sell share in: </h2>
-        </div>
-        <div class="modal-body">
-          <div class="text-center">
-            <form action="sell_validation.php" method="POST">
-            <table class="table">
-                    <tr>
-                        <th>Code</th>
-                        <td><input id="s-code" name="s-code" type="text" value="{{ request.form.s-code }}" readonly/></td>
-                    </tr>
-                    <tr>
-                        <th>Price</th>
-                        <td><input id="s-price" name="s-price" type="text" value="{{ request.form.s-price }}" readonly/></td>
-                    </tr>
-                    <tr>
-                        <th>Shares</th>
-                        <td><input id="s-share" name="s-share" type="text" value="{{ request.form.s-share }}" readonly/></td>
-                    </tr>
-                    <tr>
-                        <th>Broker Fee:</th>
-                        <td>$50</td>
-                    </tr>
-                    <tr>
-                        <th>Purchase Fee:</th>
-                        <td>0.25%</td>
-                    </tr>
-                    <tr>
-                        <th>Total:</th>
-                        <td><input type="text" id="sell-total" name="sell-total" value="calcTotalSell()" readonly/></td>
-                    </tr>
-             </table>
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-              <button type="submit" class="btn btn-success success" id="sell-submit" name="sell-submit">Submit</button>
-              </form>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <div class="col-md-12">
-            
-          </div>
-        </div>
-      </div>
-      
-    </div>
-  </div>
-
   <!-- table row selection to be displayed to a div -->
     <script>
     

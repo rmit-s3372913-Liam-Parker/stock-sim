@@ -6,7 +6,7 @@ include_once("../config/callApi.php");
 // query to select all fields from stock table using
 // a session variable for username
 // display only 5 stocks
-$sql = "select * FROM stock WHERE username = '" . $_SESSION['username'] . "' LIMIT 5";
+$sql = "select * FROM stock WHERE username = '" . $_SESSION['username'] . "' ";
 $result = mysqli_query($conn, $sql);
 
 // display a players stock  per row

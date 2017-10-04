@@ -12,8 +12,8 @@ error_reporting(E_ALL);
 <body>
 <!-- open saved file in folder file-->
 <?php
-$asx = fopen("files/ASXListedCompanies.csv", "r");
-$company = explode("\r\n", fread($asx, filesize("files/ASXListedCompanies.csv")));
+$asx = fopen("../config/files/ASXListedCompanies.csv", "r");
+$company = explode("\r\n", fread($asx, filesize("../config/files/ASXListedCompanies.csv")));
 // display 20 companies from ASX list of companies
 for ($i = 0; $i<20; $i++)
 {
