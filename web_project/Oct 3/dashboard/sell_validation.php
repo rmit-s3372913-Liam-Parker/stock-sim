@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'connection.php';
+include '../config/connection.php';
 
 if(isset($_POST['sell-submit']))
 {

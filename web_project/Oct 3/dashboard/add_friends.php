@@ -17,25 +17,26 @@ $records = mysqli_query($conn, $sql);
 <div class="container" style="width: 600px;">
   <h3 align="center">Find Friends</h3> <br>
 
-  <table class="table table-bordered">
-      <tr>
-        <!-- <th width="60%"></th>
-        <th width="40%"></th> -->
-      </tr>
-
+	<table class="table table-bordered">
       <?php
+      $i = 1;
       while($row = mysqli_fetch_array($records))
-      {
-      ?>
+      	{ 
+      	?>
         <tr>
-          <td><?php echo $row["username"]; ?></td>
-          <td><input type="button" name="add" value="ADD" class="btn btn-info"></td>
+          <td><?php echo $i; ?></td>
+          <td><input type="text" name="addedUser" value="<?php echo $row["username"]; ?>" readonly></td>
+          <td>
+           <form action="friend_request.php" method="post">  
+            <button type="submit" name="row" id="row_user" value="<?php echo $row["username"]; ?>" class="btn btn-info">ADD</button>
+           </form>
+            <?php $i++; ?>
+          </td>
         </tr>
-      <?php 
-      }
-      ?>
-    </table>
-
+		<?php 
+		 }
+		 ?>
+	</table>
 
 </div>
 
