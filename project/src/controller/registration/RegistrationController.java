@@ -53,7 +53,7 @@ public class RegistrationController extends Controller implements EventHandler<A
 	public void handle(ActionEvent event)
 	{
 		//create form to send to database
-		UserDetails newUser = new UserDetails(user.getText(), pw.getText(), email.getText());
+		UserDetails newUser = new UserDetails(-1, user.getText(), pw.getText(), email.getText());
 		
 		boolean qualified = true;
 		

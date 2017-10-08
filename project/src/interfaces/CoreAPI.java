@@ -163,4 +163,8 @@ public interface CoreAPI
 	 */
 	public String isConfirmedUser(UserDetails user);
 
+	public int getPlayerUserId(UserDetails details);
+
+	public String sendMessage(String receiverUsername, String message);
+
 }

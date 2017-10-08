@@ -30,6 +30,7 @@ public class ToolbarController extends Controller
 	
 	private DashboardView view;
 	public TextField winningField= new TextField();
+	public TextField messageField= new TextField();
 	
 	public ToolbarController(DashboardView view)
 	{
@@ -47,11 +48,21 @@ public class ToolbarController extends Controller
 				this.getModel().endSession();
 				this.switchView(new LoginView());
 			}
-		} else 
-			displaySendModal();
+		} 
+		else
+		{
+			if(event.getSource() == view.getSendMoneyButton())
+			{
+				displaySendMoneyModal();
+			}
+			else
+			{
+				displaySendMessageModal();
+			}
+		}
 	}
 
-	private void displaySendModal()
+	private void displaySendMoneyModal()
 	{
 		// Create frame for modal window
 		Stage dialog = new Stage();
@@ -124,7 +135,7 @@ public class ToolbarController extends Controller
 			@Override 
 			public void handle(ActionEvent e) 
 			{
-				new SendController(dialog, alert, friendUsername.getValue(), Double.parseDouble(winningField.getText()));
+				new SendMoneyController(dialog, alert, friendUsername.getValue(), Double.parseDouble(winningField.getText()));
 			}
 		});
 				
@@ -140,6 +151,104 @@ public class ToolbarController extends Controller
 				
 		btnBox.getChildren().addAll(sendButton, cancelButton);
 		vBox.getChildren().addAll(alert, receiver, friendUsername, winning, winningField, btnBox);
+		pane.setCenter(vBox);
+		
+		
+		// Configure modal functionality and display
+		dialog.setScene(scene);
+		dialog.initOwner(this.getStage());
+		dialog.initModality(Modality.APPLICATION_MODAL); 
+		dialog.showAndWait();
+	}
+	
+	private void displaySendMessageModal()
+	{
+		// Create frame for modal window
+		Stage dialog = new Stage();
+		dialog.setResizable(false);
+		dialog.setTitle("Send Message");
+		
+		BorderPane pane = new BorderPane();
+		VBox vBox = new VBox();
+		vBox.setAlignment(Pos.CENTER);
+		vBox.setSpacing(10.0f);
+		HBox btnBox = new HBox();
+		btnBox.setAlignment(Pos.CENTER);
+		btnBox.setSpacing(5.0f);
+		Scene scene = new Scene(pane, POPUP_WIDTH, 600);
+		
+		//setting up input field and select box
+		ComboBox<String> friendUsername = new ComboBox<String>();
+		friendUsername.setVisibleRowCount(3);
+		
+		//get list of user from database
+		List<String> friend = getModel().getFriends(getModel().getSessionDetails().getUsername());
+		
+		//setting up label
+		Label message = new Label("Message");
+		Label receiver = new Label("Receiver");
+		Text alert = new Text();
+
+		//check if user list is empty
+		if (!friend.isEmpty())
+		{
+			//insert username into slect box
+			int count = 0;
+			friendUsername.setValue(friend.get(count));
+			do 
+				friendUsername.getItems().add(friend.get(count++));
+			while(friend.size()>count);
+		}
+		else
+		{
+			//alert the user
+			alert.setText(NO_FRIEND);
+			Button cancelButton = new Button("Cancel");
+			cancelButton.setOnAction(new EventHandler<ActionEvent>() 
+			{
+				@Override 
+				public void handle(ActionEvent e) 
+				{
+					dialog.hide();
+				}
+			});
+			
+			btnBox.getChildren().addAll(cancelButton);
+			vBox.getChildren().addAll(alert, btnBox);
+			pane.setCenter(vBox);
+			
+			
+			// Configure modal functionality and display
+			dialog.setScene(scene);
+			dialog.initOwner(this.getStage());
+			dialog.initModality(Modality.APPLICATION_MODAL); 
+			dialog.showAndWait();
+			return;
+		}
+		
+		// Configure options and add them
+		Button sendButton = new Button("Send");
+		sendButton.setOnAction(new EventHandler<ActionEvent>()
+		{
+			@Override 
+			public void handle(ActionEvent e) 
+			{
+				new SendMessageController(dialog, alert, friendUsername.getValue(), messageField.getText());
+			}
+		});
+				
+		Button cancelButton = new Button("Cancel");
+		cancelButton.setOnAction(new EventHandler<ActionEvent>() 
+		{
+			@Override 
+			public void handle(ActionEvent e) 
+			{
+				dialog.hide();
+			}
+		});
+				
+		btnBox.getChildren().addAll(sendButton, cancelButton);
+		vBox.getChildren().addAll(alert, receiver, friendUsername, message, messageField, btnBox);
 		pane.setCenter(vBox);
 		
 		

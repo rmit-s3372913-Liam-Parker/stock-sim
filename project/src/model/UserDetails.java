@@ -6,19 +6,21 @@ package model;
  */
 public class UserDetails 
 {
+	private int userId;
 	private String username;
 	private String password;
 	private String email;
 	private boolean remember;
 	
 	/**
-	 * Constructs a user data object representing the given username, password and email.
+	 * Constructs a user data object representing the given userId, username, password and email.
 	 * @param username
 	 * @param password
 	 * @param email
 	 */
-	public UserDetails(String username, String password, String email)
+	public UserDetails(int userId, String username, String password, String email)
 	{
+		this.userId = userId;
 		this.username = username;
 		this.password = password;
 		this.email = email;
@@ -33,12 +35,25 @@ public class UserDetails
 		this.username = username;
 		this.password = password;
 	}
+	
+	public void setUserId(int userId)
+	{
+		this.userId = userId;
+	}
 
 	/**
 	 * @param remember
 	 */
 	public void setRemember(boolean remember){
 		this.remember = remember;
+	}
+
+	/**
+	 * @return The username of this user.
+	 */
+	public int getUserId()
+	{
+		return userId;
 	}
 
 	/**

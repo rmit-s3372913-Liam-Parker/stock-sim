@@ -30,6 +30,7 @@ public class CloudDatabase
 	private static final String WRONG_PIN = "Incorrect PIN";
 	public static final String USER_UNCONFIRMED = "Email is not confirmed";
 	public static final double WINNING_ERROR = -1;
+	public static final int ID_ERROR = -1;
 	public static final int QUANTITY_ERROR = -1;
 	
     private static String dbURL = "jdbc:mysql://capstonedatabase.cszu3gvo32mp.ap-southeast-2.rds.amazonaws.com:3306/CapstoneDatabase?user=admin&password=password";
@@ -38,6 +39,7 @@ public class CloudDatabase
     private static String buySellDetailTable = "buySellDetail";
     private static String sendReceiveDetailTable = "sendReceiveDetail";
     private static String stockTable = "stock";
+    private static String messageTable = "message";
     
     // jdbc Connection
     private Connection conn = null;
@@ -156,7 +158,7 @@ public class CloudDatabase
     	return owned;
     }
     
-    //TODO: Fix this function? I assume it is incorrect..
+    //TODO: Fix this function? I assume it is incorrect.. yep, need friend function working first
     public List<String> getFriends(String username)
     {
     	try
@@ -165,17 +167,10 @@ public class CloudDatabase
             ResultSet results = stmt.executeQuery("SELECT * FROM " + playerTable + " WHERE username !='" + username + "'");
             List<String> players = new ArrayList<String>();
             
-            if (results.next())
-            {
-        		try 
-        		{
-        			while(results.next())
-        			{
-        				players.add(results.getString(1));
-        			}
-        		} 
-        		catch (SQLException e) { e.printStackTrace(); }
-            }
+			while(results.next())
+			{
+				players.add(results.getString(2));
+			}
             
             stmt.close();
         	shutdown();
@@ -270,6 +265,32 @@ public class CloudDatabase
     	}
     	
     	return new PlayerStats(user.getUsername(), winning);
+    }
+    
+    public int getPlayerUserId(UserDetails user)
+    {
+	    int userId = 0;
+	    
+    	try 
+    	{
+    		stmt = conn.createStatement();
+    		ResultSet results = stmt.executeQuery("SELECT userId FROM " + playerTable + " WHERE username = '" + user.getUsername() + "'");
+    		
+			while(results.next())
+			{
+			    userId = Integer.parseInt(results.getString(1));
+			}
+			
+			results.close();
+			stmt.close();
+		} 
+    	catch (SQLException sqlExcept) 
+    	{ 
+    		userId = ID_ERROR;
+    		sqlExcept.printStackTrace(); 
+    	}
+    	
+    	return userId;
     }
     
     /**
@@ -386,6 +407,7 @@ public class CloudDatabase
 						MoneyTransaction receiveTransaction = new MoneyTransaction(0, 
 																		sendTransaction.getPartnerUsername(),
 																		TransactionType.Receive,
+																		getPlayerUserId(new UserDetails(sendTransaction.getUsername(), null)),
 																		sendTransaction.getUsername(),
 																		sendTransaction.getWinningAmount(),
 																		getCurrentPlayerStats(new UserDetails(sendTransaction.getPartnerUsername(), null)).getCurrentEarnings() + sendTransaction.getWinningAmount(),
@@ -604,8 +626,9 @@ public class CloudDatabase
 			{
 				// Retrieve transaction data
 				int id = results.getInt(1);
-				String otherUsername = results.getString(6);
-				double amount = results.getDouble(7);
+				int otherUserId = results.getInt(6);
+				String otherUsername = results.getString(7);
+				double amount = results.getDouble(8);
 				double postWinning = results.getDouble(4);
 				Date date = results.getDate(5);
 				TransactionType type = null;
@@ -621,6 +644,7 @@ public class CloudDatabase
 						id, 
 						details.getUsername(),
 						type,
+						otherUserId,
 						otherUsername,
 						amount,
 						postWinning,
@@ -789,10 +813,12 @@ public class CloudDatabase
     				"' AND transactionType = '" + transaction.getTransactionType() + 
     				"' AND postWinning = '" + transaction.getPostWinnings() + 
     				"' ORDER BY transactionID DESC");
+    		
 			if (results.next())
 			{
 	            stmt.execute("insert into " + sendReceiveDetailTable + " values ('" +
 	            		results.getString(1) + "','" +
+	            		transaction.getPartnerUserId() + "','" +
 	            		transaction.getPartnerUsername() + "','" +
 	            		transaction.getWinningAmount() + "')");
 			}
@@ -804,6 +830,47 @@ public class CloudDatabase
             sqlExcept.printStackTrace();
             return false;
         }
+        return true;
+    }
+    
+    public String sendMessage(UserDetails sender, String receiverUsername, String message)
+    {
+        if (createConnection())
+        {
+        	int receiverUserId;
+        	if ((receiverUserId=getPlayerUserId(new UserDetails(receiverUsername, null)))!=ID_ERROR)
+        	{
+        		UserDetails receiver = new UserDetails(receiverUserId, receiverUsername, null, null);
+        		insertMessage(sender, receiver, message);
+                shutdown();
+                return null;
+        	}
+        	shutdown();
+        	return WRONG_PIN;
+        }
+    	return NO_INTERNET;
+    }
+    
+    private boolean insertMessage(UserDetails sender, UserDetails receiver, String message)
+    {    	
+    	try
+        {
+            stmt = conn.createStatement();
+            
+            stmt.execute("insert into " + messageTable + " (senderUserId, senderUsername, receiverUserId, receiverUsername, message) values ('" +
+            		sender.getUserId() + "','" +
+            		sender.getUsername() + "','" +
+            		receiver.getUserId() + "','" +
+            		receiver.getUsername() + "','" +
+            		message + "')");
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+            return false;
+        } 
+    	
         return true;
     }
     

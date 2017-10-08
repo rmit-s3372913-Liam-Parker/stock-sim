@@ -23,6 +23,7 @@ public class DashboardView extends BorderPane
 	private CompanyView companyView = new CompanyView();
 	private Button logoutBtn;
 	private Button sendMoneyBtn;
+	private Button sendMessageBtn;
 	
 	private static final float PADDING = 3.5f;
 	
@@ -45,10 +46,13 @@ public class DashboardView extends BorderPane
 
 		sendMoneyBtn = new Button("Send Money");
 		sendMoneyBtn.setOnAction(new ToolbarController(this));
+
+		sendMessageBtn = new Button("Send Message");
+		sendMessageBtn.setOnAction(new ToolbarController(this));
 		
 		ToolBar toolBar = new ToolBar();
 		
-        toolBar.getItems().addAll(logoutBtn, new Separator(), sendMoneyBtn);
+        toolBar.getItems().addAll(logoutBtn, new Separator(), sendMoneyBtn, new Separator(), sendMessageBtn);
 		
 		// Populate main dashboard UI
 		GridPane gridPane = new GridPane();
@@ -88,5 +92,10 @@ public class DashboardView extends BorderPane
 	public Button getSendMoneyButton()
 	{
 		return sendMoneyBtn;
+	}
+	
+	public Button getSendMessageButton()
+	{
+		return sendMessageBtn;
 	}
 }

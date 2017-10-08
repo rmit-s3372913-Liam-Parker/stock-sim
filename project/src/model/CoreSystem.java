@@ -70,6 +70,8 @@ public class CoreSystem implements CoreAPI
 		} 
 		catch (IOException e) { e.printStackTrace(); }
 		
+		curUserSession.setUserId(getPlayerUserId(details));
+		
 		return "temp";
 	}
 
@@ -185,5 +187,16 @@ public class CoreSystem implements CoreAPI
 	public List<Transaction> getTransactions(UserDetails details) 
 	{
 		return cloudDatabase.getTransactions(details);
+	}
+
+	@Override
+	public int getPlayerUserId(UserDetails details) 
+	{
+		return cloudDatabase.getPlayerUserId(details);
+	}
+
+	@Override
+	public String sendMessage(String receiverUsername, String message) {
+		return cloudDatabase.sendMessage(curUserSession, receiverUsername, message);
 	}
 }

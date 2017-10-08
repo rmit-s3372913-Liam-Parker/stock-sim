@@ -8,13 +8,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.MoneyTransaction;
 import model.TransactionType;
+import model.UserDetails;
 
-public class SendController extends Controller
+public class SendMoneyController extends Controller
 {
 	final private int NOT_USED = 0;
 	final private String NOT_ENOUGH = "Not enough winning";
 	
-	public SendController (Stage dialog, Text alert, String receiver, double winning)
+	public SendMoneyController (Stage dialog, Text alert, String receiverUsername, double winning)
 	{
 		int transactionId = NOT_USED;
 		String sender = getModel().getSessionDetails().getUsername();
@@ -29,7 +30,8 @@ public class SendController extends Controller
 				new MoneyTransaction(transactionId,
 							sender, 
 							TransactionType.Send,
-							receiver, 
+							getModel().getPlayerUserId(new UserDetails(receiverUsername, null)),
+							receiverUsername, 
 							winning,
 							postWinning,
 							time);
