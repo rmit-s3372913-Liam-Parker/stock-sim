@@ -1,10 +1,8 @@
 <?php
-// start a session
-// include connection
 session_start();
 include '../config/connection.php';
-// select all from the asx_data table in database
-$sql = "select * from player";
+
+$sql = "select * from friend WHERE username = '" . $_SESSION['username'] . "' AND confirm = 'no' ";
 
 $records = mysqli_query($conn, $sql);
 
@@ -14,32 +12,28 @@ $records = mysqli_query($conn, $sql);
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <?php include("../includes/navigation.php");?>
-<div class="container" style="width: 600px;">
-  <h3 align="center">Find Friends</h3> <br>
-
-	<table class="table table-bordered">
+<div class="container" style="width: 500px;">
+  <h3 align="center">Friend Requests</h3> <br>
+  <table class="table table-bordered">
       <?php
       $i = 1;
       while($row = mysqli_fetch_array($records))
-      	{ 
-      	?>
+        { 
+        ?>
         <tr>
           <td><?php echo $i; ?></td>
-          <td><?php echo $row["username"]; $_SESSION['addedUser'] = $row["username"];?></td>
+          <td><?php echo $row["friendUsername"]; ?></td>
           <td>
-           <form action="friend_request.php" method="post">  
-            <button type="submit" name="row" id="row_user" value="<?php echo $row["username"]; ?>" class="btn btn-info">ADD</button>
+           <form action="accept_request.php" method="post">  
+            <button type="submit" name="row" id="row_user" value="<?php echo $row["friendUsername"]; ?>" class="btn btn-info">ACCEPT</button>
            </form>
             <?php $i++; ?>
           </td>
         </tr>
-		<?php 
-		 }
-		 ?>
-	</table>
+    <?php 
+     }
+     ?>
+  </table>
+
 
 </div>
-
-
-
- 

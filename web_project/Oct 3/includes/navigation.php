@@ -33,6 +33,7 @@ else
           <li><?php include 'winning.php'; ?></li>
           <li><a href="../dashboard/add_friends.php">Friends</a></li>
           <li><a href="../dashboard/send_message.php">Messages</a></li>
+          <li><a href="../dashboard/notification.php">Friend Requests</a></li>
         </ul>
       </li>
       <li><a href="../includes/logout.php">Logout</a></li>
