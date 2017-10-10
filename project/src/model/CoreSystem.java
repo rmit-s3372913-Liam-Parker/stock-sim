@@ -71,7 +71,7 @@ public class CoreSystem implements CoreAPI
 		catch (IOException e) { e.printStackTrace(); }
 		
 		curUserSession.setUserId(getPlayerUserId(details));
-		
+		//TODO: fix up
 		return "temp";
 	}
 
@@ -178,9 +178,14 @@ public class CoreSystem implements CoreAPI
 	}
 
 	@Override
-	public List<String> getFriends(String username) 
+	public List<String> getFriends() 
 	{
-		return cloudDatabase.getFriends(username);
+		return cloudDatabase.getFriends(curUserSession.getUsername());
+	}
+
+	@Override
+	public List<String> getNonFriends() {
+		return cloudDatabase.getNonFriends(curUserSession);
 	}
 
 	@Override
@@ -198,5 +203,10 @@ public class CoreSystem implements CoreAPI
 	@Override
 	public String sendMessage(String receiverUsername, String message) {
 		return cloudDatabase.sendMessage(curUserSession, receiverUsername, message);
+	}
+
+	@Override
+	public String sendFriendRequest(String receiverUsername) {
+		return cloudDatabase.sendFriendRequest(curUserSession, receiverUsername);
 	}
 }

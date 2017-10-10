@@ -24,6 +24,7 @@ public class DashboardView extends BorderPane
 	private Button logoutBtn;
 	private Button sendMoneyBtn;
 	private Button sendMessageBtn;
+	private Button sendFriendRequestBtn;
 	
 	private static final float PADDING = 3.5f;
 	
@@ -49,10 +50,15 @@ public class DashboardView extends BorderPane
 
 		sendMessageBtn = new Button("Send Message");
 		sendMessageBtn.setOnAction(new ToolbarController(this));
+
+		sendFriendRequestBtn = new Button("Send Friend Request");
+		sendFriendRequestBtn.setOnAction(new ToolbarController(this));
 		
 		ToolBar toolBar = new ToolBar();
 		
-        toolBar.getItems().addAll(logoutBtn, new Separator(), sendMoneyBtn, new Separator(), sendMessageBtn);
+        toolBar.getItems().addAll(logoutBtn, new Separator(),
+        		sendMoneyBtn, new Separator(),
+        		sendMessageBtn, new Separator(), sendFriendRequestBtn);
 		
 		// Populate main dashboard UI
 		GridPane gridPane = new GridPane();
@@ -93,9 +99,14 @@ public class DashboardView extends BorderPane
 	{
 		return sendMoneyBtn;
 	}
-	
+
 	public Button getSendMessageButton()
 	{
 		return sendMessageBtn;
+	}
+	
+	public Button getSendFriendRequestButton()
+	{
+		return sendFriendRequestBtn;
 	}
 }

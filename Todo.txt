@@ -1,13 +1,13 @@
 TODO
 
-BEGIN SESSION : RENAME/ADD A NEW LOG IN FUNCTION IN CORESYSTEM TO CHECK USER NAME AND PASS, LETTING BEGIN ACTUALLY BECOME BEGIN
-
-FORGOT PASSWORD : resend a new pin with view entering password
+Admin: new table, custom username recognized when log in
 
 SETTING : new password
+
+Notification: money, friend request
+
+Chat system
 
 CC 09/11/2017
 SEPM 06/11/2017
 OSP 30/10/2017
-
-ultilities: 

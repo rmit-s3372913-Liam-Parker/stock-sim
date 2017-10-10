@@ -17,7 +17,6 @@ import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 
-import controller.Controller;
 import controller.login.LoginController;
 import controller.login.RegisterController;
 import javafx.scene.control.Alert;
@@ -53,7 +52,6 @@ public class LoginView extends GridPane
 	private static final String USERNAME_LABEL = "Username:";
 	private static final String PASSWORD_LABEL = "Password:";
 	private static final String REMEMBER_LABEL = "Remember:";
-	private static final String FORGOT_PASSWORD_LABEL = "Forgot Password";
 	
 	private static final String LOGIN_BUTTON = "Login";
 	private static final String REGISTER_BUTTON = "Register";
@@ -62,7 +60,6 @@ public class LoginView extends GridPane
 
 	private TextField usernameField = new TextField();
 	private PasswordField passwordField = new PasswordField();
-	private TextField forgotPasswordField = new PasswordField();
 	private CheckBox rPasswordCheckbox = new CheckBox();
 	public Text alert = new Text();
 	

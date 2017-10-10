@@ -40,6 +40,7 @@ public class CloudDatabase
     private static String sendReceiveDetailTable = "sendReceiveDetail";
     private static String stockTable = "stock";
     private static String messageTable = "message";
+    private static String friendTable = "friend";
     
     // jdbc Connection
     private Connection conn = null;
@@ -158,18 +159,54 @@ public class CloudDatabase
     	return owned;
     }
     
-    //TODO: Fix this function? I assume it is incorrect.. yep, need friend function working first
+	public List<String> getNonFriends(UserDetails user) {
+		try
+        {
+            stmt = conn.createStatement();
+            ResultSet results = stmt.executeQuery("SELECT username"
+            									+ " FROM " + playerTable
+            									+ " WHERE username !='" + user.getUsername() + "' "
+            											+ "AND userId NOT IN ("
+            											+ "SELECT friendUserId"
+            											+ " FROM friend"
+            											+ " WHERE userId = '" + user.getUserId() +"')");
+            List<String> players = new ArrayList<String>();
+            
+			while(results.next())
+			{
+				players.add(results.getString(1));
+			}
+            
+            stmt.close();
+        	shutdown();
+            return players;
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+    	shutdown();
+    	return null;
+	}
+    
     public List<String> getFriends(String username)
     {
     	try
         {
             stmt = conn.createStatement();
-            ResultSet results = stmt.executeQuery("SELECT * FROM " + playerTable + " WHERE username !='" + username + "'");
+            ResultSet results = stmt.executeQuery("SELECT username"
+            									+ " FROM " + playerTable
+            									+ " WHERE username !='" + username + "' "
+            											+ "AND userId IN ("
+            											+ "SELECT friendUserId"
+            											+ " FROM friend"
+            											+ " WHERE friendUsername = '" + username +"'"
+            													+ " AND confirm = 'yes')");
             List<String> players = new ArrayList<String>();
             
 			while(results.next())
 			{
-				players.add(results.getString(2));
+				players.add(results.getString(1));
 			}
             
             stmt.close();
@@ -832,6 +869,46 @@ public class CloudDatabase
         }
         return true;
     }
+
+	public String sendFriendRequest(UserDetails sender, String receiverUsername) {
+		if (createConnection())
+        {
+        	int receiverUserId;
+        	if ((receiverUserId=getPlayerUserId(new UserDetails(receiverUsername, null)))!=ID_ERROR)
+        	{
+        		UserDetails receiver = new UserDetails(receiverUserId, receiverUsername, null, null);
+        		if (insertFriendRequest(sender, receiver))
+        		{
+	                shutdown();
+	                return null;
+        		}
+        	}
+        	shutdown();
+        }
+    	return NO_INTERNET;
+	}
+    
+    private boolean insertFriendRequest(UserDetails sender, UserDetails receiver)
+    {    	
+    	try
+        {
+            stmt = conn.createStatement();
+            
+            stmt.execute("insert into " + friendTable + " (userId, username, friendUserId, friendUsername) values ('" +
+            		sender.getUserId() + "','" +
+            		sender.getUsername() + "','" +
+            		receiver.getUserId() + "','" +
+            		receiver.getUsername() + "')");
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+            return false;
+        } 
+    	
+        return true;
+    } 
     
     public String sendMessage(UserDetails sender, String receiverUsername, String message)
     {
@@ -841,12 +918,13 @@ public class CloudDatabase
         	if ((receiverUserId=getPlayerUserId(new UserDetails(receiverUsername, null)))!=ID_ERROR)
         	{
         		UserDetails receiver = new UserDetails(receiverUserId, receiverUsername, null, null);
-        		insertMessage(sender, receiver, message);
-                shutdown();
-                return null;
+        		if (insertMessage(sender, receiver, message))
+        		{
+	                shutdown();
+	                return null;
+        		}
         	}
         	shutdown();
-        	return WRONG_PIN;
         }
     	return NO_INTERNET;
     }
@@ -908,5 +986,4 @@ public class CloudDatabase
         catch (SQLException e) {} // TODO: Investigate why exceptions throw here upon login
 
     }
-    
 }

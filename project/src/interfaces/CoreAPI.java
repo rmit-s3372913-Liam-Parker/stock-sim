@@ -2,9 +2,6 @@ package interfaces;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javafx.util.Pair;
@@ -129,7 +126,7 @@ public interface CoreAPI
     /**
      * @return A list of the players current friends.
      */
-    public List<String> getFriends(String username);
+    public List<String> getFriends();
 	
     /**
      * Sets the username's current pin
@@ -166,5 +163,9 @@ public interface CoreAPI
 	public int getPlayerUserId(UserDetails details);
 
 	public String sendMessage(String receiverUsername, String message);
+
+	public String sendFriendRequest(String receiverUsername);
+
+	public List<String> getNonFriends();
 
 }
