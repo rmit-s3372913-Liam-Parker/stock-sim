@@ -3,8 +3,8 @@
 // include connection
 session_start();
 include '../config/connection.php';
-// select all from the asx_data table in database
-$sql = "select * from player";
+// select all from player table in database
+$sql = "select * from player WHERE username != '".$_SESSION['username']."' And userId NOT IN (select friendUserId FROM player NATURAL JOIN friend WHERE username = '". $_SESSION['username'] ."')";
 
 $records = mysqli_query($conn, $sql);
 

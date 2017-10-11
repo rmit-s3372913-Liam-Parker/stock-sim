@@ -2,7 +2,13 @@
 session_start();
 include '../config/connection.php';
 
-$sql = "select * from friend WHERE username = '" . $_SESSION['username'] . "' AND confirm = 'no' ";
+// $sql = "select * 
+// from friend 
+// WHERE confirm = 'no' AND friendUserId IN (
+// select userId 
+// from player 
+// where username = '". $_SESSION['username'] ."' )";
+$sql = "select * from friend where friendUsername = '". $_SESSION['username'] ."' and confirm = 'no' ";
 
 $records = mysqli_query($conn, $sql);
 
@@ -22,10 +28,10 @@ $records = mysqli_query($conn, $sql);
         ?>
         <tr>
           <td><?php echo $i; ?></td>
-          <td><?php echo $row["friendUsername"]; ?></td>
+          <td><?php echo $row["username"]; ?></td>
           <td>
            <form action="accept_request.php" method="post">  
-            <button type="submit" name="row" id="row_user" value="<?php echo $row["friendUsername"]; ?>" class="btn btn-info">ACCEPT</button>
+            <button type="submit" name="row" id="row_user" value="<?php echo $row["username"]; ?>" class="btn btn-info">ACCEPT</button>
            </form>
             <?php $i++; ?>
           </td>
