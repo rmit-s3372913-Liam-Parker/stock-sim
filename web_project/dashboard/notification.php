@@ -8,7 +8,7 @@ include '../config/connection.php';
 // select userId 
 // from player 
 // where username = '". $_SESSION['username'] ."' )";
-$sql = "select * from friend where friendUsername = '". $_SESSION['username'] ."' and confirm = 'no' ";
+$sql = "select * from friend where friendUsername = '". $_SESSION['username'] ."' ";
 
 $records = mysqli_query($conn, $sql);
 
