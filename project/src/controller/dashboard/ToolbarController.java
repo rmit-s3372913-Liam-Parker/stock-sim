@@ -204,7 +204,7 @@ public class ToolbarController extends Controller
 		FriendView userList = new FriendView(false);
 
 		// Configure options and add them
-		Button sendButton = new Button("Send");
+		Button sendButton = new Button("Accept");
 		sendButton.setOnAction(new EventHandler<ActionEvent>()
 		{
 			@Override 
