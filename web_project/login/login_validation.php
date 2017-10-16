@@ -20,6 +20,9 @@ if(isset($_POST['login']))
 	$validate_query = mysqli_query($conn, "Select * FROM player WHERE username='".$uname."' AND confirm='no'");
 	$validate_result = mysqli_num_rows($validate_query);
 	
+	$sql = mysqli_query($conn, "select userId from player where username = '".$uname."' ");
+	//$result = mysqli_num_rows($sql);
+	$row = mysqli_fetch_array($sql);
 	
 	/* check for user */
 	if($user)
@@ -52,6 +55,7 @@ if(isset($_POST['login']))
 		// redirect to dashboard for valid username and password
 		if ($result == 1) {
 			$_SESSION['username'] = $uname;
+			$_SESSION['userId'] = $row['userId'];
 			$_SESSION['success'] = "You are now logged in";
 			header('location: ../dashboard/dashboard.php');
 		}

@@ -8,8 +8,10 @@ include '../config/connection.php';
 // select userId 
 // from player 
 // where username = '". $_SESSION['username'] ."' )";
-$sql = "select * from friend where friendUsername = '". $_SESSION['username'] ."' ";
+//$sql = "select * from friend where friendUsername = '". $_SESSION['username'] ."' ";
+// $sql = "select * from friend where friendUserId = '".$_SESSION['userId']."' AND userId NOT IN (SELECT friendUserId from friend where friendUserId = '".$_SESSION['userId']."');";
 
+$sql = "select * from friend where friendUserId = '".$_SESSION['userId']."' AND userId NOT IN (SELECT friendUserId from friend where userId = '".$_SESSION['userId']."');";
 $records = mysqli_query($conn, $sql);
 
 ?>
@@ -18,6 +20,7 @@ $records = mysqli_query($conn, $sql);
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <?php include("../includes/navigation.php");?>
+
 <div class="container" style="width: 500px;">
   <h3 align="center">Friend Requests</h3> <br>
   <table class="table table-bordered">
@@ -35,6 +38,7 @@ $records = mysqli_query($conn, $sql);
            </form>
             <?php $i++; ?>
           </td>
+
         </tr>
     <?php 
      }

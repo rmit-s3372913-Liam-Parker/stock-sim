@@ -17,11 +17,12 @@ $company = explode("\r\n", fread($asx, filesize("../config/files/ASXListedCompan
 // display 20 companies from ASX list of companies
 for ($i = 0; $i<20; $i++)
 {
-  $row = explode("\"", $company[$i]);
-  $column = explode(",", $row[2]);
+  
   if ($i>2){
     if ($company[$i]=="")
       break;
+    $row = explode("\"", $company[$i]);
+    $column = explode(",", $row[2]);
     echo "<tr>";
 
     echo "<td>" . $column[1] . "</td>";

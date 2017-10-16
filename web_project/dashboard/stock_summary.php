@@ -13,7 +13,6 @@ include '../config/connection.php';
 				        <th>Symbol</th>
 				        <th>Description</th>
 				        <th>Last price</th>
-				        <th>Change</th>
 				      </tr>
 				    </thead>
 				    <tbody>
