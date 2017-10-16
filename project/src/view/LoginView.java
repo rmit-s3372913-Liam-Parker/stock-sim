@@ -35,7 +35,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import javafx.util.Pair;
 
 
 /**
@@ -97,7 +96,7 @@ public class LoginView extends GridPane
 		Button registerButton = new Button(REGISTER_BUTTON);
 		registerButton.setOnAction(new RegisterController());
 		Button forgotPasswordButton = new Button(FORGOT_PASSWORD_BUTTON);
-		forgotPasswordButton.setOnAction(new ForgotPasswordController(this));
+		forgotPasswordButton.setOnAction(new ForgotPasswordController());
 
 		add(registerButton, 1, 3);
 		HBox buttons = new HBox(2.5);

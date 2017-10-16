@@ -109,7 +109,7 @@ public abstract class Controller implements EventHandler<ActionEvent>
 		return false;
 	}
 
-	protected String displayTextInputModal(final String header, final String message, final String defaultText)
+	protected Optional<String> displayTextInputModal(final String header, final String message, final String defaultText)
 	{
 		// Create out dialog
 		TextInputDialog dialog = new TextInputDialog(defaultText);
@@ -118,12 +118,10 @@ public abstract class Controller implements EventHandler<ActionEvent>
 		dialog.setContentText(message);
 
 		// Handle response
-		Optional<String> result = dialog.showAndWait();
-		if(result.isPresent()) { return result.get(); }
-		return "";
+		return dialog.showAndWait();
 	}
 
-	protected String displayTextInputModal(final String header, final String message)
+	protected Optional<String> displayTextInputModal(final String header, final String message)
 	{
 		return displayTextInputModal(header, message, "");
 	}
