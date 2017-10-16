@@ -39,7 +39,7 @@ public class ToolbarController extends Controller
 	{
 		if(event.getSource() == view.getLogOutButton())
 		{
-			if(this.displayQuestionModal(LOG_OUT_CONFIRMATION_MESSAGE))
+			if(this.displayConfirmationModal("Logout Confirmation", LOG_OUT_CONFIRMATION_MESSAGE))
 			{
 				this.getModel().endSession();
 				this.switchView(new LoginView());
