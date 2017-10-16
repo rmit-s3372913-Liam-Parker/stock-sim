@@ -15,7 +15,7 @@ include '../config/connection.php';
 
 <?php include("../includes/navigation.php");?>
 <div class="container" style="width: 500px;">
-  <form id="friend_message">
+  <form id="friend_message" action="message_validation.php" method="POST">
     <label>Name: </label>
     <input type="text" name="name" id="name" class="form-control">
     <br>
@@ -23,10 +23,40 @@ include '../config/connection.php';
     <input type="text" name="message" id="message" class="form-control">
     <br>
     <input type="submit" name="submit_message" id="submit_message" class="btn btn-info" value="Submit">
+    <span id="error_message" class="text-danger"></span>  
+    <span id="success_message" class="text-success"></span>
   </form>
 
 </div>
 
+ <script>  
+ $(document).ready(function(){  
+      $('#submit_message').click(function(){  
+           var name = $('#name').val();  
+           var message = $('#message').val();  
+           if(name == '' || message == '')  
+           {  
+                $('#error_message').html("All Fields are required");  
+           }  
+           else  
+           {  
+                $('#error_message').html('');  
+                $.ajax({  
+                     url:"insert.php",  
+                     method:"POST",  
+                     data:{name:name, message:message},  
+                     success:function(data){  
+                          $("form").trigger("reset");  
+                          $('#success_message').fadeIn().html(data);  
+                          setTimeout(function(){  
+                               $('#success_message').fadeOut("Slow");  
+                          }, 2000);  
+                     }  
+                });  
+           }  
+      });  
+ });  
+ </script> 
 
 
  

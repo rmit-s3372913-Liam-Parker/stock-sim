@@ -4,7 +4,7 @@
 session_start();
 include '../config/connection.php';
 // select all from player table in database
-$sql = "select * from player WHERE username != '".$_SESSION['username']."' And userId NOT IN (select friendUserId FROM player NATURAL JOIN friend WHERE username = '". $_SESSION['username'] ."')";
+$sql = "select * from message WHERE receiverUsername = '".$_SESSION['username']."' ";
 
 $records = mysqli_query($conn, $sql);
 
@@ -15,23 +15,17 @@ $records = mysqli_query($conn, $sql);
 
 <?php include("../includes/navigation.php");?>
 <div class="container" style="width: 600px;">
-  <h3 align="center">Find Friends</h3> <br>
+  <h3 align="center">Messages</h3> <br>
 
 	<table class="table table-bordered">
       <?php
-      $i = 1;
+      
       while($row = mysqli_fetch_array($records))
       	{ 
       	?>
         <tr>
-          <td><?php echo $i; ?></td>
-          <td><?php echo $row["username"]; $_SESSION['addedUser'] = $row["username"];?></td>
-          <td>
-           <form action="friend_request.php" method="post">  
-            <button type="submit" name="row" id="row_user" value="<?php echo $row["username"]; ?>" class="btn btn-info">ADD</button>
-           </form>
-            <?php $i++; ?>
-          </td>
+          <td><?php echo "From: <br/>" . "<b>" . $row["senderUsername"] . "</b>"; ?></td> 
+          <td><?php echo "Message: <br/>" . $row["message"]; ?> </td>
         </tr>
 		<?php 
 		 }
