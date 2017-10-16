@@ -23,7 +23,6 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 {
 	private static final String WRONG_SYNTAX = "Can have only maximum length of 15 of normal alphabet, number and following special character: ,.;:?_-$";
 	private static final String REMEMBER_DETAILS_PATH = "./dataStorage/lastLogin.txt";
-
 	private LoginView view;
 	
 	/**
@@ -69,15 +68,17 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 			qualified = false;
 		}
 		
-		if (qualified){
+		if (qualified)
+		{
 			// connect to database and get match
 			UserDetails user = new UserDetails(userString, pwString);
 			String loginAlert = getModel().login(user);
-			if (loginAlert==null){
+			if (loginAlert == null)
+			{
 				String confirmAlert = getModel().confirmedUser(user);
 				if (view.getPasswordCheckbox().isSelected())
 					user.setRemember(true);
-				if (confirmAlert==null)
+				if (confirmAlert == null)
 				{
 					getModel().beginSession(user);
 					switchView(new DashboardView());
@@ -86,42 +87,47 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 					if (confirmAlert.equals("Email is not confirmed"))
 						switchView(new ConfirmationView(user));
 				newline();
-				view.alert.setText(view.alert.getText()+confirmAlert);
+				view.alert.setText(view.alert.getText() + confirmAlert);
 			}
 			newline();
-			view.alert.setText(view.alert.getText()+loginAlert);
+			view.alert.setText(view.alert.getText() + loginAlert);
 		}
 		event.consume();
 	}
 
 	private void newline(){
-		if (view.alert.getText()!="")
+		if (view.alert.getText().equals(""))
 			view.alert.setText(view.alert.getText()+"\r\n");
 	}
 
 	// Retrieves saved information if required.
 	private void checkRemember()
 	{
-		try
+		try(FileReader reader = new FileReader(REMEMBER_DETAILS_PATH))
 		{
-			FileReader reader = new FileReader(REMEMBER_DETAILS_PATH);
 			BufferedReader bufferedReader = new BufferedReader(reader);
 
 			String line;
 
-			if ((line = bufferedReader.readLine()) != null) {
+			if ((line = bufferedReader.readLine()) != null)
+			{
 				view.getUserNameText().setText(line);
 			}
 
-			if ((line = bufferedReader.readLine()) != null) {
+			if ((line = bufferedReader.readLine()) != null)
+			{
 				view.getPasswordText().setText(line);
 				view.getPasswordCheckbox().setSelected(true);
 			}
+		}
+		catch (IOException e)
+		{
+			displayExceptionModal(e, "Something went wrong when trying to read saved login information.");
 
-			reader.close();
-		} catch (FileNotFoundException e) {
-		} catch (IOException e) {
-			e.printStackTrace();
+			// Reset the input fields
+			view.getUserNameText().setText("");
+			view.getPasswordText().setText("");
+			view.getPasswordCheckbox().setSelected(false);
 		}
 	}
 }

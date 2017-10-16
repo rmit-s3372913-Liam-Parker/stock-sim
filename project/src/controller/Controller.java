@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -17,9 +18,6 @@ import java.util.Optional;
 
 public abstract class Controller implements EventHandler<ActionEvent> 
 {
-	protected static final int POPUP_WIDTH = 300;
-	protected static final int POPUP_HEIGHT = 150;
-	private boolean hasConfirmedDialog = false;
 	
 	/**
 	 * Switches views in the application window.
@@ -32,7 +30,7 @@ public abstract class Controller implements EventHandler<ActionEvent>
 	}
 	
 	/**
-	 * @return The main application stage for displaying modal windows or making other adjustments.
+	 * @return The main application stage for or making other adjustments.
 	 */
 	protected Stage getStage()
 	{
@@ -51,8 +49,8 @@ public abstract class Controller implements EventHandler<ActionEvent>
 	{
 		// Create our alert and set content
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Notification");
-		alert.setHeaderText("Notification Message");
+		alert.setTitle("Notification Window");
+		alert.setHeaderText(header);
 		alert.setContentText(message);
 
 		// Ensure expected behaviour of window
@@ -68,7 +66,7 @@ public abstract class Controller implements EventHandler<ActionEvent>
 	{
 		// Create our alert and set content
 		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Error");
+		alert.setTitle("Error Window");
 		alert.setHeaderText(header);
 		alert.setContentText(message);
 
@@ -85,7 +83,7 @@ public abstract class Controller implements EventHandler<ActionEvent>
 	{
 		// Create our alert and set content
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Confirmation");
+		alert.setTitle("Confirmation Window");
 		alert.setHeaderText(header);
 		alert.setContentText(message);
 
@@ -111,7 +109,26 @@ public abstract class Controller implements EventHandler<ActionEvent>
 		return false;
 	}
 
-	protected void displayExceptionModal(final Exception ex)
+	protected String displayTextInputModal(final String header, final String message, final String defaultText)
+	{
+		// Create out dialog
+		TextInputDialog dialog = new TextInputDialog(defaultText);
+		dialog.setTitle("Input Window");
+		dialog.setHeaderText(header);
+		dialog.setContentText(message);
+
+		// Handle response
+		Optional<String> result = dialog.showAndWait();
+		if(result.isPresent()) { return result.get(); }
+		return "";
+	}
+
+	protected String displayTextInputModal(final String header, final String message)
+	{
+		return displayTextInputModal(header, message, "");
+	}
+
+	protected void displayExceptionModal(final Exception ex, final String userReadableString)
 	{
 		//TODO: Implement a stack trace dialog for runtime debugging.
 	}

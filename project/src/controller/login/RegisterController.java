@@ -13,7 +13,6 @@ public class RegisterController extends Controller
 	public void handle(ActionEvent event) 
 	{
 		switchView(new RegistrationView());
-		
 		event.consume();
 	}
 }

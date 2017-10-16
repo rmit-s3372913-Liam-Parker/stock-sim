@@ -75,7 +75,7 @@ public class ToolbarController extends Controller
 		HBox btnBox = new HBox();
 		btnBox.setAlignment(Pos.CENTER);
 		btnBox.setSpacing(5.0f);
-		Scene scene = new Scene(pane, POPUP_WIDTH, 600);
+		Scene scene = new Scene(pane, 600, 300);
 		
 		//setting up input field
 		NumberField.numberField(winningField);
@@ -136,7 +136,7 @@ public class ToolbarController extends Controller
 		HBox btnBox = new HBox();
 		btnBox.setAlignment(Pos.CENTER);
 		btnBox.setSpacing(5.0f);
-		Scene scene = new Scene(pane, POPUP_WIDTH, 600);
+		Scene scene = new Scene(pane, 600, 300);
 		
 		
 		//setting up label
@@ -194,7 +194,7 @@ public class ToolbarController extends Controller
 		HBox btnBox = new HBox();
 		btnBox.setAlignment(Pos.CENTER);
 		btnBox.setSpacing(5.0f);
-		Scene scene = new Scene(pane, POPUP_WIDTH, 600);
+		Scene scene = new Scene(pane, 600, 300);
 		
 		//setting up label
 		Label receiver = new Label("Username");
