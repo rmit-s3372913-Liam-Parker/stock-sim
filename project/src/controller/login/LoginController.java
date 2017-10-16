@@ -11,58 +11,58 @@ import view.ConfirmationView;
 import view.DashboardView;
 import view.LoginView;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 /**
  * LoginController handles login and input validation.
  * */
 public class LoginController extends Controller implements EventHandler<ActionEvent>
 {
-	private static final String WRONG_SYNTAX = 
-			"Can have only maximum length of 15 of normal alphabet, number and following special character: ,.;:?_-$";
-			
-	LoginView view;
-	TextField user;
-	TextField pw;
-	CheckBox re;
+	private static final String WRONG_SYNTAX = "Can have only maximum length of 15 of normal alphabet, number and following special character: ,.;:?_-$";
+	private static final String REMEMBER_DETAILS_PATH = "./dataStorage/lastLogin.txt";
+
+	private LoginView view;
 	
 	/**
 	 * Constructs a controller for the login UI.
-	 * @param user The TextField used to input username.
-	 * @param pw The TextField used to input password.
+	 * @param view The view associated to this controller.
 	 */
-	public LoginController(LoginView view, TextField user, TextField pw, CheckBox re)
+	public LoginController(LoginView view)
 	{
 		this.view = view;
-		this.user = user;
-		this.pw = pw;
-		this.re = re;
+		checkRemember();
 	}
 	
 	@Override
 	public void handle(ActionEvent event) 
 	{
-		String userString = user.getText();
-		String pwString = pw.getText();
+		String userString = view.getUserNameText().getText();
+		String pwString = view.getPasswordText().getText();
 		boolean qualified = true;
 		
 		view.alert.setText(null);
 		
 		//Input validation
-		
 		// check username if empty
-		if (userString.isEmpty()) {
+		if (userString.isEmpty())
+		{
 			view.alert.setText("Please enter a username");
 			qualified = false;
 		}
 		
 		// check password if empty
-		if (pwString.isEmpty()) {
+		if (pwString.isEmpty())
+		{
 			newline();
 			view.alert.setText(view.alert.getText()+"Please enter the password");
 			qualified = false;
 		}
 
 		//check if password is allowed
-		if (!InputValidation.inputValidation(pw.getText()) || !InputValidation.inputValidation(user.getText()))
+		if (!InputValidation.inputValidation(pwString) || !InputValidation.inputValidation(userString))
 		{
 			newline();
 			view.alert.setText(view.alert.getText() + WRONG_SYNTAX);
@@ -75,7 +75,7 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 			String loginAlert = getModel().login(user);
 			if (loginAlert==null){
 				String confirmAlert = getModel().confirmedUser(user);
-				if (re.isSelected())
+				if (view.getPasswordCheckbox().isSelected())
 					user.setRemember(true);
 				if (confirmAlert==null)
 				{
@@ -97,5 +97,31 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 	private void newline(){
 		if (view.alert.getText()!="")
 			view.alert.setText(view.alert.getText()+"\r\n");
+	}
+
+	// Retrieves saved information if required.
+	private void checkRemember()
+	{
+		try
+		{
+			FileReader reader = new FileReader(REMEMBER_DETAILS_PATH);
+			BufferedReader bufferedReader = new BufferedReader(reader);
+
+			String line;
+
+			if ((line = bufferedReader.readLine()) != null) {
+				view.getUserNameText().setText(line);
+			}
+
+			if ((line = bufferedReader.readLine()) != null) {
+				view.getPasswordText().setText(line);
+				view.getPasswordCheckbox().setSelected(true);
+			}
+
+			reader.close();
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

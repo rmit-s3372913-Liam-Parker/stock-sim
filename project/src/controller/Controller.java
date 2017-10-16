@@ -3,18 +3,17 @@ package controller;
 import interfaces.CoreAPI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.UserDetails;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import view.StockApplication;
+
+import java.util.Optional;
 
 public abstract class Controller implements EventHandler<ActionEvent> 
 {
@@ -48,91 +47,74 @@ public abstract class Controller implements EventHandler<ActionEvent>
 		return StockApplication.getModel();
 	}
 	
-	protected void displayNotificationModal(String message)
+	protected void displayNotificationModal(final String header, final String message)
 	{
-		// Create frame for modal window
-		Stage dialog = new Stage();
-		dialog.setResizable(false);
-		dialog.setTitle("Notification");
-		
-		BorderPane pane = new BorderPane();
-		VBox vBox = new VBox();
-		vBox.setAlignment(Pos.CENTER);
-		vBox.setSpacing(10.0f);
-		
-		Scene scene = new Scene(pane, POPUP_WIDTH, POPUP_HEIGHT);
-				
-		// Configure options and add them
-		Button btn = new Button("OK");
-		
-		btn.setOnAction(new EventHandler<ActionEvent>() 
-		{
-		    @Override public void handle(ActionEvent e) 
-		    {
-		        dialog.hide();
-		    }
-		});
-		
-		vBox.getChildren().addAll(new Text(message), btn);
-		pane.setCenter(vBox);
-		
-		// Configure modal functionality and display
-		dialog.setScene(scene);
-		dialog.initOwner(this.getStage());
-		dialog.initModality(Modality.APPLICATION_MODAL); 
-		dialog.showAndWait();
-	}
-	
-	protected boolean displayQuestionModal(String message)
-	{
-		// Create frame for modal window
-		Stage dialog = new Stage();
-		dialog.setResizable(false);
-		dialog.setTitle("User Confirmation");
-		
-		BorderPane pane = new BorderPane();
-		VBox vBox = new VBox();
-		vBox.setAlignment(Pos.CENTER);
-		vBox.setSpacing(10.0f);
-		HBox btnBox = new HBox();
-		btnBox.setAlignment(Pos.CENTER);
-		btnBox.setSpacing(5.0f);
-		Scene scene = new Scene(pane, POPUP_WIDTH, POPUP_HEIGHT);
-						
-		// Configure options and add them
-		Button okBtn = new Button("OK");
-		okBtn.setOnAction(new EventHandler<ActionEvent>()
-		{
-			@Override 
-			public void handle(ActionEvent e) 
-			{
-				dialog.hide();
-				hasConfirmedDialog = true;
-			}
-		});
-				
-		Button cancelBtn = new Button("Cancel");
-		cancelBtn.setOnAction(new EventHandler<ActionEvent>() 
-		{
-			@Override 
-			public void handle(ActionEvent e) 
-			{
-				dialog.hide();
-				hasConfirmedDialog = false;
-			}
-		});
-				
-		btnBox.getChildren().addAll(okBtn, cancelBtn);
-		vBox.getChildren().addAll(new Text(message), btnBox);
-		pane.setCenter(vBox);
-		
-		
-		// Configure modal functionality and display
-		dialog.setScene(scene);
-		dialog.initOwner(this.getStage());
-		dialog.initModality(Modality.APPLICATION_MODAL); 
-		dialog.showAndWait();
+		// Create our alert and set content
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Notification");
+		alert.setHeaderText("Notification Message");
+		alert.setContentText(message);
 
-		return hasConfirmedDialog;
+		// Ensure expected behaviour of window
+		alert.setResizable(false);
+		alert.initOwner(this.getStage());
+		alert.initModality(Modality.APPLICATION_MODAL);
+
+		// We show the modal and wait for input
+		alert.showAndWait();
 	}
+
+	protected void displayErrorModal(final String header, final String message)
+	{
+		// Create our alert and set content
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Error");
+		alert.setHeaderText(header);
+		alert.setContentText(message);
+
+		// Ensure expected behaviour of window
+		alert.setResizable(false);
+		alert.initOwner(this.getStage());
+		alert.initModality(Modality.APPLICATION_MODAL);
+
+		// We show the modal and wait for input
+		alert.showAndWait();
+	}
+
+	protected boolean displayConfirmationModal(final String header, final String message)
+	{
+		// Create our alert and set content
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation");
+		alert.setHeaderText(header);
+		alert.setContentText(message);
+
+		// Ensure expected behaviour of window
+		alert.setResizable(false);
+		alert.initOwner(this.getStage());
+		alert.initModality(Modality.APPLICATION_MODAL);
+
+		// Create buttons for each of our expected inputs
+		ButtonType okBtn = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+		ButtonType cancelBtn = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+		alert.getButtonTypes().setAll(okBtn, cancelBtn);
+
+		// We show the modal and wait for input
+		Optional<ButtonType> result = alert.showAndWait();
+
+		// We check input to the modal
+		if(result.isPresent())
+		{
+			if (result.get() == okBtn) { return true; }
+			else if (result.get() == cancelBtn) { return false; }
+		}
+		return false;
+	}
+
+	protected void displayExceptionModal(final Exception ex)
+	{
+		//TODO: Implement a stack trace dialog for runtime debugging.
+	}
+
+
 }

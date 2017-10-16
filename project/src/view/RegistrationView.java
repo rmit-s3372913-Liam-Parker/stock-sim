@@ -10,8 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 /**
@@ -36,28 +34,18 @@ public class RegistrationView extends BorderPane
 	
 	public RegistrationView()
 	{
-		populate();
-	}
-	
-	/**
-	 * Builds the UI for this pane. UI elements and
-	 * any call-backs for functionality should be registered
-	 * here.   
-	 * */
-	public void populate()
-	{
 		setCenter(addGridPane());
 	}
-	
+
 	private GridPane addGridPane(){
 		GridPane gridPane = new GridPane();
 		gridPane.setAlignment(Pos.CENTER);
-		
+
 		// Setup title
 		Text registrationTitle = new Text(REGISTRATION_TITLE);
-		registrationTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		registrationTitle.setFont(StockApplication.APP_HEADING_FONT);
 		gridPane.add(registrationTitle, 0, 0, 2, 1);
-		
+
 		// Setup user-name field
 		Label username = new Label(USERNAME_LABEL);
 		gridPane.add(username, 0, 1);
