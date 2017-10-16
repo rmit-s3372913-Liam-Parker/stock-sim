@@ -189,19 +189,18 @@ public class CloudDatabase
     	return null;
 	}
     
-    public List<String> getFriends(String username)
+    public List<String> getFriends(UserDetails user)
     {
     	try
         {
             stmt = conn.createStatement();
             ResultSet results = stmt.executeQuery("SELECT username"
-            									+ " FROM " + playerTable
-            									+ " WHERE username !='" + username + "' "
-            											+ "AND userId IN ("
-            											+ "SELECT friendUserId"
+            									+ " FROM " + friendTable
+            									+ " WHERE friendUserId = " + user.getUserId()
+            											+ " AND userId IN ("
+            											+ " SELECT friendUserId"
             											+ " FROM friend"
-            											+ " WHERE friendUsername = '" + username +"'"
-            													+ " AND confirm = 'yes')");
+            											+ " WHERE userId = '" + user.getUserId() +"')");
             List<String> players = new ArrayList<String>();
             
 			while(results.next())

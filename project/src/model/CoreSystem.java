@@ -180,7 +180,7 @@ public class CoreSystem implements CoreAPI
 	@Override
 	public List<String> getFriends() 
 	{
-		return cloudDatabase.getFriends(curUserSession.getUsername());
+		return cloudDatabase.getFriends(curUserSession);
 	}
 
 	@Override

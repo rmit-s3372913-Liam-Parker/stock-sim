@@ -8,6 +8,8 @@ Notification: money, friend request
 
 Chat system
 
+5gn bug
+
 CC 09/11/2017
 SEPM 06/11/2017
 OSP 30/10/2017

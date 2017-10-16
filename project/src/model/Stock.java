@@ -36,7 +36,7 @@ public class Stock
 	{
 		code = (String)obj.get("code");
 		description = (String)obj.get("desc_full");
-		lastPrice = (double)obj.get("last_price");
+		lastPrice = ((Number)obj.get("last_price")).doubleValue();
 		volume = (long)obj.get("volume");
 		marketCap = (long)obj.get("market_cap");
 		numShares = (long)obj.get("number_of_shares");
