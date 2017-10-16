@@ -31,13 +31,19 @@ public class RegistrationView extends BorderPane
 	public Text passCheck = new Text();
 	public Text retypePassCheck = new Text();
 	public Text internetCheck = new Text();
-	
+
+	private TextField usernameField;
+	private TextField emailField;
+	private PasswordField passwordField;
+	private PasswordField retypePasswordField;
+
 	public RegistrationView()
 	{
 		setCenter(addGridPane());
 	}
 
-	private GridPane addGridPane(){
+	private GridPane addGridPane()
+	{
 		GridPane gridPane = new GridPane();
 		gridPane.setAlignment(Pos.CENTER);
 
@@ -49,7 +55,7 @@ public class RegistrationView extends BorderPane
 		// Setup user-name field
 		Label username = new Label(USERNAME_LABEL);
 		gridPane.add(username, 0, 1);
-		TextField usernameField = new TextField();
+		usernameField = new TextField();
 		gridPane.add(usernameField, 1, 1);
 
 		//Creating an alert Text 
@@ -58,7 +64,7 @@ public class RegistrationView extends BorderPane
 		// Setup email field
 		Label email = new Label(EMAIL_LABEL);
 		gridPane.add(email, 0, 2);
-		TextField emailField = new TextField();
+		emailField = new TextField();
 		gridPane.add(emailField, 1, 2);
 
 		//Creating an alert Text 
@@ -67,7 +73,7 @@ public class RegistrationView extends BorderPane
 		// Setup password field
 		Label password = new Label(PASSWORD_LABEL);
 		gridPane.add(password, 0, 3);
-		PasswordField passwordField = new PasswordField();
+		passwordField = new PasswordField();
 		gridPane.add(passwordField, 1, 3);
 
 		//Creating an alert Text 
@@ -76,7 +82,7 @@ public class RegistrationView extends BorderPane
 		// Setup password retype field
 		Label retypePassword = new Label(RETYPE_PASSWORD_LABEL);
 		gridPane.add(retypePassword, 0, 4);
-		PasswordField retypePasswordField = new PasswordField();
+		retypePasswordField = new PasswordField();
 		gridPane.add(retypePasswordField, 1, 4);
 
 		//Creating an alert Text 
@@ -87,7 +93,7 @@ public class RegistrationView extends BorderPane
 		
 		// Set up buttons
 		Button registerButton = new Button(REGISTER_BUTTON);
-		registerButton.setOnAction(new RegistrationController(this, usernameField, emailField, passwordField, retypePasswordField));
+		registerButton.setOnAction(new RegistrationController(this));
 		gridPane.add(registerButton, 1, 3);
 		Button cancelButton = new Button(CANCEL_BUTTON);
 		cancelButton.setOnAction(new ReturnToLoginButtonController());
@@ -96,5 +102,25 @@ public class RegistrationView extends BorderPane
 		buttons.getChildren().addAll(registerButton, cancelButton);
 		gridPane.add(buttons, 1, 6);
 		return gridPane;
+	}
+
+	public TextField getUsernameField()
+	{
+		return usernameField;
+	}
+
+	public TextField getEmailField()
+	{
+		return emailField;
+	}
+
+	public PasswordField getPasswordField()
+	{
+		return passwordField;
+	}
+
+	public PasswordField getConfirmPasswordField()
+	{
+		return retypePasswordField;
 	}
 }
