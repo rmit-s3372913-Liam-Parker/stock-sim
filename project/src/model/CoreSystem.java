@@ -41,8 +41,7 @@ public class CoreSystem implements CoreAPI
 	@Override
 	public String login(UserDetails details) 
 	{
-		curUserSession = details;
-		return cloudDatabase.login(curUserSession);
+		return cloudDatabase.login(details);
 	}
 	
 	@Override
@@ -69,7 +68,8 @@ public class CoreSystem implements CoreAPI
 	        writer.close();
 		} 
 		catch (IOException e) { e.printStackTrace(); }
-		
+
+		curUserSession = details;
 		curUserSession.setUserId(getPlayerUserId(details));
 		//TODO: fix up
 		return "temp";

@@ -3,16 +3,12 @@ package controller.login;
 import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
 import model.UserDetails;
 import ultilities.InputValidation;
 import view.ConfirmationView;
 import view.DashboardView;
 import view.LoginView;
-
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
