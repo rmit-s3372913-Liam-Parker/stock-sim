@@ -372,8 +372,8 @@ public class CloudDatabase
             {
                 stmt = conn.createStatement();
                 stmt.executeUpdate("UPDATE " + playerTable
-                		+ " SET password=" + Hash.hashPassword(password) +
-                		" WHERE username = '" + username + "'");
+                		+ " SET password = '" + Hash.hashPassword(password) +
+                		"' WHERE username = '" + username + "'");
                 stmt.close();
                 return "DONE";
             } 
