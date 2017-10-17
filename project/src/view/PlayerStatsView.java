@@ -32,10 +32,9 @@ public class PlayerStatsView extends BorderPane
 	private ToggleButton curStocksBtn = new ToggleButton("Current Stocks");
 	private ToggleButton transactionBtn = new ToggleButton("Transaction History");
 	
-	ObservableList<String> listItems = FXCollections.observableArrayList();
-	private final ListView<String> statsList = new ListView<>(listItems);
-	
+	private final ObservableList<String> listItems = FXCollections.observableArrayList();
 	private final PlayerStatsController controller = new PlayerStatsController(listItems, transactionBtn, curStocksBtn);
+	private final ListView<String> statsList = new ListView<>(listItems);
 	
 	private static DoubleProperty currentEarnings = new SimpleDoubleProperty();
 	

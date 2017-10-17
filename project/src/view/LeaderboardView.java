@@ -15,7 +15,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import model.PlayerStats;
 
-public class LeaderboardView extends BorderPane 
+public class LeaderBoardView extends BorderPane
 {
 	Text title = new Text("Leaderboard");
 	CoreAPI core = StockApplication.getModel();
@@ -25,7 +25,7 @@ public class LeaderboardView extends BorderPane
 	
 	private final int DURATION = 10000;
 	
-	public LeaderboardView()
+	public LeaderBoardView()
 	{
 		populate();
 		final Timeline timeline = new Timeline(

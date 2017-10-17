@@ -9,23 +9,15 @@ public class Stock
 {
 	private static final double BROKER_FEE = 50.0;
 	private static final double PURCHASE_FEE_MULTIPLIER = 0.01;
-	
-	String code;
-	String description;
-	boolean suspended;
-	
-	long volume;
-	long averageDailyVolume;
-	long marketCap;
-	long numShares;
-	
-	double lastPrice;
-	double openPrice;
-	double dayHighPrice;
-	double dayLowPrice;
-	double changePrice;
-	double bidPrice;
-	double offerPrice;
+
+	private String code;
+	private String description;
+	private boolean suspended;
+
+	private long volume;
+	private long marketCap;
+	private long numShares;
+	private double lastPrice;
 	
 	/**
 	 * Builds a stock object from a given JSONObject.
@@ -79,10 +71,6 @@ public class Stock
 		return volume;
 	}
 
-	public long getAverageDailyVolume() {
-		return averageDailyVolume;
-	}
-
 	public long getMarketCap() {
 		return marketCap;
 	}
@@ -93,30 +81,6 @@ public class Stock
 
 	public double getStockPrice() {
 		return lastPrice;
-	}
-
-	public double getOpenPrice() {
-		return openPrice;
-	}
-
-	public double getDayHighPrice() {
-		return dayHighPrice;
-	}
-
-	public double getDayLowPrice() {
-		return dayLowPrice;
-	}
-
-	public double getChangePrice() {
-		return changePrice;
-	}
-
-	public double getBidPrice() {
-		return bidPrice;
-	}
-
-	public double getOfferPrice() {
-		return offerPrice;
 	}
 	
 }

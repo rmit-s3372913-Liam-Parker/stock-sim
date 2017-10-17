@@ -23,9 +23,9 @@ import com.opencsv.CSVReader;
  * */
 public class ASXInterface 
 {
-	private final String STOCK_URL = "http://data.asx.com.au/data/1/share/";
-	private final String COMPANY_LIST = "http://www.asx.com.au/asx/research/ASXListedCompanies.csv";
-	private final int LINE_SKIP = 3;
+	private final static String STOCK_URL = "http://data.asx.com.au/data/1/share/";
+	private final static String COMPANY_LIST = "http://www.asx.com.au/asx/research/ASXListedCompanies.csv";
+	private final static int LINE_SKIP = 3;
 	
 	private List<CompanyInfo> cachedCompanyInfo = null;
 	

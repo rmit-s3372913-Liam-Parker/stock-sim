@@ -18,13 +18,13 @@ public class DashboardView extends BorderPane
 {
 	// Each sub section of the dash-board is contained within these classes.
 	private StockView stockView = new StockView();
-	private LeaderboardView leaderboardView = new LeaderboardView();
+	private LeaderBoardView leaderBoardView = new LeaderBoardView();
 	private PlayerStatsView statsView = new PlayerStatsView();
 	private CompanyView companyView = new CompanyView();
-	private Button logoutBtn;
-	private Button sendMoneyBtn;
-	private Button sendMessageBtn;
-	private Button sendFriendRequestBtn;
+
+	private final Button logoutBtn = new Button("Log out");
+	private final Button friendsBtn = new Button("FriendsView");
+	private final Button notificationsBtn = new Button("Notifications");
 	
 	private static final float PADDING = 3.5f;
 	
@@ -33,32 +33,18 @@ public class DashboardView extends BorderPane
 		companyView.addStockObserver(stockView);
 		populate();
 	}
-	
-	/**
-	 * Builds the UI for this pane. UI elements and
-	 * any call-backs for functionality should be registered
-	 * here.   
-	 * */
+
 	private void populate()
 	{
-		// Populate tool bar
-		logoutBtn = new Button("Log out");
-		logoutBtn.setOnAction(new ToolbarController(this));
+		// Assign buttons to controller
+		ToolbarController controller = new ToolbarController(this);
+		logoutBtn.setOnAction(controller);
+		friendsBtn.setOnAction(controller);
+		notificationsBtn.setOnAction(controller);
 
-		sendMoneyBtn = new Button("Send Money");
-		sendMoneyBtn.setOnAction(new ToolbarController(this));
-
-		sendMessageBtn = new Button("Send Message");
-		sendMessageBtn.setOnAction(new ToolbarController(this));
-
-		sendFriendRequestBtn = new Button("Send Friend Request");
-		sendFriendRequestBtn.setOnAction(new ToolbarController(this));
-		
+		// Build our tool bar for UI
 		ToolBar toolBar = new ToolBar();
-		
-        toolBar.getItems().addAll(logoutBtn, new Separator(),
-        		sendMoneyBtn, new Separator(),
-        		sendMessageBtn, new Separator(), sendFriendRequestBtn);
+        toolBar.getItems().addAll(logoutBtn, new Separator(), friendsBtn, notificationsBtn);
 		
 		// Populate main dashboard UI
 		GridPane gridPane = new GridPane();
@@ -81,7 +67,7 @@ public class DashboardView extends BorderPane
         gridPane.getRowConstraints().addAll(row1, row2);
         
 		// Setup title
-        gridPane.add(leaderboardView, 0, 0);
+        gridPane.add(leaderBoardView, 0, 0);
         gridPane.add(statsView,       0, 1);
         gridPane.add(stockView,       1, 0);
         gridPane.add(companyView,     1, 1);
@@ -94,19 +80,14 @@ public class DashboardView extends BorderPane
 	{
 		return logoutBtn;
 	}
-	
-	public Button getSendMoneyButton()
+
+	public Button getFriendsButton()
 	{
-		return sendMoneyBtn;
+		return friendsBtn;
 	}
 
-	public Button getSendMessageButton()
+	public Button getNotificationsButton()
 	{
-		return sendMessageBtn;
-	}
-	
-	public Button getSendFriendRequestButton()
-	{
-		return sendFriendRequestBtn;
+		return notificationsBtn;
 	}
 }

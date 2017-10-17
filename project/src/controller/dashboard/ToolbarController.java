@@ -13,9 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
 import ultilities.NumberField;
-import view.DashboardView;
-import view.FriendView;
-import view.LoginView;
+import view.*;
 
 /**
  * Responsible for handling interaction with the tool-bar on the main dash-board.
@@ -25,8 +23,8 @@ public class ToolbarController extends Controller
 	private static final String LOG_OUT_CONFIRMATION_MESSAGE = "Are you sure you want to log out?";
 	
 	private DashboardView view;
-	public TextField winningField= new TextField();
-	public TextField messageField= new TextField();
+	private TextField winningField= new TextField();
+	private TextField messageField= new TextField();
 	
 	public ToolbarController(DashboardView view)
 	{
@@ -44,21 +42,24 @@ public class ToolbarController extends Controller
 				this.getModel().endSession();
 				this.switchView(new LoginView());
 			}
-		} 
-		else
-		{
-			if(event.getSource() == view.getSendMoneyButton())
-			{
-				displaySendMoneyModal();
-			}
-			else
-			{
-				if (event.getSource() == view.getSendMessageButton())
-					displaySendMessageModal();
-				else
-					displaySendFriendRequestModal();
-			}
 		}
+		else if(event.getSource() == view.getFriendsButton())
+		{
+			displayFriendsWindow();
+		}
+
+		else if(event.getSource() == view.getNotificationsButton())
+		{
+
+		}
+	}
+
+	private void displayFriendsWindow()
+	{
+		Stage stage = new Stage();
+		stage.setTitle("FriendsView");
+		stage.setScene(new Scene(view));
+		stage.show();
 	}
 
 	private void displaySendMoneyModal()

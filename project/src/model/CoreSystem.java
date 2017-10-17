@@ -201,12 +201,14 @@ public class CoreSystem implements CoreAPI
 	}
 
 	@Override
-	public String sendMessage(String receiverUsername, String message) {
+	public String sendMessage(String receiverUsername, String message)
+	{
 		return cloudDatabase.sendMessage(curUserSession, receiverUsername, message);
 	}
 
 	@Override
-	public String sendFriendRequest(String receiverUsername) {
+	public String sendFriendRequest(String receiverUsername)
+	{
 		return cloudDatabase.sendFriendRequest(curUserSession, receiverUsername);
 	}
 }
