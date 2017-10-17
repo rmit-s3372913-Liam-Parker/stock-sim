@@ -3,17 +3,21 @@ package database;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.util.Pair;
 import model.StockTransaction;
 import model.PlayerStats;
+import model.Message;
 import model.MoneyTransaction;
 import model.Transaction;
 import model.TransactionType;
@@ -610,6 +614,49 @@ public class CloudDatabase
     	return null;
     }
     
+    public List<Message> getMessages(UserDetails user)
+    {
+    	try
+        {
+            stmt = conn.createStatement();
+            ResultSet results = stmt.executeQuery("SELECT *"
+					            				+ " FROM " + messageTable + ""
+					            				+ " WHERE senderUserId = '" + user.getUserId()
+					            				+ "' OR receiverUserId = '" + user.getUserId() + "'");
+            List<Message> messages = new ArrayList<Message>();
+
+			while(results.next())
+			{
+				boolean read = true;
+				if (results.getString(8).equals("no"))
+					read = false;
+				DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+				Date date = format.parse(results.getString(7));
+				messages.add(new Message(Integer.parseInt(results.getString(1)),
+						Integer.parseInt(results.getString(2)),
+						results.getString(3), 
+						Integer.parseInt(results.getString(4)),
+						results.getString(5),
+						results.getString(6),
+						date,
+						read));
+			}
+            
+            stmt.close();
+        	shutdown();
+            return messages;
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        } 
+    	catch (ParseException e) 
+    	{
+			e.printStackTrace();
+		}
+    	shutdown();
+    	return null;
+    } 
     /**
      * @return A list of transactions for a given username.
      */

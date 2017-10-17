@@ -6,6 +6,7 @@ import java.util.List;
 
 import javafx.util.Pair;
 import model.ASXInterface;
+import model.Message;
 import model.PlayerStats;
 import model.Transaction;
 import model.UserDetails;
@@ -167,5 +168,7 @@ public interface CoreAPI
 	String sendFriendRequest(String receiverUsername);
 
 	List<String> getNonFriends();
+
+	List<Message> getMessages();
 
 }

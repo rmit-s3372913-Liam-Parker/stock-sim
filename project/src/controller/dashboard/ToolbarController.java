@@ -1,5 +1,10 @@
 package controller.dashboard;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -11,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.Message;
 import javafx.scene.control.*;
 import ultilities.NumberField;
 import view.*;
@@ -50,7 +56,7 @@ public class ToolbarController extends Controller
 
 		else if(event.getSource() == view.getNotificationsButton())
 		{
-
+			displayMessageModal();
 		}
 	}
 
@@ -171,6 +177,65 @@ public class ToolbarController extends Controller
 				
 		btnBox.getChildren().addAll(sendButton, cancelButton);
 		vBox.getChildren().addAll(alert, receiver, friendUsername, message, messageField, btnBox);
+		pane.setCenter(vBox);
+		
+		
+		// Configure modal functionality and display
+		dialog.setScene(scene);
+		dialog.initOwner(this.getStage());
+		dialog.initModality(Modality.APPLICATION_MODAL); 
+		dialog.showAndWait();
+	}
+	
+	private void displayMessageModal()
+	{
+		// Create frame for modal window
+		Stage dialog = new Stage();
+		dialog.setResizable(false);
+		dialog.setTitle("Send Message");
+		
+		BorderPane pane = new BorderPane();
+		VBox vBox = new VBox();
+		vBox.setAlignment(Pos.CENTER);
+		vBox.setSpacing(10.0f);
+		HBox btnBox = new HBox();
+		btnBox.setAlignment(Pos.CENTER);
+		btnBox.setSpacing(5.0f);
+		Scene scene = new Scene(pane, 600, 300);
+		
+		
+		//setting up label
+		Label message = new Label("Message");
+		Label receiver = new Label("With");
+		Text alert = new Text();
+
+		//add user search table
+		List<Message> messages = getModel().getMessages();
+		Map<Integer, List<Message>> conversation = new HashMap<Integer, List<Message>>();
+		for (int i=0; i<messages.size(); i++)
+		{
+			List<Message> list = new ArrayList<Message>();
+			if (messages.get(i).getReceiverUserId()==getModel().getSessionDetails().getUserId())
+			{
+				if (conversation.get(messages.get(i).getSenderUserId())!=null)
+					list = conversation.get(messages.get(i).getSenderUserId());
+				list.add(messages.get(i));
+				conversation.put(messages.get(i).getSenderUserId(), list);
+			}
+			else
+			{
+				if (conversation.get(messages.get(i).getReceiverUserId())!=null)
+					list = conversation.get(messages.get(i).getReceiverUserId());
+				list.add(messages.get(i));
+				conversation.put(messages.get(i).getReceiverUserId(), list);
+			}
+		}
+		MessageView view = null;
+		for (Integer key : conversation.keySet())
+		{
+			view = new MessageView(conversation.get(key));
+		}
+		vBox.getChildren().addAll(alert, receiver, message, view);
 		pane.setCenter(vBox);
 		
 		

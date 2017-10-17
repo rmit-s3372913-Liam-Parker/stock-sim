@@ -211,4 +211,9 @@ public class CoreSystem implements CoreAPI
 	{
 		return cloudDatabase.sendFriendRequest(curUserSession, receiverUsername);
 	}
+
+	@Override
+	public List<Message> getMessages() {
+		return cloudDatabase.getMessages(curUserSession);		
+	}
 }
