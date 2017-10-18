@@ -35,6 +35,13 @@ else
           <li><a href="../dashboard/notification.php">Friend Requests</a></li>
           <li><a href="../dashboard/my_message.php">Messages</a></li>
           <li><a href="../dashboard/send_message.php">Send Message</a></li>
+          <?php
+          if($_SESSION['username'] == 'admin')
+          {
+          echo "<li><a href='../dashboard/transaction.php'>Date</a></li>";
+          echo "<li><a href='#'>Users</a></li>";
+          }
+          ?>
         </ul>
       </li>
       <li><a href="../includes/logout.php">Logout</a></li>

@@ -44,7 +44,6 @@ $records = mysqli_query($conn, $sql);
       <li class="active"><a data-toggle="tab" href="#summary">Summary</a></li>
       <li><a data-toggle="tab" href="#my_stocks">My Stocks</a></li>
       <li><a data-toggle="tab" href="#user_transaction">Transaction</a></li>
-      <!-- <li><a data-toggle="tab" href="#chart">Charts</a></li> -->
     </ul>
   </div>
   
