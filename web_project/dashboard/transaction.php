@@ -1,23 +1,22 @@
 <?php
 session_start();
 include '../config/connection.php';
-include '../includes/navigation.php';
+//include '../includes/navigation.php';
 
 $query = "SELECT * FROM transaction ORDER BY timeOfTransaction desc";
 
 $result = mysqli_query($conn, $query);
 
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Date-Picker</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>  
-           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
-           <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>  
-           <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-</head>
-<body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+<?php include("../includes/navigation.php");?>
 <div class="container" style="width: 900px;">
 	<h3 align="center">SELECT DATE</h3> <br>
 

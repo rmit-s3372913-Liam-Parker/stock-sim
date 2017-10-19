@@ -50,13 +50,7 @@ include '../config/connection.php';
 		      
 		    </div>
 
-		    <!-- <div id="user_transaction" class="tab-pane fade">
-		    	<?php include 'user_transaction.php' ?>
-		    </div>
-
-		    <div id="transaction" class="tab-pane fade">
-		    	<?php include 'transaction.php' ?>
-		    </div> -->
+		   
 		    
 
 		</div>

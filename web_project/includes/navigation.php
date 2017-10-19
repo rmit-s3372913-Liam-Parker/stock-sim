@@ -39,7 +39,7 @@ else
           if($_SESSION['username'] == 'admin')
           {
           echo "<li><a href='../dashboard/transaction.php'>Date</a></li>";
-          echo "<li><a href='#'>Users</a></li>";
+          echo "<li><a href='../dashboard/user_list.php'>Users</a></li>";
           }
           ?>
         </ul>
