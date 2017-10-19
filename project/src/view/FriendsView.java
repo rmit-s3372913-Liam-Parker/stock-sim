@@ -30,23 +30,6 @@ public class FriendsView extends BorderPane
         this.setLeft(leftBox);
         this.setCenter(buildActionsView());
         this.setPadding(new Insets(2.5));
-
-        // We setup a list listener
-        messageThread = new Thread(() ->
-        {
-            while(messageThread.isAlive())
-            {
-                try
-                {
-                    Thread.sleep(10000);
-                }
-                catch(InterruptedException e)
-                {
-
-                }
-            }
-        });
-        messageThread.start();
     }
 
     private HBox buildAddFriendsBar()
