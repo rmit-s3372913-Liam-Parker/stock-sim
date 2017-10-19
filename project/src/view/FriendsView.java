@@ -11,6 +11,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class FriendsView extends BorderPane
@@ -24,9 +25,10 @@ public class FriendsView extends BorderPane
     {
         VBox leftBox = new VBox();
         leftBox.getChildren().addAll(buildAddFriendsBar(), buildFriendListView());
+        VBox.setVgrow(friendListView, Priority.ALWAYS);
 
         this.setLeft(leftBox);
-        this.setRight(buildActionsView());
+        this.setCenter(buildActionsView());
         this.setPadding(new Insets(2.5));
 
         // We setup a list listener
@@ -52,6 +54,9 @@ public class FriendsView extends BorderPane
         HBox bar = new HBox();
 
         TextField usernameField = new TextField();
+        usernameField.setPromptText("Username");
+        HBox.setHgrow(usernameField, Priority.ALWAYS);
+
         Button addFriendBtn = new Button("Add Friend");
 
         bar.getChildren().addAll(usernameField, addFriendBtn);
@@ -81,8 +86,11 @@ public class FriendsView extends BorderPane
         TextArea messageHistory = new TextArea();
         messageHistory.setEditable(false);
         messageHistory.setWrapText(true);
+        VBox.setVgrow(messageHistory, Priority.ALWAYS);
 
         TextField messageBox = new TextField();
+        messageBox.setPromptText("Type a message...");
+        messageBox.setEditable(false);
 
         box.getChildren().addAll(messageHistory, messageBox);
 
