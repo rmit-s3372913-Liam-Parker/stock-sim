@@ -107,13 +107,21 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 
 			if ((line = bufferedReader.readLine()) != null)
 			{
-				view.getUserNameText().setText(line);
+				if (InputValidation.inputValidation(line))
+					view.getUserNameText().setText(line);
+				else
+					throw new IOException("Corrupted file");
 			}
 
 			if ((line = bufferedReader.readLine()) != null)
 			{
-				view.getPasswordText().setText(line);
-				view.getPasswordCheckbox().setSelected(true);
+				if (InputValidation.inputValidation(line))
+				{
+					view.getPasswordText().setText(line);
+					view.getPasswordCheckbox().setSelected(true);
+				}	
+				else
+					throw new IOException("Corrupted file");
 			}
 		}
 		catch (IOException e)

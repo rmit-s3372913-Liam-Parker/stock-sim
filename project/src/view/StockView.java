@@ -1,10 +1,17 @@
 package view;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import controller.dashboard.StockController;
 import interfaces.StockSelectedCallback;
 import javafx.geometry.Pos;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -14,8 +21,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import model.CompanyInfo;
 import model.Stock;
@@ -38,9 +43,10 @@ public class StockView extends BorderPane implements StockSelectedCallback
 	private Button sellBtn = new Button("Sell");
 	private StockController controller = new StockController(this);
 
-	private NumberAxis x = new NumberAxis();
+	private CategoryAxis x = new CategoryAxis();
 	private NumberAxis y = new NumberAxis();
-	private final LineChart<Number,Number> stockHistoryChart = new LineChart<>(x,y);
+	private LineChart<String,Number> stockHistoryChart = new LineChart<String, Number>(x,y);;
+	private final static String FILES_PATH = "./dataStorage/stockHistory/";
 	
 	public StockView()
 	{
@@ -66,9 +72,6 @@ public class StockView extends BorderPane implements StockSelectedCallback
 		stockInfoPane.add(quantityField,          1, 4);
 		stockInfoPane.add(buyBtn,                 0, 5);
 		stockInfoPane.add(sellBtn,                1, 5);
-
-		//TODO: REMOVE ONCE WE HAVE HISTORY WORKING
-		generateFakeChartData();
 
 		horizontalLayout.getChildren().addAll(stockInfoPane, stockHistoryChart);
 		HBox.setHgrow(stockHistoryChart, Priority.ALWAYS);
@@ -103,7 +106,7 @@ public class StockView extends BorderPane implements StockSelectedCallback
 		this.setTop(title);
 		
 		this.setCenter(horizontalLayout);
-		generateFakeChartData();
+		generateChartData(data.getStockCode());
 	}
 	
 	public Button getBuyButton()
@@ -141,22 +144,48 @@ public class StockView extends BorderPane implements StockSelectedCallback
 		return quantityField;
 	}
 	
-	/*
-	 * Purely for testing purposes.
-	 * Utilizing: https://stackoverflow.com/questions/40431966/what-is-the-best-way-to-generate-a-random-float-value-included-into-a-specified
-	 * Unintended for any commercial release.
-	 */
-	private void generateFakeChartData()
+	private void generateChartData(String stockCode)
 	{
 		stockHistoryChart.getData().clear();
-		
-		XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-		series1.setName("Last Price");
-		for(int i = 1; i <= 12; ++i)
-		{
-			double random = 10.0 + Math.random() * (90.0 - 10.0);
-			series1.getData().add(new XYChart.Data<>(i, random));
-		}
+
+		XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+		series1.setName("Close Price");
+		for (int j=0; j<4; j++)
+			for(int i = 1; i <= 5; i++)
+			{
+				LocalDate previousWeekDay = 
+					LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY)).minusWeeks(5-j)
+						.with(TemporalAdjusters.nextOrSame(DayOfWeek.of(i))) ;
+				String file = previousWeekDay.toString().replace("-", "");
+				try(FileReader reader = new FileReader(FILES_PATH+file+".txt"))
+				{
+					BufferedReader bufferedReader = new BufferedReader(reader);
+	
+					String line;
+					String[] stock = null;
+					while ((line = bufferedReader.readLine()) != null)
+					{
+						stock = line.split(",");
+						if (stock[0].equals(stockCode))
+						{
+							series1.getData().add(
+									new XYChart.Data<>(previousWeekDay.format(DateTimeFormatter.ofPattern("dd/MM")),
+									Double.parseDouble(stock[5])));
+							
+							break;
+						}
+					}
+				}
+				catch (FileNotFoundException e) 
+				{
+					e.printStackTrace();
+				}
+				catch (IOException e) 
+				{
+					e.printStackTrace();
+				}
+			}
+		stockHistoryChart.getXAxis().setAnimated(false);
 		stockHistoryChart.getData().add(series1);
 	}
 }

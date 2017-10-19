@@ -6,12 +6,9 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
 import database.CloudDatabase;
 import interfaces.CoreAPI;
 import interfaces.TransactionCallback;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 public class CoreSystem implements CoreAPI 
