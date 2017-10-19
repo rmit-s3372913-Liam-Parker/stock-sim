@@ -1,5 +1,6 @@
 package view;
 
+import controller.dashboard.FriendsController;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +16,10 @@ import javafx.scene.layout.VBox;
 
 public class FriendsView extends BorderPane
 {
-    private Thread messageThread;
+    private TextField usernameField;
+    private Button addFriendBtn;
+    private TextArea messageHistory;
+    private TextField messageBox;
 
     private ObservableList<String> friendsList = FXCollections.observableArrayList();
     private ListView<String> friendListView = new ListView<>(friendsList);
@@ -29,17 +33,20 @@ public class FriendsView extends BorderPane
         this.setLeft(leftBox);
         this.setCenter(buildActionsView());
         this.setPadding(new Insets(2.5));
+
+        FriendsController controller = new FriendsController(this);
+        addFriendBtn.setOnAction(controller);
     }
 
     private HBox buildAddFriendsBar()
     {
         HBox bar = new HBox();
 
-        TextField usernameField = new TextField();
+        usernameField = new TextField();
         usernameField.setPromptText("Username");
         HBox.setHgrow(usernameField, Priority.ALWAYS);
 
-        Button addFriendBtn = new Button("Add Friend");
+        addFriendBtn = new Button("Add Friend");
 
         bar.getChildren().addAll(usernameField, addFriendBtn);
 
@@ -51,11 +58,6 @@ public class FriendsView extends BorderPane
         VBox friendsPanel = new VBox();
 
         friendListView.setEditable(false);
-        friendListView.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldVal, String newVal) ->
-        {
-            if(messageThread != null)
-                messageThread.interrupt();
-        });
 
         friendsPanel.getChildren().addAll(friendListView);
         return friendsPanel;
@@ -65,12 +67,12 @@ public class FriendsView extends BorderPane
     {
         VBox box = new VBox();
 
-        TextArea messageHistory = new TextArea();
+        messageHistory = new TextArea();
         messageHistory.setEditable(false);
         messageHistory.setWrapText(true);
         VBox.setVgrow(messageHistory, Priority.ALWAYS);
 
-        TextField messageBox = new TextField();
+        messageBox = new TextField();
         messageBox.setPromptText("Type a message...");
         messageBox.setEditable(false);
 
@@ -78,4 +80,35 @@ public class FriendsView extends BorderPane
 
         return box;
     }
+
+    public ObservableList<String> getFriendListForDisplay()
+    {
+        return friendsList;
+    }
+
+    public ListView<String> getFriendsListView()
+    {
+        return friendListView;
+    }
+
+    public TextField getAddFriendText()
+    {
+        return usernameField;
+    }
+
+    public Button getAddFriendBtn()
+    {
+        return addFriendBtn;
+    }
+
+    public TextArea getMessageHistory()
+    {
+        return messageHistory;
+    }
+
+    public TextField getMessageField()
+    {
+        return messageBox;
+    }
+
 }

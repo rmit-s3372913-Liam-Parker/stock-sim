@@ -919,8 +919,8 @@ public class CloudDatabase
 	public String sendFriendRequest(UserDetails sender, String receiverUsername) {
 		if (createConnection())
         {
-        	int receiverUserId;
-        	if ((receiverUserId=getPlayerUserId(new UserDetails(receiverUsername, null)))!=ID_ERROR)
+        	int receiverUserId = getPlayerUserId(new UserDetails(receiverUsername, null));
+        	if (receiverUserId != ID_ERROR)
         	{
         		UserDetails receiver = new UserDetails(receiverUserId, receiverUsername, null, null);
         		if (insertFriendRequest(sender, receiver))
