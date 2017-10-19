@@ -10,6 +10,8 @@ import java.util.List;
 import database.CloudDatabase;
 import interfaces.CoreAPI;
 import interfaces.TransactionCallback;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 public class CoreSystem implements CoreAPI 
@@ -19,7 +21,7 @@ public class CoreSystem implements CoreAPI
 	private CloudDatabase cloudDatabase = new CloudDatabase();
 	
 	private List<TransactionCallback> onTransactionList = new ArrayList<>();
-	
+
 	@Override
 	public String checkUsername(UserDetails details)
 	{
@@ -85,8 +87,7 @@ public class CoreSystem implements CoreAPI
 	@Override
 	public List<PlayerStats> getPlayerList() 
 	{
-		List<PlayerStats> players = cloudDatabase.getHighScore();
-		return players;
+		return cloudDatabase.getHighScore();
 	}
 	
 	@Override
@@ -166,7 +167,7 @@ public class CoreSystem implements CoreAPI
 	}
 
 	@Override
-	public List<Pair<String, String>> getAllStockOwned(String username) 
+	public List<Pair<String, String>> getStockOwned(String username)
 	{
 		return cloudDatabase.getAllStockOwned(username);
 	}

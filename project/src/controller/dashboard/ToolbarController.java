@@ -27,7 +27,8 @@ import view.*;
 public class ToolbarController extends Controller
 {
 	private static final String LOG_OUT_CONFIRMATION_MESSAGE = "Are you sure you want to log out?";
-	
+
+	private Stage friendsWindow = new Stage();
 	private DashboardView view;
 	private TextField winningField= new TextField();
 	private TextField messageField= new TextField();
@@ -35,6 +36,10 @@ public class ToolbarController extends Controller
 	public ToolbarController(DashboardView view)
 	{
 		this.view = view;
+
+		friendsWindow.setTitle("Friends");
+		friendsWindow.setScene(new Scene(new FriendsView(), 600, 450));
+		friendsWindow.setResizable(false);
 	}
 	
 	//check which button was pressed then execute appropriate function
@@ -62,10 +67,10 @@ public class ToolbarController extends Controller
 
 	private void displayFriendsWindow()
 	{
-		Stage stage = new Stage();
-		stage.setTitle("FriendsView");
-		stage.setScene(new Scene(view));
-		stage.show();
+		if(!friendsWindow.isShowing())
+			friendsWindow.show();
+		else
+			friendsWindow.toFront();
 	}
 
 	private void displaySendMoneyModal()

@@ -53,7 +53,7 @@ public class PlayerStatsController extends Controller implements TransactionCall
 	private void loadStocks()
 	{
 		list.clear();
-		List<Pair<String, String>> stockList = getModel().getAllStockOwned(player.getUsername());
+		List<Pair<String, String>> stockList = getModel().getStockOwned(player.getUsername());
 		
 		for(int i = 0; i < stockList.size(); ++i)
 		{

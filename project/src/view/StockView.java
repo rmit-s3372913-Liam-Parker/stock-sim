@@ -23,45 +23,40 @@ import ultilities.NumberField;
 
 public class StockView extends BorderPane implements StockSelectedCallback
 {	
-	Text title = new Text("No Stock Selected");
-	
-	GridPane stockInfoPane = new GridPane();
-	HBox horizontalLayout = new HBox();
-	
-	Text stockValueText = new Text();
-	Text brokerFeeText = new Text();
-	Text purchaseFeeText = new Text();
-	Text totalText = new Text();
-	
-	TextField quantityField = new TextField("1");
-	Button buyBtn = new Button("Buy");
-	Button sellBtn = new Button("Sell");
-	StockController controller = new StockController(this);
-	
-	NumberAxis x = new NumberAxis();
-	NumberAxis y = new NumberAxis();
-	final LineChart<Number,Number> stockHistoryChart = new LineChart<Number,Number>(x,y);
+	private Text title = new Text("No Stock Selected");
+
+	private GridPane stockInfoPane = new GridPane();
+	private HBox horizontalLayout = new HBox();
+
+	private Text stockValueText = new Text();
+	private Text brokerFeeText = new Text();
+	private Text purchaseFeeText = new Text();
+	private Text totalText = new Text();
+
+	private TextField quantityField = new TextField("1");
+	private Button buyBtn = new Button("Buy");
+	private Button sellBtn = new Button("Sell");
+	private StockController controller = new StockController(this);
+
+	private NumberAxis x = new NumberAxis();
+	private NumberAxis y = new NumberAxis();
+	private final LineChart<Number,Number> stockHistoryChart = new LineChart<>(x,y);
 	
 	public StockView()
 	{
-		populate();
-	}
-	
-	public void populate()
-	{
 		//setting up title
-		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		title.setFont(StockApplication.APP_HEADING_FONT);
 		this.setCenter(title);
 		BorderPane.setAlignment(title, Pos.CENTER);
-		
+
 		//setting up buttons
 		buyBtn.setOnAction(controller);
 		sellBtn.setOnAction(controller);
-		
+
 		//setting up input field
 		NumberField.numberField(quantityField);
 		quantityField.textProperty().addListener(controller);
-		
+
 		// Build stock information view
 		stockInfoPane.add(stockValueText,         0, 0);
 		stockInfoPane.add(brokerFeeText,          0, 1);
@@ -71,12 +66,12 @@ public class StockView extends BorderPane implements StockSelectedCallback
 		stockInfoPane.add(quantityField,          1, 4);
 		stockInfoPane.add(buyBtn,                 0, 5);
 		stockInfoPane.add(sellBtn,                1, 5);
-		
+
 		//TODO: REMOVE ONCE WE HAVE HISTORY WORKING
 		generateFakeChartData();
-		
+
 		horizontalLayout.getChildren().addAll(stockInfoPane, stockHistoryChart);
-		HBox.setHgrow(stockHistoryChart, Priority.ALWAYS);  
+		HBox.setHgrow(stockHistoryChart, Priority.ALWAYS);
 	}
 	
 	//create a view upon clicking on a stock

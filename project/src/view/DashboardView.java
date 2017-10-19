@@ -23,7 +23,7 @@ public class DashboardView extends BorderPane
 	private CompanyView companyView = new CompanyView();
 
 	private final Button logoutBtn = new Button("Log out");
-	private final Button friendsBtn = new Button("FriendsView");
+	private final Button friendsBtn = new Button("Friends");
 	private final Button notificationsBtn = new Button("Notifications");
 	
 	private static final float PADDING = 3.5f;

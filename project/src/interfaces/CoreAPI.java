@@ -112,7 +112,7 @@ public interface CoreAPI
 	/**
 	 * @return All stock owned by the player
 	 */
-	List<Pair<String, String>> getAllStockOwned(String username);
+	List<Pair<String, String>> getStockOwned(String username);
     
     /**
      * @return A list of all transactions of a certain player.

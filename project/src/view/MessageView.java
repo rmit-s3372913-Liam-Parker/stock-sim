@@ -12,11 +12,11 @@ import model.Message;
 
 public class MessageView  extends BorderPane
 {
-	private final String NO_MESSAGE = "No message exists between you and this you user";
-	VBox verticalLayout = new VBox();
-	ObservableList<Message> messageList = FXCollections.observableArrayList();
-	FilteredList<Message> filteredMessageList = new FilteredList<>(messageList);
-	ListView<Message> displayMessageList = new ListView<>(filteredMessageList);
+	private static final String NO_MESSAGE = "No message exists between you and this you user";
+
+	private VBox verticalLayout = new VBox();
+	private ObservableList<Message> messageList = FXCollections.observableArrayList();
+	private ListView<Message> displayMessageList = new ListView<>(messageList);
 	
 	public MessageView(List<Message> messageList)
 	{
