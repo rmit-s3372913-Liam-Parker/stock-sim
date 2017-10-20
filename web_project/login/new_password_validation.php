@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../includes/connection.php';
+include '../config/connection.php';
 
 if(isset($_POST['change']))
 {

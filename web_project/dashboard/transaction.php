@@ -31,7 +31,7 @@ $result = mysqli_query($conn, $query);
 	</div>
 	<div style="clear:both"></div>
 	<br>
-	<div id="order_table">
+	<div id="transaction_table">
 		<table class="table table-bordered">
 			<tr>
 				<th width="15%">ID</th>
@@ -85,7 +85,7 @@ $result = mysqli_query($conn, $query);
 					data:{from_date:from_date, to_date:to_date},
 					success:function(data)
 					{
-						$('#order_table').html(data);
+						$('#transaction_table').html(data);
 					}
 				});
 			}

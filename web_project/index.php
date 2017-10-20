@@ -65,7 +65,7 @@ unset($_SESSION['address']);
             <p>Enter email address to receive an email with a link to reset password.</p>
             
             <div class="panel-body">
-              <form action="modal_email.php" method="POST">
+              <form action="login/modal_email.php" method="POST">
                 <div class="form-group">
                   <input type="email" class="form-control" name="email" placeholder="Email" required>
                 </div>
