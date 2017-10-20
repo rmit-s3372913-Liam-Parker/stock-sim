@@ -111,7 +111,7 @@ if (isset($_GET['username']))
 			</div>
 
 			<!-- div container displaying a list of companies with prices using ASX API -->
-<!-- 			<div class="col-md-8">
+			<div class="col-md-8">
 				<div class="panel panel-default">
 				<div class="panel-heading">
 				<h2 style="text-align: center">ASX Companies</h2>
@@ -126,14 +126,14 @@ if (isset($_GET['username']))
 							</tr>
 						</thead>
 						<tbody>
-              <?php// include '../config/read_asx_csv.php'; ?>
+              <?php include '../config/read_asx_csv.php'; ?>
 						</tbody>
 						
 					</table>
 				</div>
 				</div>
 			</div>
-		</div> -->
+		</div>
 
 	</div>
 
