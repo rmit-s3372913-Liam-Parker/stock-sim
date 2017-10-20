@@ -28,32 +28,21 @@ include '../config/connection.php';
 								<td></td>
 								<td></td>
 								<td>No of Shares: <?php include 'stock_count.php'; ?></td>
-								<td>Average Price </td>
+								<td id='avg'></td>
 							</tr>
 							<tr>
 								<th>No</th>
 								<th>Symbol</th>
-				        		<th>Shares</th>
-				        		<th>Price</th>
-
+                <th>Shares</th>
+                <th>Price</th>
 							</tr>
-							
 						</thead>
 						<tbody>
-
 							<tr>
 								<?php include '../includes/my_stocks.php';?>
 							</tr>
-							
 						</tbody>
 		      </table>
-		      
 		    </div>
-
-		   
-		    
-
 		</div>
-		
-
 	</div>

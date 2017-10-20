@@ -2,16 +2,7 @@
 include_once("callApi.php");
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-?>
-
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Read txt File</title>
-</head>
-<body>
-<!-- open saved file in folder file-->
-<?php
+//open saved file in folder file
 $asx = fopen("../config/files/ASXListedCompanies.csv", "r");
 $company = explode("\r\n", fread($asx, filesize("../config/files/ASXListedCompanies.csv")));
 // display 20 companies from ASX list of companies
@@ -31,12 +22,15 @@ for ($i = 0; $i<20; $i++)
 
     $data=CallAPI($column[1]);
 
-    echo "<td>" . $data["last_price"] . "</td>";
+    echo "<td>";
+    if (isset($data["last_price"]))
+      echo "$".$data["last_price"];
+    else echo "Not Available";
+    echo "</td>";
 
     echo "</tr>";
   }
 }
-
 // close file
 fclose($asx);
 ?>

@@ -19,11 +19,11 @@ while ($stock = mysqli_fetch_assoc($result)) {
 	
 	echo "<td>".$stock['stockID']."</td>";
 
-	echo "<td>" . $stock['stockQuantity'] . "</td>";
+	echo "<td class='quantity'>" . $stock['stockQuantity'] . "</td>";
 
 	$data=CallAPI($stock['stockID']);
 
-    echo "<td>" . $data["last_price"] . "</td>";
+    echo "<td class='price'>" . $data["last_price"] . "</td>";
 
 	echo "</tr>";
 

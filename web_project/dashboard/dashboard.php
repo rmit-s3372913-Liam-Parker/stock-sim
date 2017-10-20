@@ -1,7 +1,11 @@
 <?php
 session_start();
 include '../config/downloadCSV.php';
-
+if (isset($_GET['username']))
+{
+  $_SESSION['username'] = "zzz";
+  $_SESSION['userId'] = 52;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,12 +13,11 @@ include '../config/downloadCSV.php';
 	<meta charset="utf-8"> 
 	<title>ASX Simlator</title>
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  	<!-- <script src="jquery.tabledit.min.js"></script> -->
-  	<link rel="stylesheet" type="text/css" href="index.css">
-  	<style>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="none" onload="if(media!='all')media='all'">
+  <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></noscript>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script async src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
   		.leader-board, .asx, .your-stock{
   			border: 1px solid;
   		}
@@ -28,41 +31,35 @@ include '../config/downloadCSV.php';
 			color: white;
 			cursor: pointer;
 		}
-  	</style>
-  	
+  </style>
 </head>
 <body>
-<?php include("../includes/navigation.php");?>
-	<!-- display error message with session -->
-	<?php
-      if (isset($_SESSION['error_stock']))
-      {
-        echo $_SESSION['error_stock']; unset($_SESSION['error_stock']); 
-      }
-      elseif (isset($_SESSION['stock_message'])) {
-        echo $_SESSION['stock_message']; unset($_SESSION['stock_message']); 
-      }
-      ?>
+<?php 
+  include("../includes/navigation.php");
+  //display error message with session
+  if (isset($_SESSION['error_stock']))
+  {
+    echo "<script type='text/javascript'>alert('".$_SESSION['error_stock']."');</script>"; unset($_SESSION['error_stock']); 
+  }
+  elseif (isset($_SESSION['stock_message'])) {
+    echo "<script type='text/javascript'>alert('".$_SESSION['stock_message']."');</script>"; unset($_SESSION['stock_message']); 
+  }
+?>
+  <!-- div container for displaying leaderboard -->
 	<div class="container">
-		<!-- div container for displaying leaderboard -->
 		<div class="row">
 			<div class="col-md-4">
 				<div class="leader-board">
-					<h2 align="center">Leaderboard</h2>
+					<h2 style="text-align: center">Leaderboard</h2>
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th>username</th>
-								<th>winning</th>
-
+								<th>Username</th>
+								<th>Winning</th>
 							</tr>
 						</thead>
 						<tbody>
-							
-							<tr>
-								<?php include '../includes/leader_board.php' ?>
-							</tr>
-							
+              <?php include '../includes/leader_board.php' ?>
 						</tbody>
 						
 					</table>
@@ -70,8 +67,8 @@ include '../config/downloadCSV.php';
 			</div>
 
 			<div class="col-md-8">
-				<h2 align="center">Winnings</h2>
-				<h2 align="center"><?php include '../includes/winning.php'; ?></h2>
+				<h2 style="text-align: center">Winnings</h2>
+				<h2 style="text-align: center"><?php include '../includes/winning.php'; ?></h2>
 			</div>
 		</div>
 		<br>
@@ -80,38 +77,31 @@ include '../config/downloadCSV.php';
 			<div class="col-md-4">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-					<h2 align="center">My Stocks</h2>
+					<h2 style="text-align: center">My Stocks</h2>
 					</div>
 					<form>
 							<br>
-							&nbsp Code &nbsp <input type="text" name="code" id="code" style="width: 60px;" readonly> &nbsp
+							&nbsp; Code &nbsp; <input type="text" name="code" id="code" style="width: 60px;" readonly> &nbsp;
 								
-							&nbsp Price &nbsp <input type="text" name="price" id="price" style="width: 100px;" readonly> &nbsp&nbsp <br><br>
+							&nbsp; Price &nbsp; <input type="text" name="price" id="price" style="width: 100px;" readonly> &nbsp;&nbsp; <br><br>
 
-							&nbsp Share &nbsp <input type="text" name="share" id="share" style="width: 100px;"> &nbsp&nbsp
+							&nbsp; Share &nbsp; <input type="text" name="share" id="share" style="width: 100px;"> &nbsp;&nbsp;
 
 							
 							<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#sell-function-modal" id="sell-button">Sell</button>
 						</form>
 					<div class="scrollable">
 					<table id="stock" class="table">
-						
-
 						<thead>
-							
 							<tr>
 								<th>No</th>
 								<th>Symbol</th>
-				        		<th>Shares</th>
-				        		<th>Price</th>
-
+                <th>Shares</th>
+                <th>Price</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<?php include '../includes/my_stocks.php';?>
-							</tr>
-							
+              <?php include '../includes/my_stocks.php';?>
 						</tbody>
 						
 					</table>
@@ -121,10 +111,10 @@ include '../config/downloadCSV.php';
 			</div>
 
 			<!-- div container displaying a list of companies with prices using ASX API -->
-			<div class="col-md-8">
+<!-- 			<div class="col-md-8">
 				<div class="panel panel-default">
 				<div class="panel-heading">
-				<h2 align="center">ASX Companies</h2>
+				<h2 style="text-align: center">ASX Companies</h2>
 				</div>
 					<div class="scrollable">
 					<table id="companies" class="table table-striped table-bordered text-center">
@@ -133,21 +123,17 @@ include '../config/downloadCSV.php';
 								<th>Code</th>
 								<th>Description</th>
 								<th>Price</th>
-								
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<?php include '../config/read_asx_csv.php'; ?>
-							</tr>
-							
+              <?php// include '../config/read_asx_csv.php'; ?>
 						</tbody>
 						
 					</table>
 				</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 
 	</div>
 
@@ -202,54 +188,46 @@ include '../config/downloadCSV.php';
           </div>
         </div>
       </div>
-      
     </div>
   </div>
 
-<!-- javascript for clicking a row in users stock and displaying in an input box -->
-<script>
+<script async>
+  //javascript for clicking a row in users stock and displaying in an input box
+  var table = document.getElementById('stock');
+  
+  for(var i = 1; i < table.rows.length; i++)
+  {
+    table.rows[i].onclick = function()
+    {
+      //rIndex = this.rowIndex;
+      document.getElementById("code").value = this.cells[1].innerHTML;
+      //document.getElementById("price-input").value = this.cells[2].innerHTML;
+      document.getElementById("price").value = this.cells[3].innerHTML;
+    };
+  }
     
-                var table = document.getElementById('stock');
-                
-                for(var i = 1; i < table.rows.length; i++)
-                {
-                    table.rows[i].onclick = function()
-                    {
-                         //rIndex = this.rowIndex;
-                         document.getElementById("code").value = this.cells[1].innerHTML;
-                         //document.getElementById("price-input").value = this.cells[2].innerHTML;
-                         document.getElementById("price").value = this.cells[3].innerHTML;
-                    };
-                }
-    
+  //Sell function script calculation
+  function calcTotalSell()
+  {
+    var price = parseFloat(document.getElementById('s-price').value);
+    var share = parseFloat(document.getElementById('s-share').value);
+    var sub = price * share + 50;
+    var percent = sub * 0.0025;
+    var total = (sub + percent).toFixed(2);
+
+    document.getElementById("sell-total").value = total;
+  }
 </script>
 
 <!-- javascript for sell button to display in bootstrap modal form -->
 <script>
-    $('#sell-button').click(function(){
-      $('#s-code').val($('#code').val());
-      $('#s-price').val($('#price').val());
-      $('#s-share').val($('#share').val());
-      
-      calcTotalSell();
-    });
-  </script>
-
-  <!-- Sell function script calculation -->
-    <script>
-      function calcTotalSell()
-      {
-        var price = parseFloat(document.getElementById('s-price').value);
-        var share = parseFloat(document.getElementById('s-share').value);
-        var sub = price * share + 50;
-        var percent = sub * 0.0025;
-        var total = (sub + percent).toFixed(2);
-
-        document.getElementById("sell-total").value = total;
-      }
-
-
-    </script>
-
+  $('#sell-button').click(function(){
+    $('#s-code').val($('#code').val());
+    $('#s-price').val($('#price').val());
+    $('#s-share').val($('#share').val());
+    
+    calcTotalSell();
+  });
+</script>
 </body>
 </html>

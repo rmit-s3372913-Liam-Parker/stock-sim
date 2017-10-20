@@ -29,14 +29,14 @@ if(isset($_POST['submit']))
 		// check database if username exists
 		if ($numrow_uname != 0)
 		{
-			$_SESSION['username_error'] = "Username already exists!";
+			$_SESSION['error'] = "Username already exists!";
 			header("Location: registration.php");
 		}
 
 		// check database if email exists
 		if ($numrow_email != 0)
 		{
-			$_SESSION['email_error'] = "Email address already exists!";
+			$_SESSION['error'] = "Email address already exists!";
 			header("Location: registration.php");
 		}	
 
@@ -69,8 +69,8 @@ if(isset($_POST['submit']))
 				// Set header                   
 				$headers = 'From: ASX Simulator.com.au' . "\r\n"; 
 				mail($to, $subject, $message, $headers); 
-				echo "Account has been created successfully. Please check your email to verify.";
-				header('Refresh: 5; ../login/index.php');
+				echo "<script type='text/javascript'>alert('Account has been created successfully. Please check your email to verify.');</script>";
+				header('Refresh: 0; ../index.php');
 			 
 			} 
 			else 
@@ -80,17 +80,16 @@ if(isset($_POST['submit']))
 		}
 		else
 		{
-			// display an error message and redirect to 
-			// registration page with a time delay of 3 seconds
-			echo "Invalid username or password";
-			header('Refresh: 3; registration.php');
+			// display an error message and redirect to registration page
+			echo "<script type='text/javascript'>alert('Invalid username or password');</script>";
+			header('Refresh: 0; registration.php');
 		}
 	}
 	else
 	{
 		// set a session varaible for error message
 		// redirect page to registration page
-		$_SESSION['message'] = "Password does not match!";
+		$_SESSION['error'] = "Password does not match!";
 		header("Location: registration.php");
 	}
 	

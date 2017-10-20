@@ -9,7 +9,8 @@ $sql = "select * from asx_data";
 $records = mysqli_query($conn, $sql);
 
 ?>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="none" onload="if(media!='all')media='all'">
+  <noscript><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></noscript>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -25,15 +26,15 @@ $records = mysqli_query($conn, $sql);
     <!-- div display a selected row -->
     <form>
       <input type="text" name="search" placeholder="Search Company">
-      Code &nbsp <input type="text" name="code" id="code-input" size="12"> &nbsp
-      Price &nbsp <input type="text" name="price" id="price-input" size="12"> &nbsp
-      Share &nbsp <input type="number" name="share" id="share-input" size="12" step="10" min="0">
+      Code &nbsp; <input type="text" name="code" id="code-input" size="12"> &nbsp;
+      Price &nbsp; <input type="text" name="price" id="price-input" size="12"> &nbsp;
+      Share &nbsp; <input type="number" name="share" id="share-input" size="12" step="10" min="0">
       
       <!-- Buy button open modal -->
       <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#buy-function-modal" id="buy-button">Buy</button>
 
 
-      <!-- <!-- Sell button open modal --
+      <!-- Sell button open modal
       <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#sell-function-modal" id="sell-button">Sell</button> -->
     </form>
   </div>
@@ -87,7 +88,7 @@ $records = mysqli_query($conn, $sql);
                     </tr>
                     <tr>
                         <th>Total:</th>
-                        <td><input type="text" id="buy-total" name="buy-total" value="calcTotalBuy()" readonly/></td>
+                        <td><input type="text" id="buy-total" name="buy-total" value="" readonly/></td>
                     </tr>
             </table>
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
@@ -98,13 +99,6 @@ $records = mysqli_query($conn, $sql);
             <!-- end of form -->
           </div>
         </div>
-
-        <div class="modal-footer">
-          <div class="col-md-12">
-            
-            
-          </div>
-        </div>
       </div>
       
     </div>
@@ -113,30 +107,26 @@ $records = mysqli_query($conn, $sql);
 
 
   <!-- table row selection to be displayed to a div -->
-    <script>
+  <script>
+    var table = document.getElementById('table');
     
-                var table = document.getElementById('table');
-                
-                for(var i = 1; i < table.rows.length; i++)
-                {
-                    table.rows[i].onclick = function()
-                    {
-                         //rIndex = this.rowIndex;
-                         document.getElementById("code-input").value = this.cells[0].innerHTML;
-                         document.getElementById("price-input").value = this.cells[2].innerHTML;
-                         document.getElementById("share-input").value = this.cells[3].innerHTML;
-                    };
-                }
-    
-    </script>
+    for(var i = 1; i < table.rows.length; i++)
+    {
+      table.rows[i].onclick = function()
+      {
+        document.getElementById("code-input").value = this.cells[0].innerHTML;
+        document.getElementById("price-input").value = this.cells[2].innerHTML;
+      };
+    }
+  
+  </script>
 
   <!-- Buy-function script to display selection to modal -->
   <script>
-      $('#buy-button').click(function(){
+    $('#buy-button').click(function(){
       $('#code').val($('#code-input').val());
       $('#price').val($('#price-input').val());
       $('#share').val($('#share-input').val());
-
       calcTotalBuy();
     });
   </script>
@@ -145,13 +135,25 @@ $records = mysqli_query($conn, $sql);
   <script>
       function calcTotalBuy()
       {
-        var price = parseFloat(document.getElementById('price').value);
+        var price = parseFloat(document.getElementById('price').value.replace("$", ""));
         var share = parseFloat(document.getElementById('share').value);
         var sub = price * share + 50;
         var percent = sub * 0.01;
         var total = (sub + percent).toFixed(2);
-
         document.getElementById("buy-total").value = total;
       }
-
+  </script>
+  <script>
+    window.addEventListener('load', function () {
+      var stockCount = document.getElementsByClassName("quantity");
+      var stockPrice = document.getElementsByClassName("price");
+      var total = 0;
+      var average = 0;
+      for (i = 0; i < stockCount.length; i++) { 
+        total += parseFloat(stockCount[i].innerHTML);
+        average += parseFloat(stockCount[i].innerHTML)*parseFloat(stockPrice[i].innerHTML.replace("$", ""));
+      }
+      average = average/total;
+      document.getElementById('avg').innerHTML="Average Price per Stock: "+average;
+    });
   </script>
