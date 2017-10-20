@@ -11,9 +11,11 @@ unset($_SESSION['address']);
   <link rel="stylesheet" type="text/css" href="bootstrap-3.3.6-dist/css/bootstrap.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="index.css">
-
-  <script async src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script async src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="user.js">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -77,7 +79,7 @@ unset($_SESSION['address']);
             <p>Enter email address to receive an email with a link to reset password.</p>
             
             <div class="panel-body">
-              <form action="modal_email.php" method="POST">
+              <form action="/login/modal_email.php" method="POST">
                 <div class="form-group">
                   <input type="email" class="form-control" name="email" placeholder="Email" required>
                 </div>      
