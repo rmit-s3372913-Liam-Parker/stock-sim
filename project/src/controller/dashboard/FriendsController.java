@@ -1,10 +1,14 @@
 package controller.dashboard;
 
 import controller.Controller;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.util.Duration;
 import model.Message;
 import view.FriendsView;
 
@@ -22,12 +26,35 @@ public class FriendsController extends Controller
     {
         this.view = view;
 
-        processMessages();
+        // We create a thread for monitoring messages and friend related notifications.
+        final Timeline timeline = new Timeline(
+                new KeyFrame(
+                        Duration.millis( 10000 ),
+                        event -> {
+                            processMessages();
+                            processRequests();
+                            recalculateLists();
+                        }
+                )
+        );
+        timeline.setCycleCount( Animation.INDEFINITE );
+        timeline.play();
 
-        view.getFriendListForDisplay().addAll(getModel().getFriends());
+        // We call our process functions initially to populate the view.
+        processMessages();
+        processRequests();
+        recalculateLists();
+
         view.getFriendsListView().getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldVal, String newVal) ->
         {
             setCurrentChat(newVal);
+        });
+
+        view.getFriendRqstListView().getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldVal, String newVal) ->
+        {
+            boolean isConfirmed = displayConfirmationModal("Confirm Request","Press OK to confirm this request and add " + newVal + " to your friend list.");
+            if(isConfirmed)
+                view.getFriendRqstListForDisplay().remove(newVal);
         });
     }
 
@@ -83,6 +110,17 @@ public class FriendsController extends Controller
             if(newMessage)
                 messages.get(targetFriend).add(message);
         }
+    }
+
+    private void processRequests()
+    {
+
+    }
+
+    private void recalculateLists()
+    {
+        view.getFriendListForDisplay().addAll(getModel().getFriends());
+        view.getFriendRqstListForDisplay().addAll(getModel().getNonFriends());
     }
 
     private void setCurrentChat(String username)
