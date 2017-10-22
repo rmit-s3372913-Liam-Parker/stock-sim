@@ -3,7 +3,6 @@ package database;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
-import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,13 +11,15 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javafx.util.Pair;
-import model.StockTransaction;
-import model.PlayerStats;
 import model.Message;
 import model.MoneyTransaction;
+import model.Player;
+import model.PlayerStats;
+import model.StockTransaction;
 import model.Transaction;
 import model.TransactionType;
 import model.UserDetails;
@@ -38,7 +39,7 @@ public class CloudDatabase
 	public static final int QUANTITY_ERROR = -1;
 	
     private static String dbURL = "jdbc:mysql://capstonedatabase.cszu3gvo32mp.ap-southeast-2.rds.amazonaws.com:3306/CapstoneDatabase?user=admin&password=password";
-    private static String playerTable = "player";
+	private static String playerTable = "player";
     private static String transactionTable = "transaction";
     private static String buySellDetailTable = "buySellDetail";
     private static String sendReceiveDetailTable = "sendReceiveDetail";
@@ -996,6 +997,60 @@ public class CloudDatabase
         } 
     	
         return true;
+    }
+    
+    /*
+     * This function will fetch all the players from database
+     * Convert those Entries to POJOS and return
+     * */
+    public List<Player> getAllRegisteredPlayers()
+    {
+    	if(createConnection()) {
+    		try
+    		{
+    			stmt = conn.createStatement();
+    			ResultSet results = stmt.executeQuery("SELECT * FROM " + playerTable);
+    			List<Player> players = new ArrayList<Player>();
+
+    			while(results.next())
+    			{
+    				players.add(new Player(results.getInt(1), results.getString(2),results.getString(4),results.getString(5),results.getDouble(8)));
+    			}
+
+    			stmt.close();
+    			shutdown();
+    			return players;
+    		}
+    		catch (SQLException sqlExcept)
+    		{
+    			sqlExcept.printStackTrace();
+    		}
+    	}
+    	shutdown();
+    	return null;
+    }
+    
+    /*
+     * This Function will take id of player as parameter
+     * Delete that found entry
+     * */
+    public String deletePlayerById(int id) {
+    	if(createConnection()) {
+    		try
+    		{
+    			stmt = conn.createStatement();
+    			int result = stmt.executeUpdate("DELETE FROM " + playerTable + " WHERE userId=" + id);
+    			stmt.close();
+    			shutdown();
+    			return result==1?"DONE":"ERROR";
+    		}
+    		catch (SQLException sqlExcept)
+    		{
+    			sqlExcept.printStackTrace();
+    		}
+    	}
+    	shutdown();
+    	return null;
     }
     
     private boolean createConnection()

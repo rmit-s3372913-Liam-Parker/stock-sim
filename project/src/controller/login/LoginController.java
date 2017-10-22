@@ -1,16 +1,20 @@
 package controller.login;
 
-import controller.Controller;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import model.UserDetails;
-import ultilities.InputValidation;
-import view.ConfirmationView;
-import view.DashboardView;
-import view.LoginView;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
+
+import controller.Controller;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import model.Player;
+import model.UserDetails;
+import ultilities.InputValidation;
+import view.AdminLoginView;
+import view.ConfirmationView;
+import view.DashboardView;
+import view.LoginView;
 
 /**
  * LoginController handles login and input validation.
@@ -76,8 +80,15 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 					user.setRemember(true);
 				if (confirmAlert == null)
 				{
-					getModel().beginSession(user);
-					switchView(new DashboardView());
+					//Check if the user is admin take it to admin view 
+					// else take user to his dashboard
+					if(userString.equals("admin")) {
+						getModel().beginSession(user);
+						switchView(new AdminLoginView(getRegisteredPlayers()));
+					}else {
+						getModel().beginSession(user);
+						switchView(new DashboardView());
+					}
 				}
 				else
 					if (confirmAlert.equals("Email is not confirmed"))
@@ -133,5 +144,9 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 			view.getPasswordText().setText("");
 			view.getPasswordCheckbox().setSelected(false);
 		}
+	}
+	
+	private List<Player> getRegisteredPlayers(){
+		return getModel().getRegisteredPlayers();
 	}
 }

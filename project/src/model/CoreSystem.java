@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
 import database.CloudDatabase;
 import interfaces.CoreAPI;
 import interfaces.TransactionCallback;
@@ -213,5 +214,17 @@ public class CoreSystem implements CoreAPI
 	@Override
 	public List<Message> getMessages() {
 		return cloudDatabase.getMessages(curUserSession);		
+	}
+	
+	// Get all players from database
+	@Override
+	public List<Player> getRegisteredPlayers(){
+		return cloudDatabase.getAllRegisteredPlayers();
+	}
+	
+	// Delete Player from database by ID
+	@Override
+	public String deletePlayer(int id) {
+		return cloudDatabase.deletePlayerById(id);
 	}
 }

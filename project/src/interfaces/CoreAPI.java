@@ -7,6 +7,7 @@ import java.util.List;
 import javafx.util.Pair;
 import model.ASXInterface;
 import model.Message;
+import model.Player;
 import model.PlayerStats;
 import model.Transaction;
 import model.UserDetails;
@@ -171,4 +172,14 @@ public interface CoreAPI
 
 	List<Message> getMessages();
 
+	/*
+	 * Get All Players From Database
+	 * */
+	List<Player> getRegisteredPlayers();
+	
+	/*
+	 * Delete Player By Id from database
+	 * @param id
+	 * */
+	String deletePlayer(int id);
 }
