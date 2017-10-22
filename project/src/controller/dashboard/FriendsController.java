@@ -45,6 +45,7 @@ public class FriendsController extends Controller
         processRequests();
         recalculateLists();
 
+        // Respond to list selections
         view.getFriendsListView().getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldVal, String newVal) ->
         {
             setCurrentChat(newVal);
@@ -119,7 +120,9 @@ public class FriendsController extends Controller
 
     private void recalculateLists()
     {
+        view.getFriendListForDisplay().clear();
         view.getFriendListForDisplay().addAll(getModel().getFriends());
+        view.getFriendRqstListForDisplay().clear();
         view.getFriendRqstListForDisplay().addAll(getModel().getNonFriends());
     }
 
