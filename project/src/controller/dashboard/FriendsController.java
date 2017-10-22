@@ -24,7 +24,7 @@ public class FriendsController extends Controller
 {
     private FriendsView view;
     private Map<String, List<Message>> messages = new HashMap<>();
-    public String currentChat;
+    private String currentChat;
 
     public FriendsController(FriendsView view)
     {
@@ -52,7 +52,8 @@ public class FriendsController extends Controller
         view.getFriendsListView().getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldVal, String newVal) ->
         {
             setCurrentChat(newVal);
-            currentChat = newVal;
+            if (newVal!=null)
+            	currentChat=newVal;
         });
 
         view.getFriendRqstListView().getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldVal, String newVal) ->
@@ -154,7 +155,7 @@ public class FriendsController extends Controller
     {
         TextArea chatBox = view.getMessageHistory();
         TextField chatBar = view.getMessageField();
-
+        
         // Clear previous data
         chatBox.clear();
         chatBar.clear();

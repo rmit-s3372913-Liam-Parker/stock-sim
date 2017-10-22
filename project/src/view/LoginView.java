@@ -13,7 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.io.File;
@@ -25,7 +24,6 @@ import java.io.File;
  * */
 public class LoginView extends GridPane 
 {
-	private static final String LOGIN_TITLE = "ASX Simulator";
 	private static final String USERNAME_LABEL = "Username:";
 	private static final String PASSWORD_LABEL = "Password:";
 	private static final String REMEMBER_LABEL = "Remember:";
