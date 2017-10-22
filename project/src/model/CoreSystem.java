@@ -214,4 +214,14 @@ public class CoreSystem implements CoreAPI
 	public List<Message> getMessages() {
 		return cloudDatabase.getMessages(curUserSession);		
 	}
+	
+	@Override
+	public List<Player> getRegisteredPlayers(){
+		return cloudDatabase.getAllRegisteredPlayers();
+	}
+	
+	@Override
+	public String deletePlayer(int id) {
+		return cloudDatabase.deletePlayerById(id);
+	}
 }

@@ -5,7 +5,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -21,14 +24,11 @@ public class FriendsView extends BorderPane
     private ObservableList<String> friendsList = FXCollections.observableArrayList();
     private ListView<String> friendListView = new ListView<>(friendsList);
 
-    private ObservableList<String> friendRqstList = FXCollections.observableArrayList();
-    private ListView<String> friendRqstView = new ListView<>(friendRqstList);
-
     public FriendsView()
     {
         VBox leftBox = new VBox();
         leftBox.getChildren().addAll(buildAddFriendsBar(), buildFriendListView());
-        //VBox.setVgrow(friendListView, Priority.ALWAYS);
+        VBox.setVgrow(friendListView, Priority.ALWAYS);
 
         this.setLeft(leftBox);
         this.setCenter(buildActionsView());
@@ -59,7 +59,7 @@ public class FriendsView extends BorderPane
 
         friendListView.setEditable(false);
 
-        friendsPanel.getChildren().addAll(friendListView, new Label("Incoming Requests") ,friendRqstView);
+        friendsPanel.getChildren().addAll(friendListView);
         return friendsPanel;
     }
 
@@ -86,16 +86,9 @@ public class FriendsView extends BorderPane
         return friendsList;
     }
 
-    public ObservableList<String> getFriendRqstListForDisplay() { return friendRqstList; }
-
     public ListView<String> getFriendsListView()
     {
         return friendListView;
-    }
-
-    public ListView<String> getFriendRqstListView()
-    {
-        return friendRqstView;
     }
 
     public TextField getAddFriendText()

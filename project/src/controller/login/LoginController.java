@@ -1,8 +1,10 @@
 package controller.login;
 
 import controller.Controller;
+import controller.admin.AdminLoginController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import model.UserDetails;
 import ultilities.InputValidation;
 import view.ConfirmationView;
@@ -76,8 +78,8 @@ public class LoginController extends Controller implements EventHandler<ActionEv
 					user.setRemember(true);
 				if (confirmAlert == null)
 				{
-					getModel().beginSession(user);
-					switchView(new DashboardView());
+						getModel().beginSession(user);
+						switchView(new DashboardView());
 				}
 				else
 					if (confirmAlert.equals("Email is not confirmed"))
