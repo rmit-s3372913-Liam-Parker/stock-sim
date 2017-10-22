@@ -164,7 +164,7 @@ public class CloudDatabase
     	return owned;
     }
     
-	public List<String> getNonFriends(UserDetails user) {
+	public List<String> getFriendRequest(UserDetails user) {
 		try
         {
             stmt = conn.createStatement();
@@ -174,7 +174,11 @@ public class CloudDatabase
             											+ "AND userId NOT IN ("
             											+ "SELECT friendUserId"
             											+ " FROM friend"
-            											+ " WHERE userId = '" + user.getUserId() +"')");
+            											+ " WHERE userId = '" + user.getUserId() +"')"
+            													+ "AND userId IN ("
+            													+ "SELECT userId"
+		            											+ " FROM friend"
+		            											+ " WHERE friendUserId = '" + user.getUserId() +"')");
             List<String> players = new ArrayList<String>();
             
 			while(results.next())

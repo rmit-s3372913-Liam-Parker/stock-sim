@@ -168,7 +168,7 @@ public interface CoreAPI
 
 	String sendFriendRequest(String receiverUsername);
 
-	List<String> getNonFriends();
+	List<String> getFriendRequest();
 
 	List<Message> getMessages();
 

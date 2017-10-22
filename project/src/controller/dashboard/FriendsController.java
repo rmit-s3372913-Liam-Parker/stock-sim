@@ -109,7 +109,7 @@ public class FriendsController extends Controller
         view.getFriendListForDisplay().clear();
         view.getFriendListForDisplay().addAll(getModel().getFriends());
         view.getFriendRqstListForDisplay().clear();
-        view.getFriendRqstListForDisplay().addAll(getModel().getNonFriends());
+        view.getFriendRqstListForDisplay().addAll(getModel().getFriendRequest());
     }
 
     private void setCurrentChat(String username)

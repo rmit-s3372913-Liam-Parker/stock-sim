@@ -1,7 +1,6 @@
 package view;
 
 import controller.dashboard.FriendsController;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -85,7 +84,10 @@ public class FriendsView extends BorderPane
         return friendsList;
     }
 
-    public ObservableList<String> getFriendRqstListForDisplay() { return friendRqstList; }
+    public ObservableList<String> getFriendRqstListForDisplay() 
+    {
+    	return friendRqstList; 
+	}
 
     public ListView<String> getFriendsListView()
     {

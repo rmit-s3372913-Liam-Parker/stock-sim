@@ -41,7 +41,7 @@ public class FriendView extends BorderPane
 		if (friend)
 			username = core.getFriends();
 		else
-			username = core.getNonFriends();
+			username = core.getFriendRequest();
 		if (username.isEmpty())
 			if (!friend)
 				this.setCenter(new Text(NO_USER));

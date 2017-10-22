@@ -183,8 +183,8 @@ public class CoreSystem implements CoreAPI
 	}
 
 	@Override
-	public List<String> getNonFriends() {
-		return cloudDatabase.getNonFriends(curUserSession);
+	public List<String> getFriendRequest() {
+		return cloudDatabase.getFriendRequest(curUserSession);
 	}
 
 	@Override

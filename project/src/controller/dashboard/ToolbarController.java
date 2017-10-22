@@ -7,7 +7,6 @@ import java.util.Map;
 
 import controller.Controller;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -18,7 +17,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Message;
 import javafx.scene.control.*;
-import ultilities.NumberField;
 import view.*;
 
 /**
