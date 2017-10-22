@@ -19,7 +19,6 @@ import model.StockTransaction;
 import model.PlayerStats;
 import model.Message;
 import model.MoneyTransaction;
-import model.Player;
 import model.Transaction;
 import model.TransactionType;
 import model.UserDetails;
@@ -611,52 +610,6 @@ public class CloudDatabase
         {
             sqlExcept.printStackTrace();
         }
-    	shutdown();
-    	return null;
-    }
-    
-    public List<Player> getAllRegisteredPlayers()
-    {
-    	if(createConnection()) {
-    		try
-    		{
-    			stmt = conn.createStatement();
-    			ResultSet results = stmt.executeQuery("SELECT * FROM " + playerTable);
-    			List<Player> players = new ArrayList<Player>();
-
-    			while(results.next())
-    			{
-    				players.add(new Player(results.getInt(1), results.getString(2),results.getString(4),results.getString(5),results.getDouble(8)));
-    			}
-
-    			stmt.close();
-    			shutdown();
-    			return players;
-    		}
-    		catch (SQLException sqlExcept)
-    		{
-    			sqlExcept.printStackTrace();
-    		}
-    	}
-    	shutdown();
-    	return null;
-    }
-    
-    public String deletePlayerById(int id) {
-    	if(createConnection()) {
-    		try
-    		{
-    			stmt = conn.createStatement();
-    			int result = stmt.executeUpdate("DELETE FROM " + playerTable + " WHERE userId=" + id);
-    			stmt.close();
-    			shutdown();
-    			return result==1?"DONE":"ERROR";
-    		}
-    		catch (SQLException sqlExcept)
-    		{
-    			sqlExcept.printStackTrace();
-    		}
-    	}
     	shutdown();
     	return null;
     }

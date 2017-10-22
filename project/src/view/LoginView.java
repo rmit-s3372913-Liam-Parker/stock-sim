@@ -1,6 +1,5 @@
 package view;
 
-import controller.admin.AdminLoginController;
 import controller.login.ForgotPasswordController;
 import controller.login.LoginController;
 import controller.login.RegisterController;
@@ -29,7 +28,6 @@ public class LoginView extends GridPane
 	private static final String LOGIN_BUTTON = "Login";
 	private static final String REGISTER_BUTTON = "Register";
 	private static final String FORGOT_PASSWORD_BUTTON = "Forgot Password";
-	private static final String ADMIN_LOGIN_BUTTON = "Admin Login";
 
 	private TextField usernameField = new TextField();
 	private PasswordField passwordField = new PasswordField();
@@ -76,12 +74,10 @@ public class LoginView extends GridPane
 		registerButton.setOnAction(new RegisterController());
 		Button forgotPasswordButton = new Button(FORGOT_PASSWORD_BUTTON);
 		forgotPasswordButton.setOnAction(new ForgotPasswordController());
-		Button adminLoginButton = new Button(ADMIN_LOGIN_BUTTON);
-		adminLoginButton.setOnAction(new AdminLoginController(this));
 
-		//add(registerButton, 1, 3);
+		add(registerButton, 1, 3);
 		HBox buttons = new HBox(2.5);
-		buttons.getChildren().addAll(loginButton,adminLoginButton ,registerButton,forgotPasswordButton);
+		buttons.getChildren().addAll(loginButton, registerButton,forgotPasswordButton);
 		add(buttons, 1, 5);
 	}
 

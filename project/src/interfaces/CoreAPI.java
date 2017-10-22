@@ -7,7 +7,6 @@ import java.util.List;
 import javafx.util.Pair;
 import model.ASXInterface;
 import model.Message;
-import model.Player;
 import model.PlayerStats;
 import model.Transaction;
 import model.UserDetails;
@@ -171,9 +170,5 @@ public interface CoreAPI
 	List<String> getNonFriends();
 
 	List<Message> getMessages();
-	
-	List<Player> getRegisteredPlayers();
-	
-	String deletePlayer(int id);
 
 }
