@@ -203,7 +203,7 @@ public class CloudDatabase
     	try
         {
             stmt = conn.createStatement();
-            ResultSet results = stmt.executeQuery("SELECT username"
+            ResultSet results = stmt.executeQuery("SELECT userId, username"
             									+ " FROM " + friendTable
             									+ " WHERE friendUserId = " + user.getUserId()
             											+ " AND userId IN ("
@@ -214,7 +214,10 @@ public class CloudDatabase
             
 			while(results.next())
 			{
-				players.add(results.getString(1));
+				String username = results.getString(2);
+				if (!playerIdExist(results.getString(1)))
+					username=username.concat("(Account Deleted)");
+				players.add(username);
 			}
             
             stmt.close();
@@ -478,6 +481,24 @@ public class CloudDatabase
         {
             stmt = conn.createStatement();
             ResultSet results = stmt.executeQuery("select * from " + playerTable + " where username = '" + username + "'");
+            if (results.next()){
+                stmt.close();
+            	return true;
+            }
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+    	return false;
+    }
+    
+    private boolean playerIdExist(String id){
+    	try
+        {
+            stmt = conn.createStatement();
+            ResultSet results = stmt.executeQuery("select * from " + playerTable + " where userId = '" + id + "'");
             if (results.next()){
                 stmt.close();
             	return true;

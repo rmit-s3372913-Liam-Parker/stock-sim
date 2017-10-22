@@ -6,8 +6,11 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 import model.Message;
 import view.FriendsView;
@@ -21,6 +24,7 @@ public class FriendsController extends Controller
 {
     private FriendsView view;
     private Map<String, List<Message>> messages = new HashMap<>();
+    private String currentChat;
 
     public FriendsController(FriendsView view)
     {
@@ -31,7 +35,6 @@ public class FriendsController extends Controller
                 new KeyFrame(
                         Duration.millis( 10000 ),
                         event -> {
-                            processMessages();
                             recalculateLists();
                         }
                 )
@@ -47,7 +50,27 @@ public class FriendsController extends Controller
         view.getFriendsListView().getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldVal, String newVal) ->
         {
             setCurrentChat(newVal);
+            currentChat = newVal;
         });
+        
+        view.getMessageField().setOnKeyPressed(new EventHandler<KeyEvent>()
+        {
+            @Override
+            public void handle(KeyEvent key)
+            {
+                if (key.getCode().equals(KeyCode.ENTER))
+                {
+                	String error;
+            		
+            		//store the transaction on cloud database
+            		if ((error = getModel().sendMessage(currentChat, view.getMessageField().getText())) == null)
+            			processMessages();
+            		else
+            			displayErrorModal("Message Error", error);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -118,8 +141,9 @@ public class FriendsController extends Controller
         TextField chatBar = view.getMessageField();
 
         // Clear previous data
-        chatBar.clear();
         chatBox.clear();
+        chatBar.clear();
+        view.getMessageField().setEditable(true);
 
         // Load history of selected friend
         messages.putIfAbsent(username, new ArrayList<>());
