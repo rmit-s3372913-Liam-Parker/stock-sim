@@ -52,6 +52,16 @@ public class FriendsController extends Controller
             setCurrentChat(newVal);
             currentChat = newVal;
         });
+
+        view.getFriendRqstListView().getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldVal, String newVal) ->
+        {
+            boolean isAccepted = displayConfirmationModal("Friend Request Confirmation","Would you like to accept " + newVal + " as a friend.");
+            if(isAccepted)
+            {
+                view.getFriendRqstListForDisplay().remove(newVal);
+                getModel().sendFriendRequest(newVal);
+            }
+        });
         
         view.getMessageField().setOnKeyPressed(new EventHandler<KeyEvent>()
         {
