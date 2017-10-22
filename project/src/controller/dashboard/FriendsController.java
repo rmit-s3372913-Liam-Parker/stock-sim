@@ -80,7 +80,7 @@ public class FriendsController extends Controller
             		else
             			displayErrorModal("Message Error", error);
 
-                    view.getMessageField().clear();
+                    setCurrentChat(currentChat);
                 }
             }
         });
@@ -129,7 +129,6 @@ public class FriendsController extends Controller
             messages.putIfAbsent(targetFriend, new ArrayList<>());
 
             // Check to see if we've already received this message.
-            //TODO: Might be able to simplify this to a .contains() call depending on how Messages are compared.
             for(Message savedMsg : messages.get(targetFriend))
             {
                 if(savedMsg.getId() == message.getId()) newMessage = false;
@@ -147,6 +146,8 @@ public class FriendsController extends Controller
         view.getFriendListForDisplay().addAll(getModel().getFriends());
         view.getFriendRqstListForDisplay().clear();
         view.getFriendRqstListForDisplay().addAll(getModel().getFriendRequest());
+        if (currentChat!=null)
+        	view.getFriendsListView().getSelectionModel().select(currentChat);
     }
 
     private void setCurrentChat(String username)

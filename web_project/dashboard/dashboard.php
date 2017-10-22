@@ -1,11 +1,6 @@
 <?php
 session_start();
 include '../config/downloadCSV.php';
-if (isset($_GET['username']))
-{
-  $_SESSION['username'] = "zzz";
-  $_SESSION['userId'] = 52;
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
