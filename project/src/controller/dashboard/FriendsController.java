@@ -35,7 +35,9 @@ public class FriendsController extends Controller
                 new KeyFrame(
                         Duration.millis( 10000 ),
                         event -> {
+                            processMessages();
                             recalculateLists();
+                            setCurrentChat(currentChat);
                         }
                 )
         );
@@ -74,9 +76,11 @@ public class FriendsController extends Controller
             		
             		//store the transaction on cloud database
             		if ((error = getModel().sendMessage(currentChat, view.getMessageField().getText())) == null)
-            			processMessages();
+                        processMessages();
             		else
             			displayErrorModal("Message Error", error);
+
+                    view.getMessageField().clear();
                 }
             }
         });
