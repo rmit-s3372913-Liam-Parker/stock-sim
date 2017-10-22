@@ -24,7 +24,6 @@ public class DashboardView extends BorderPane
 
 	private final Button logoutBtn = new Button("Log out");
 	private final Button friendsBtn = new Button("Friends");
-	private final Button notificationsBtn = new Button("Notifications");
 	
 	private static final float PADDING = 3.5f;
 	
@@ -40,11 +39,10 @@ public class DashboardView extends BorderPane
 		ToolbarController controller = new ToolbarController(this);
 		logoutBtn.setOnAction(controller);
 		friendsBtn.setOnAction(controller);
-		notificationsBtn.setOnAction(controller);
 
 		// Build our tool bar for UI
 		ToolBar toolBar = new ToolBar();
-        toolBar.getItems().addAll(logoutBtn, new Separator(), friendsBtn, notificationsBtn);
+        toolBar.getItems().addAll(logoutBtn, new Separator(), friendsBtn);
 		
 		// Populate main dashboard UI
 		GridPane gridPane = new GridPane();
@@ -84,10 +82,5 @@ public class DashboardView extends BorderPane
 	public Button getFriendsButton()
 	{
 		return friendsBtn;
-	}
-
-	public Button getNotificationsButton()
-	{
-		return notificationsBtn;
 	}
 }

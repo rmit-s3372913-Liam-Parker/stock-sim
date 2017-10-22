@@ -24,7 +24,7 @@ public class FriendsController extends Controller
 {
     private FriendsView view;
     private Map<String, List<Message>> messages = new HashMap<>();
-    private String currentChat;
+    public String currentChat;
 
     public FriendsController(FriendsView view)
     {
