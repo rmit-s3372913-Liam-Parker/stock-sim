@@ -28,7 +28,6 @@ public class FriendsView extends BorderPane
     {
         VBox leftBox = new VBox();
         leftBox.getChildren().addAll(buildAddFriendsBar(), buildFriendListView());
-        //VBox.setVgrow(friendListView, Priority.ALWAYS);
 
         this.setLeft(leftBox);
         this.setCenter(buildActionsView());

@@ -2,10 +2,14 @@ package view;
 import interfaces.CoreAPI;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import model.CoreSystem;
+
+import java.io.File;
 
 /**
  * StockApplication serves as the main entry point for the program.
@@ -17,8 +21,8 @@ public class StockApplication extends Application
 	public static final int WINDOW_WIDTH = 1920/2;
 	public static final int WINDOW_HEIGHT = 1080/2;
 	
-	public static final Font APP_HEADING_FONT = Font.font("Tahoma", FontWeight.NORMAL, 20);
-	public static final Font APP_DETAIL_FONT = Font.font("Tahoma", FontWeight.NORMAL, 14);
+	static final Font APP_HEADING_FONT = Font.font("Tahoma", FontWeight.NORMAL, 20);
+	static final Font APP_DETAIL_FONT = Font.font("Tahoma", FontWeight.NORMAL, 14);
 	
 	private static Stage stage;
 	private static CoreAPI model;
@@ -38,7 +42,12 @@ public class StockApplication extends Application
         
         stage.setMinHeight(WINDOW_HEIGHT / 2);
         stage.setMinWidth(WINDOW_WIDTH / 2);
-        
+
+        // Add logo
+		File file = new File("assets/logo/logo2.png");
+		Image image = new Image(file.toURI().toString());
+        stage.getIcons().add(image);
+
         stage.setScene(scene);
         stage.show();
 	}

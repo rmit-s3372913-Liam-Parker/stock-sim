@@ -32,7 +32,6 @@ public class FriendsController extends Controller
                         Duration.millis( 10000 ),
                         event -> {
                             processMessages();
-                            processRequests();
                             recalculateLists();
                         }
                 )
@@ -42,20 +41,12 @@ public class FriendsController extends Controller
 
         // We call our process functions initially to populate the view.
         processMessages();
-        processRequests();
         recalculateLists();
 
         // Respond to list selections
         view.getFriendsListView().getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldVal, String newVal) ->
         {
             setCurrentChat(newVal);
-        });
-
-        view.getFriendRqstListView().getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldVal, String newVal) ->
-        {
-            boolean isConfirmed = displayConfirmationModal("Confirm Request","Press OK to confirm this request and add " + newVal + " to your friend list.");
-            if(isConfirmed)
-                view.getFriendRqstListForDisplay().remove(newVal);
         });
     }
 
@@ -111,11 +102,6 @@ public class FriendsController extends Controller
             if(newMessage)
                 messages.get(targetFriend).add(message);
         }
-    }
-
-    private void processRequests()
-    {
-
     }
 
     private void recalculateLists()

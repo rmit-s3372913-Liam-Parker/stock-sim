@@ -9,9 +9,14 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+import java.io.File;
 
 
 /**
@@ -32,7 +37,9 @@ public class LoginView extends GridPane
 	private TextField usernameField = new TextField();
 	private PasswordField passwordField = new PasswordField();
 	private CheckBox passwordCheckbox = new CheckBox();
-
+	private File file = new File("assets/logo/logo1.png");
+	private Image image = new Image(file.toURI().toString());
+	private ImageView logo = new ImageView(image);
 	public Text alert = new Text();
 	
 	/**
@@ -46,9 +53,7 @@ public class LoginView extends GridPane
 		setVgap(5);
 
 		// Setup title
-		Text loginTitle = new Text(LOGIN_TITLE);
-		loginTitle.setFont(StockApplication.APP_HEADING_FONT);
-		add(loginTitle, 0, 0, 2, 1);
+		add(logo, 0, 0, 2, 1);
 
 		// Setup user-name field
 		Label username = new Label(USERNAME_LABEL);
